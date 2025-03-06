@@ -13,3 +13,10 @@ Group Project for course "Applied Machine Learning and Predictive Modelling 1" i
 
 ### Lenny Budliger
 - Topic lead: Support Vector Machine
+
+## Folder Structure
+- Readme 
+- Data
+  - data
+- Scripts
+  - main.qmd
