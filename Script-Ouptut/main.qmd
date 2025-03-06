@@ -4,7 +4,6 @@ author:
 - Lenny Budlinger
 - Thomas van der Wardt 
 - Oliver Zingg
-
 format:
   html:
     toc: true
