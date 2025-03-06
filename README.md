@@ -1,6 +1,7 @@
 # Budliger_van-der-Wardt_Zingg_MatID
 Group Project for course "Applied Machine Learning and Predictive Modelling 1" in which multiple models are estimated and compared using a dataset of our choosing.
 
+Dataset used: <https://www.kaggle.com/datasets/adilshamim8/global-traffic-accidents-dataset>
 
 
 ## Contributions
@@ -17,6 +18,7 @@ Group Project for course "Applied Machine Learning and Predictive Modelling 1" i
 ## Folder Structure
 - Readme 
 - Data
-  - data
+  - data.csv
+  - description_data.md
 - Scripts
   - main.qmd
