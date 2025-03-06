@@ -1,1 +1,84 @@
+---
+title: "Project Title"
+author: 
+- Lenny Budlinger
+- Thomas van der Wardt 
+- Oliver Zingg
+
+format:
+  html:
+    toc: true
+    number_sections: true
+    toc_float: true
+    toc_depth: 5
+    theme: cosmo
+    highlight: zenburn
+---
+
+# Packages
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| warning: false
+#| error: false
+
+library(tidyverse) #ggplot for plotting, dplyr for data manipulation
+
+
+```
+
+# Dataset
+
+Short description
+
+## Load
+
+```{r}
+
+```
+
+# Key take aways
+
+## Problems with modelling and data
+
+## Interpretations of results
+
+# Modelling
+
+## Linear Model
+
+## **Short description of model:**
+
+## **What have we learned?:**
+
+## GLM Poisson
+
+## **Short description of model:**
+
+## **What have we learned?:**
+
+## GLM Binomial
+
+## **Short description of model:**
+
+## **What have we learned?:**
+
+## GAM
+
+## **Short description of model:**
+
+## **What have we learned?:**
+
+## Neural Network
+
+## **Short description of model:**
+
+## **What have we learned?:**
+
+## Support Vector Machine
+
+## **Short description of model:**
+
+## **What have we learned?:**
 
