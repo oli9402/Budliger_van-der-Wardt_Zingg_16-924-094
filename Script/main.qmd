@@ -23,8 +23,16 @@ format:
 #| warning: false
 #| error: false
 
-library(tidyverse) #ggplot for plotting, dplyr for data manipulation
+# Install Packages ---------------------------
 
+# install.packages("tidyverse")
+# install.packages("lubridate")
+# install.packages("gt")
+# Load packages ---------------------------
+
+library(tidyverse) # ggplot for plotting, dplyr for data manipulation
+library(lubridate) # package for handeling time variable
+library(gt) # Print tables
 
 ```
 
@@ -35,8 +43,64 @@ Short description
 ## Load
 
 ```{r}
+#| echo: false 
+#| code-fold: true
+#| code-summary: "Show the code"
+#| warning: false
+
+# Load data ---------------------------
+
+# get working directory if csv not loading or use absolute path
+# getwd() 
+
+df_accidents <- read.csv("./../Data/global_traffic_accidents.csv")
+
+df_accidents %>% 
+  head() %>% 
+  gt(rownames_to_stub = TRUE)
+```
+
+## Transform Data
+
+```{r}
+# Time variable ---------------------------
+# Split day, month, year
+
+df_accidents <- df_accidents %>% 
+  # creates new columns for day, month, year 
+  mutate(
+    Day = day(Date),
+    Month = month(Date),
+    Year = year(Date)
+  ) %>%
+  # moves new created columns after Date
+  relocate(Day, Month, Year, .after = Date)
+  
+# Location variable ---------------------------
+# City, Country
+
+df_accidents <- df_accidents %>% 
+  # separate by ","
+  separate(Location, into = c("City", "Country"), sep = ",")
 
 ```
+
+## Explore data
+
+Impact of seasons?
+```{r}
+df_accidents %>% 
+  group_by(Year, Month) %>%
+  summarise(sum_Casualties = sum(Casualties), .groups = "drop") %>% 
+  ggplot(
+    aes(x = Month, y = sum_Casualties)
+  ) + 
+  geom_line() + 
+  scale_x_continuous(limits = c(1, 12), breaks = seq(1, 12, by = 1)) +  # Custom ticks
+  theme_minimal()  +
+  facet_wrap(~Year) 
+```
+
 
 # Key take aways
 
