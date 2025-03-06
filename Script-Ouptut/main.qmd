@@ -88,10 +88,6 @@ df_accidents %>%
   gt(rownames_to_stub = TRUE)
 ```
 
-```{r}
-
-```
-
 ## Explore data
 
 ### Impact of seasons?

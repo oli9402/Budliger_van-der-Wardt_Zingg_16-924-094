@@ -162,25 +162,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="load" class="level2">
 <h2 class="anchored" data-anchor-id="load">Load</h2>
 <div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data ---------------------------</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get working directory if csv not loading or use absolute path</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># getwd() </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./../Data/global_traffic_accidents.csv"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="sc">%&gt;%</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rownames_to_stub =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <div>
-<div id="pdsekafyfj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pdsekafyfj table {
+<div id="hcqjwurvkv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hcqjwurvkv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pdsekafyfj thead, #pdsekafyfj tbody, #pdsekafyfj tfoot, #pdsekafyfj tr, #pdsekafyfj td, #pdsekafyfj th {
+#hcqjwurvkv thead, #hcqjwurvkv tbody, #hcqjwurvkv tfoot, #hcqjwurvkv tr, #hcqjwurvkv td, #hcqjwurvkv th {
   border-style: none;
 }
 
-#pdsekafyfj p {
+#hcqjwurvkv p {
   margin: 0;
   padding: 0;
 }
 
-#pdsekafyfj .gt_table {
+#hcqjwurvkv .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -206,12 +219,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_caption {
+#hcqjwurvkv .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pdsekafyfj .gt_title {
+#hcqjwurvkv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -223,7 +236,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#pdsekafyfj .gt_subtitle {
+#hcqjwurvkv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -235,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#pdsekafyfj .gt_heading {
+#hcqjwurvkv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -247,13 +260,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_bottom_border {
+#hcqjwurvkv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_col_headings {
+#hcqjwurvkv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -268,7 +281,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_col_heading {
+#hcqjwurvkv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -288,7 +301,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#pdsekafyfj .gt_column_spanner_outer {
+#hcqjwurvkv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -300,15 +313,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#pdsekafyfj .gt_column_spanner_outer:first-child {
+#hcqjwurvkv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pdsekafyfj .gt_column_spanner_outer:last-child {
+#hcqjwurvkv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pdsekafyfj .gt_column_spanner {
+#hcqjwurvkv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -320,11 +333,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#pdsekafyfj .gt_spanner_row {
+#hcqjwurvkv .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pdsekafyfj .gt_group_heading {
+#hcqjwurvkv .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -350,7 +363,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#pdsekafyfj .gt_empty_group_heading {
+#hcqjwurvkv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -365,15 +378,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#pdsekafyfj .gt_from_md > :first-child {
+#hcqjwurvkv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pdsekafyfj .gt_from_md > :last-child {
+#hcqjwurvkv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pdsekafyfj .gt_row {
+#hcqjwurvkv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -392,7 +405,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#pdsekafyfj .gt_stub {
+#hcqjwurvkv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -405,7 +418,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pdsekafyfj .gt_stub_row_group {
+#hcqjwurvkv .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -419,15 +432,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#pdsekafyfj .gt_row_group_first td {
+#hcqjwurvkv .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pdsekafyfj .gt_row_group_first th {
+#hcqjwurvkv .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pdsekafyfj .gt_summary_row {
+#hcqjwurvkv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -437,16 +450,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pdsekafyfj .gt_first_summary_row {
+#hcqjwurvkv .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_first_summary_row.thick {
+#hcqjwurvkv .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pdsekafyfj .gt_last_summary_row {
+#hcqjwurvkv .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -456,7 +469,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_grand_summary_row {
+#hcqjwurvkv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -466,7 +479,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pdsekafyfj .gt_first_grand_summary_row {
+#hcqjwurvkv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -476,7 +489,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_last_grand_summary_row_top {
+#hcqjwurvkv .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -486,11 +499,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_striped {
+#hcqjwurvkv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pdsekafyfj .gt_table_body {
+#hcqjwurvkv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -499,7 +512,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_footnotes {
+#hcqjwurvkv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -513,7 +526,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_footnote {
+#hcqjwurvkv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -522,7 +535,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pdsekafyfj .gt_sourcenotes {
+#hcqjwurvkv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -536,7 +549,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pdsekafyfj .gt_sourcenote {
+#hcqjwurvkv .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -544,72 +557,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pdsekafyfj .gt_left {
+#hcqjwurvkv .gt_left {
   text-align: left;
 }
 
-#pdsekafyfj .gt_center {
+#hcqjwurvkv .gt_center {
   text-align: center;
 }
 
-#pdsekafyfj .gt_right {
+#hcqjwurvkv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pdsekafyfj .gt_font_normal {
+#hcqjwurvkv .gt_font_normal {
   font-weight: normal;
 }
 
-#pdsekafyfj .gt_font_bold {
+#hcqjwurvkv .gt_font_bold {
   font-weight: bold;
 }
 
-#pdsekafyfj .gt_font_italic {
+#hcqjwurvkv .gt_font_italic {
   font-style: italic;
 }
 
-#pdsekafyfj .gt_super {
+#hcqjwurvkv .gt_super {
   font-size: 65%;
 }
 
-#pdsekafyfj .gt_footnote_marks {
+#hcqjwurvkv .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pdsekafyfj .gt_asterisk {
+#hcqjwurvkv .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pdsekafyfj .gt_indent_1 {
+#hcqjwurvkv .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pdsekafyfj .gt_indent_2 {
+#hcqjwurvkv .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pdsekafyfj .gt_indent_3 {
+#hcqjwurvkv .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pdsekafyfj .gt_indent_4 {
+#hcqjwurvkv .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pdsekafyfj .gt_indent_5 {
+#hcqjwurvkv .gt_indent_5 {
   text-indent: 25px;
 }
 
-#pdsekafyfj .katex-display {
+#hcqjwurvkv .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#pdsekafyfj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#hcqjwurvkv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -727,49 +740,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="transform-data" class="level2">
 <h2 class="anchored" data-anchor-id="transform-data">Transform Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Time variable ---------------------------</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Split day, month, year</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="ot">&lt;-</span> df_accidents <span class="sc">%&gt;%</span> </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># creates new columns for day, month, year </span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Day =</span> <span class="fu">day</span>(Date),</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month =</span> <span class="fu">month</span>(Date),</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Year =</span> <span class="fu">year</span>(Date)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># moves new created columns after Date</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(Day, Month, Year, <span class="at">.after =</span> Date)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Location variable ---------------------------</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># City, Country</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="ot">&lt;-</span> df_accidents <span class="sc">%&gt;%</span> </span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># separate by ","</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(Location, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"City"</span>, <span class="st">"Country"</span>), <span class="at">sep =</span> <span class="st">","</span>)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># First 5 rows ---------------------------</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="sc">%&gt;%</span> </span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rownames_to_stub =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Time variable ---------------------------</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Split day, month, year</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="ot">&lt;-</span> df_accidents <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># creates new columns for day, month, year </span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Day =</span> <span class="fu">day</span>(Date),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month =</span> <span class="fu">month</span>(Date),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Year =</span> <span class="fu">year</span>(Date)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># moves new created columns after Date</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(Day, Month, Year, <span class="at">.after =</span> Date)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Location variable ---------------------------</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># City, Country</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="ot">&lt;-</span> df_accidents <span class="sc">%&gt;%</span> </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># separate by ","</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(Location, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"City"</span>, <span class="st">"Country"</span>), <span class="at">sep =</span> <span class="st">","</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># First 5 rows ---------------------------</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="sc">%&gt;%</span> </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rownames_to_stub =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<div id="pgiyqtkzrw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pgiyqtkzrw table {
+<div id="ashyuniqqz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ashyuniqqz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pgiyqtkzrw thead, #pgiyqtkzrw tbody, #pgiyqtkzrw tfoot, #pgiyqtkzrw tr, #pgiyqtkzrw td, #pgiyqtkzrw th {
+#ashyuniqqz thead, #ashyuniqqz tbody, #ashyuniqqz tfoot, #ashyuniqqz tr, #ashyuniqqz td, #ashyuniqqz th {
   border-style: none;
 }
 
-#pgiyqtkzrw p {
+#ashyuniqqz p {
   margin: 0;
   padding: 0;
 }
 
-#pgiyqtkzrw .gt_table {
+#ashyuniqqz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -795,12 +808,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_caption {
+#ashyuniqqz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pgiyqtkzrw .gt_title {
+#ashyuniqqz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -812,7 +825,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#pgiyqtkzrw .gt_subtitle {
+#ashyuniqqz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -824,7 +837,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#pgiyqtkzrw .gt_heading {
+#ashyuniqqz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -836,13 +849,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_bottom_border {
+#ashyuniqqz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_col_headings {
+#ashyuniqqz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -857,7 +870,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_col_heading {
+#ashyuniqqz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -877,7 +890,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#pgiyqtkzrw .gt_column_spanner_outer {
+#ashyuniqqz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -889,15 +902,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#pgiyqtkzrw .gt_column_spanner_outer:first-child {
+#ashyuniqqz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pgiyqtkzrw .gt_column_spanner_outer:last-child {
+#ashyuniqqz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pgiyqtkzrw .gt_column_spanner {
+#ashyuniqqz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -909,11 +922,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#pgiyqtkzrw .gt_spanner_row {
+#ashyuniqqz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pgiyqtkzrw .gt_group_heading {
+#ashyuniqqz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -939,7 +952,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#pgiyqtkzrw .gt_empty_group_heading {
+#ashyuniqqz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -954,15 +967,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#pgiyqtkzrw .gt_from_md > :first-child {
+#ashyuniqqz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pgiyqtkzrw .gt_from_md > :last-child {
+#ashyuniqqz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pgiyqtkzrw .gt_row {
+#ashyuniqqz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -981,7 +994,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#pgiyqtkzrw .gt_stub {
+#ashyuniqqz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -994,7 +1007,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pgiyqtkzrw .gt_stub_row_group {
+#ashyuniqqz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1008,15 +1021,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#pgiyqtkzrw .gt_row_group_first td {
+#ashyuniqqz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pgiyqtkzrw .gt_row_group_first th {
+#ashyuniqqz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pgiyqtkzrw .gt_summary_row {
+#ashyuniqqz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1026,16 +1039,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pgiyqtkzrw .gt_first_summary_row {
+#ashyuniqqz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_first_summary_row.thick {
+#ashyuniqqz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pgiyqtkzrw .gt_last_summary_row {
+#ashyuniqqz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1045,7 +1058,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_grand_summary_row {
+#ashyuniqqz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1055,7 +1068,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pgiyqtkzrw .gt_first_grand_summary_row {
+#ashyuniqqz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1065,7 +1078,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_last_grand_summary_row_top {
+#ashyuniqqz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1075,11 +1088,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_striped {
+#ashyuniqqz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pgiyqtkzrw .gt_table_body {
+#ashyuniqqz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1088,7 +1101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_footnotes {
+#ashyuniqqz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1102,7 +1115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_footnote {
+#ashyuniqqz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1111,7 +1124,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pgiyqtkzrw .gt_sourcenotes {
+#ashyuniqqz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1125,7 +1138,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pgiyqtkzrw .gt_sourcenote {
+#ashyuniqqz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1133,72 +1146,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pgiyqtkzrw .gt_left {
+#ashyuniqqz .gt_left {
   text-align: left;
 }
 
-#pgiyqtkzrw .gt_center {
+#ashyuniqqz .gt_center {
   text-align: center;
 }
 
-#pgiyqtkzrw .gt_right {
+#ashyuniqqz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pgiyqtkzrw .gt_font_normal {
+#ashyuniqqz .gt_font_normal {
   font-weight: normal;
 }
 
-#pgiyqtkzrw .gt_font_bold {
+#ashyuniqqz .gt_font_bold {
   font-weight: bold;
 }
 
-#pgiyqtkzrw .gt_font_italic {
+#ashyuniqqz .gt_font_italic {
   font-style: italic;
 }
 
-#pgiyqtkzrw .gt_super {
+#ashyuniqqz .gt_super {
   font-size: 65%;
 }
 
-#pgiyqtkzrw .gt_footnote_marks {
+#ashyuniqqz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pgiyqtkzrw .gt_asterisk {
+#ashyuniqqz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pgiyqtkzrw .gt_indent_1 {
+#ashyuniqqz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pgiyqtkzrw .gt_indent_2 {
+#ashyuniqqz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pgiyqtkzrw .gt_indent_3 {
+#ashyuniqqz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pgiyqtkzrw .gt_indent_4 {
+#ashyuniqqz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pgiyqtkzrw .gt_indent_5 {
+#ashyuniqqz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#pgiyqtkzrw .katex-display {
+#ashyuniqqz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#pgiyqtkzrw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ashyuniqqz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1346,20 +1359,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="impact-of-seasons" class="level3">
 <h3 class="anchored" data-anchor-id="impact-of-seasons">Impact of seasons?</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="sc">%&gt;%</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year, Month) <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">sum_Casualties =</span> <span class="fu">sum</span>(Casualties), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> sum_Casualties)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">12</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">12</span>, <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span>  <span class="co"># Custom ticks</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()  <span class="sc">+</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Year) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df_accidents <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">sum_Casualties =</span> <span class="fu">sum</span>(Casualties), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> sum_Casualties)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">12</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">12</span>, <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span>  <span class="co"># Custom ticks</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()  <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Year) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
