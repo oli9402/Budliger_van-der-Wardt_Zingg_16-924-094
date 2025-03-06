@@ -83,11 +83,19 @@ df_accidents <- df_accidents %>%
   # separate by ","
   separate(Location, into = c("City", "Country"), sep = ",")
 
+# First 5 rows ---------------------------
+df_accidents %>% 
+  head() %>% 
+  gt(rownames_to_stub = TRUE)
+```
+
+```{r}
+
 ```
 
 ## Explore data
 
-Impact of seasons?
+### Impact of seasons?
 ```{r}
 df_accidents %>% 
   group_by(Year, Month) %>%
@@ -112,37 +120,37 @@ df_accidents %>%
 
 ## Linear Model
 
-## **Short description of model:**
+**Short description of model:**
 
-## **What have we learned?:**
+**What have we learned?:**
 
 ## GLM Poisson
 
-## **Short description of model:**
+**Short description of model:**
 
-## **What have we learned?:**
+**What have we learned?:**
 
 ## GLM Binomial
 
-## **Short description of model:**
+**Short description of model:**
 
-## **What have we learned?:**
+**What have we learned?:**
 
 ## GAM
 
-## **Short description of model:**
+**Short description of model:**
 
-## **What have we learned?:**
+**What have we learned?:**
 
 ## Neural Network
 
-## **Short description of model:**
+**Short description of model:**
 
-## **What have we learned?:**
+**What have we learned?:**
 
 ## Support Vector Machine
 
-## **Short description of model:**
+**Short description of model:**
 
-## **What have we learned?:**
+**What have we learned?:**
 
