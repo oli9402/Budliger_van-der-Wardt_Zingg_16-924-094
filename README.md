@@ -14,6 +14,7 @@ Dataset used: <https://www.kaggle.com/datasets/adilshamim8/global-traffic-accide
 
 ### Lenny Budliger
 - Topic lead: Support Vector Machine
+-- test rstudio github
 
 ## Folder Structure
 - Readme 
@@ -22,3 +23,5 @@ Dataset used: <https://www.kaggle.com/datasets/adilshamim8/global-traffic-accide
   - description_data.md
 - Scripts
   - main.qmd
+  
+
