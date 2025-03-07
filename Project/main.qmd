@@ -1,1 +1,15 @@
 
+---
+title: "Test Document"
+format: html
+---
+
+## Introduction
+
+This is a test of a Quarto document. Below is an example R code block:
+
+```{r}
+# test 
+data <- read.csv("../Data/global_traffic_accidents.csv")
+head(data)
+```
