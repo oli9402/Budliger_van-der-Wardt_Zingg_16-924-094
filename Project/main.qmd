@@ -1,12 +1,17 @@
 
 ---
-title: "Test Document"
+title: "Project Title"
 format: html
 ---
 
-## Introduction
+## Projec Introduction
 
-This is a test of a Quarto document. Below is an example R code block:
+Short introduction of the project
+
+## Analysis of the Dataset
+Short description of the Dataset, followed by an analysis with all methods seen in
+class
+
 
 ```{r}
 # test 
