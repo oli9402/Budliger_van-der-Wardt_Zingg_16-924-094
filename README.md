@@ -1,4 +1,4 @@
-# Budliger_van-der-Wardt_Zingg_MatID
+# Budliger_van-der-Wardt_Zingg_16-924-094
 Group Project for course "Applied Machine Learning and Predictive Modelling 1" in which multiple models are estimated and compared using a dataset of our choosing.
 
 Dataset used: <https://www.kaggle.com/datasets/yuanyuwendymu/airline-delay-and-cancellation-data-2009-2018/data?select=2018.csv>
@@ -65,7 +65,5 @@ Since this dataset is large we only used the plane delays from the year 2018. Fu
     |______ <b>planes.csv</b>
 |__ <b>Scripts</b>
     |______ <b>preprocessing.qmd</b>
-    |______ <b>scraping_auto_de.py</b>
-    |______ <b>scraping_autoscout24_de.py</b>
-|__ <b>data_folder</b>
+    |______ <b>main.qmd</b>
 </pre>
