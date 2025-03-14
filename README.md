@@ -29,13 +29,13 @@ Since this dataset is large we only used the plane delays from the year 2018. Fu
 |DIVERTED              | logical | Aircraft landed on airport that out of schedule |
 |CRS_ELAPSED_TIME              | integer | Planned time amount needed for the flight trip |
 |ACTUAL_ELAPSED_TIME              | integer | AIR_TIME+TAXI_IN+TAXI_OUT |
-|AIR_TIME              | integer | The time duration between wheels_off and wheels_on time |
-|DISTANCE           | integer | Distance between two airports |
-|CARRIER_DELAY           | integer | Delay caused by the airline in minutes |
-|WEATHER_DELAY|     |integer|       Delay caused by weather|
-|NAS_DELAY|     |integer|       Delay caused by air system|
-|SECURITY_DELAY|     |integer|       Delay caused by air system|
-|LATE_AIRCRAFT_DELAY|     |integer|      Delay caused by security|
+|AIR_TIME              | integer | The time duration between <b>wheels_off and wheels_on time</b>  |
+|DISTANCE           | integer | Distance between <b>two airports</b> |
+|CARRIER_DELAY           | integer | Delay caused by the <b> airline</b>  in minutes |
+|WEATHER_DELAY|     integer|       Delay caused by <b>weather</b> |
+|NAS_DELAY|     integer|       Delay caused by <b> air system</b> |
+|SECURITY_DELAY|     integer|       Delay caused by <b>air system</b> |
+|LATE_AIRCRAFT_DELAY|     integer|      Delay caused by <b>security|</b> |
 
 
 
