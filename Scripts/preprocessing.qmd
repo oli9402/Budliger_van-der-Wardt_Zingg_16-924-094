@@ -11,6 +11,8 @@ library(tidyverse) # data manipulation
 library(readr) # read large csv 
 library(skimr) # preview data variables
 library(gt) # Print tables
+library(hms) # to get time format
+
 planes <- read_lines("/Users/oliverzingg/Downloads/archive/2018.csv", n_max = 10000) # sample read only a 10'000 lines
 write_lines(planes, "planes.csv")
 
@@ -19,7 +21,42 @@ write_lines(planes, "planes.csv")
 
 skims through data variable
 ```{r}
+#| echo: false
 planes <- read.csv("./../Data/planes.csv")
-skim(planes) 
+#skim(planes) 
 ```
 
+```{r}
+# remove last col, mutate FL_DATE as date
+planes <- planes %>% 
+  select(-last_col()) %>%
+  mutate(FL_DATE = as.Date(FL_DATE),
+         CANCELLED = as.logical(CANCELLED))
+
+glimpse(planes)
+
+```
+
+Let's see how many `NA`are in the last 5 cols. 
+
+```{r}
+# percent
+round(colSums(is.na(planes))/9999*100,2)
+
+```
+
+70% of rows in the last 5 cols have `NA`values and we therefore remove them.
+
+```{r}
+planes <- planes %>% 
+  select(-(last_col(offset = 4):last_col()))
+```
+
+Let's count the character variables
+
+```{r}
+lapply(planes[, sapply(planes, function(x) is.character(x) | is.logical(x))], table)
+
+```
+
+We can see that less than 5% flights were canceld in the year 2018. These leads to unbalanced dataset and should be consider if included in furhter analysis. For the `OP_CARRIER` it seems as though there are enough cases in each carrier to included it in further analysis. For task as for example predicting cancellation we should consider balancing out the data with downsampling. 
