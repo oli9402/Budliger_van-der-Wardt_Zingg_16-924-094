@@ -1,12 +1,36 @@
 # Budliger_van-der-Wardt_Zingg_16-924-094
 Group Project for course "Applied Machine Learning and Predictive Modelling 1" in which multiple models are estimated and compared using a dataset of our choosing.
 
-Dataset used: <https://www.kaggle.com/datasets/yuanyuwendymu/airline-delay-and-cancellation-data-2009-2018/data?select=2018.csv>
+## Contributions
 
+### Oliver Zingg
+- Topic lead: Generalised Linear Model with family set to Binomial 
+
+### Thomas van der Wardt
+- Topic lead: Neural Network 
+
+### Lenny Budliger
+- Topic lead: Support Vector Machine
+-- test rstudio github
+
+## Folder Structure
+
+<pre style="font-size: 10.0pt; font-family: Arial; line-height: 2; letter-spacing: 1.0pt;" >
+<b>Directory Structure</b>
+|__ <b>.gitignore</b>
+|__ <b>Data</b>
+    |______ <b>planes.csv</b>
+|__ <b>Scripts</b>
+    |______ <b>preprocessing.qmd</b>
+    |______ <b>main.qmd</b>
+</pre>
+
+## Dataset 
+
+Dataset used: <https://www.kaggle.com/datasets/yuanyuwendymu/airline-delay-and-cancellation-data-2009-2018/data?select=2018.csv>
 
 Since this dataset is large we only used the plane delays from the year 2018. Furthermore using `read_lines` we only read 10'000 lines of the dataset.
 
-## Dataset 
 
 |variable          |class     |description |
 |:-----------------|:---------|:-----------|
@@ -44,26 +68,5 @@ Since this dataset is large we only used the plane delays from the year 2018. Fu
 
 
 
-## Contributions
 
-### Oliver Zingg
-- Topic lead: Generalised Linear Model with family set to Binomial 
 
-### Thomas van der Wardt
-- Topic lead: Neural Network 
-
-### Lenny Budliger
-- Topic lead: Support Vector Machine
--- test rstudio github
-
-## Folder Structure
-
-<pre style="font-size: 10.0pt; font-family: Arial; line-height: 2; letter-spacing: 1.0pt;" >
-<b>Directory Structure</b>
-|__ <b>.gitignore</b>
-|__ <b>Data</b>
-    |______ <b>planes.csv</b>
-|__ <b>Scripts</b>
-    |______ <b>preprocessing.qmd</b>
-    |______ <b>main.qmd</b>
-</pre>
