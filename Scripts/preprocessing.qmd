@@ -1,0 +1,24 @@
+---
+title: "preprocessing"
+format: html
+---
+
+## Preprocessing
+
+```{r}
+library(tidyverse)
+library(readr)
+library(skimr)
+planes <- read_lines("/Users/oliverzingg/Downloads/archive/2018.csv", n_max = 10000) #sample read onyl a 10'000 lines
+write_lines(planes, "planes.csv")
+
+```
+
+
+skims through data variable
+```{r}
+planes <- read.csv("lanes.csv")
+skim(planes)
+head(planes)
+```
+

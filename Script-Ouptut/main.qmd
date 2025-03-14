@@ -27,11 +27,14 @@ format:
 # install.packages("tidyverse")
 # install.packages("lubridate")
 # install.packages("gt")
+# install.packages("openmeteo")
 # Load packages ---------------------------
 
 library(tidyverse) # ggplot for plotting, dplyr for data manipulation
-library(lubridate) # package for handeling time variable
+library(lubridate) # package for handling time variable
+library(hms) # handling time
 library(gt) # Print tables
+library(openmeteo)
 
 ```
 
@@ -42,7 +45,6 @@ Short description
 ## Load
 
 ```{r}
-#| echo: false 
 #| code-fold: true
 #| code-summary: "Show the code"
 #| warning: false
@@ -73,14 +75,16 @@ df_accidents <- df_accidents %>%
     Year = year(Date)
   ) %>%
   # moves new created columns after Date
-  relocate(Day, Month, Year, .after = Date)
+  relocate(Day, Month, Year, .after = Date) 
   
 # Location variable ---------------------------
 # City, Country
 
 df_accidents <- df_accidents %>% 
   # separate by ","
-  separate(Location, into = c("City", "Country"), sep = ",")
+  separate(Location, into = c("City", "Country"), sep = ", ")
+
+
 
 # First 5 rows ---------------------------
 df_accidents %>% 
@@ -88,9 +92,85 @@ df_accidents %>%
   gt(rownames_to_stub = TRUE)
 ```
 
+
+# Clean Longitudinal, Latitudinal
+
+It seems as if coordinates are wrong (?) in the data set, we can't use them
+
+```{r}
+
+df_accidents %>% 
+  filter(Country %in% c("UK", "China")) %>%
+  ggplot(aes(x = Country, y = Longitude)) + 
+  geom_boxplot() +
+  labs(
+    title = "Boxplots of Longitude Coordinates China vs. UK"
+  )
+
+```
+
+
+```{r}
+# Delete both columns -----------------
+df_accidents <- df_accidents %>% 
+  select(-Longitude, -Latitude)
+```
+
+There is only one City per Country
+```{r}
+df_accidents %>% 
+  group_by(Country) %>% 
+  count(City)
+```
+## Get temperate for each incident by hour
+Using Api request below daily 10'000, 5'000 per hour, 600 per minute
+
+```{r}
+#| eval: false
+
+# Function to get weather data for a single row
+get_weather <- function(loc, dat, tim) {
+  weather <- openmeteo::weather_history(
+    location = loc,
+    start = dat,
+    end = dat,
+    hourly = "temperature_2m"
+  )
+  
+
+  
+  temp <- weather$hourly_temperature_2m[as.integer(substr(tim,1,2)) + 1] # starts at 0 so we add 1 to get correct row in weather table
+  return(temp)
+}
+
+
+df_accidents <- df_accidents%>%
+  mutate(Temp = NA, .after = Time)
+
+
+for(i in 1:5){
+df_temp <- df_accidents %>% 
+    filter(is.na(Temp)) %>%
+    sample_n(600) %>%
+    rowwise() %>%
+    mutate(Temp = get_weather(City, Date, Time), .after = Time) %>%
+    ungroup()
+
+df_accidents <- df_accidents %>%
+  mutate(Temp = ifelse(is.na(Temp), df_temp$Temp[match(Accident.ID, df_temp$Accident.ID)], Temp))
+
+Sys.sleep(60)  # Sleep for 60 seconds (1 minute)
+}
+
+write.csv(df_accidents, "df_accidents_temp.csv", row.names = FALSE)
+```
+
+
+
 ## Explore data
 
 ### Impact of seasons?
+
 ```{r}
 df_accidents %>% 
   group_by(Year, Month) %>%
@@ -103,6 +183,53 @@ df_accidents %>%
   theme_minimal()  +
   facet_wrap(~Year) 
 ```
+
+```{r}
+df_accidents %>% 
+  ggplot(aes(x = "", y = Temp)) + 
+  geom_boxplot()
+df_accidents %>% 
+  ggplot(aes(x = Road.Condition, y = Temp)) + 
+  geom_boxplot()
+```
+
+
+```{r}
+df_accidents %>% 
+  filter(Month %in% c(11,12,1)) %>%
+  group_by(Country,Road.Condition)%>%
+  count(Road.Condition) %>% 
+  ungroup() %>%
+  ggplot(aes(x = Country, y = n, color = Road.Condition)) + 
+  geom_point() 
+```
+```{r}
+df_accidents %>% 
+  filter(Month %in% c(5,6,7)) %>%
+  count(City, Road.Condition) %>% 
+  group_by(City) %>% 
+  mutate(perc_road = n / sum(n) * 100) %>% 
+  # Create 100% stacked bar plot
+  ggplot(aes(x = perc_road, y = City, fill = Road.Condition)) +
+  geom_bar(stat = "identity", position = "fill") +  # "fill" makes it 100% stacked
+  scale_x_continuous(labels = scales::percent_format()) +  # Convert y-axis to percentage
+  labs(title = "Month: Mai, June, July - Road Conditions of Accidents by Country",
+       x = "Percentage",
+       y = "Country",
+       fill = "Road Condition") +
+  theme_minimal()
+
+```
+
+## Plot long, lat
+
+```{r}
+library(skimr)
+skim(df_accidents)
+# Load required libraries
+
+```
+
 
 
 # Key take aways
