@@ -12,6 +12,9 @@ format:
     toc_depth: 5
     theme: cosmo
     highlight: zenburn
+output: 
+  html_document:
+    output_dir: "../Docs/" 
 ---
 
 # Packages
