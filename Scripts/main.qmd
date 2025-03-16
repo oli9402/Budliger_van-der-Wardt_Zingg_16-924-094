@@ -53,74 +53,46 @@ Short description
 # get working directory if csv not loading or use absolute path
 # getwd() 
 
-df_accidents <- read.csv("./../Data/global_traffic_accidents.csv")
+planes <- read.csv("./../Data/planes.csv")
 
-df_accidents %>% 
-  head() %>% 
-  gt(rownames_to_stub = TRUE)
-```
-
-## Transform Data
-
-```{r}
-# Time variable ---------------------------
-# Split day, month, year
-
-df_accidents <- df_accidents %>% 
-  # creates new columns for day, month, year 
-  mutate(
-    Day = day(Date),
-    Month = month(Date),
-    Year = year(Date)
-  ) %>%
-  # moves new created columns after Date
-  relocate(Day, Month, Year, .after = Date) 
-  
-# Location variable ---------------------------
-# City, Country
-
-df_accidents <- df_accidents %>% 
-  # separate by ","
-  separate(Location, into = c("City", "Country"), sep = ", ")
-
-
-
-# First 5 rows ---------------------------
-df_accidents %>% 
-  head() %>% 
-  gt(rownames_to_stub = TRUE)
 ```
 
 
-# Clean Longitudinal, Latitudinal
 
-It seems as if coordinates are wrong (?) in the data set, we can't use them
+## Explore
+
 
 ```{r}
-
-df_accidents %>% 
-  filter(Country %in% c("UK", "China")) %>%
-  ggplot(aes(x = Country, y = Longitude)) + 
+planes %>% 
+  ggplot(aes(x = OP_CARRIER, y = DEP_DELAY)) + 
   geom_boxplot() +
   labs(
-    title = "Boxplots of Longitude Coordinates China vs. UK"
+    title = "Boxplots of Departure Delay for carrier"
+  )+
+  scale_y_continuous(
+    limits = c(-10, 300)
   )
 
 ```
 
 
+Is delay influenced by departure time? Let's look at `B6` which has a high median of `DEP_DELAY`
+
 ```{r}
-# Delete both columns -----------------
-df_accidents <- df_accidents %>% 
-  select(-Longitude, -Latitude)
+planes %>% 
+  filter(OP_CARRIER == "B6") %>% 
+  ggplot(aes(DEP_TIME,DEP_DELAY,  color = OP_CARRIER)) + 
+  geom_point()
 ```
 
-There is only one City per Country
 ```{r}
-df_accidents %>% 
-  group_by(Country) %>% 
-  count(City)
+planes %>% 
+  filter(OP_CARRIER == "B6") %>% 
+  count(DEP_DELAY > 5)
+  ggplot(aes(DEP_TIME,DEP_DELAY,  color = OP_CARRIER)) + 
+  geom_point()
 ```
+
 ## Get temperate for each incident by hour
 Using Api request below daily 10'000, 5'000 per hour, 600 per minute
 
