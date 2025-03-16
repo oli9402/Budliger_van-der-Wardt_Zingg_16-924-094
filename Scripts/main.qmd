@@ -53,11 +53,32 @@ Short description
 # get working directory if csv not loading or use absolute path
 # getwd() 
 
-planes <- read.csv("./../Data/planes.csv")
+planes <- read.csv("./../Data/LGA.csv")
 
 ```
 
+## Data transformation
 
+### Add seasons
+
+```{r}
+planes <- planes %>% 
+  mutate(FL_DATE = as.Date(FL_DATE)) %>% 
+  mutate(
+    Year  = format(FL_DATE, "%Y"),
+    Month = as.numeric(format(FL_DATE, "%m")),
+    Day   = format(FL_DATE, "%d")) %>% 
+  mutate(Season = case_when( 
+           Month %in% c(12,01,02) ~ "Winter" ,
+           Month %in% c(03,04,05) ~ "Spring",
+           Month %in% c(06,07,08) ~ "Summer",
+           Month %in% c(09,10,11) ~ "Fall",
+           TRUE ~ NA
+           )) %>% 
+  mutate(Weekday = weekdays(FL_DATE)) %>%
+  mutate(Season = as.factor(Season)) %>% 
+  relocate(Year, Month, Day, Weekday, Season, .after = FL_DATE) 
+```
 
 ## Explore
 
@@ -70,137 +91,71 @@ planes %>%
     title = "Boxplots of Departure Delay for carrier"
   )+
   scale_y_continuous(
-    limits = c(-10, 300)
+    limits = c(-10, 100)
   )
 
 ```
 
-
-Is delay influenced by departure time? Let's look at `B6` which has a high median of `DEP_DELAY`
-
 ```{r}
 planes %>% 
-  filter(OP_CARRIER == "B6") %>% 
-  ggplot(aes(DEP_TIME,DEP_DELAY,  color = OP_CARRIER)) + 
-  geom_point()
-```
-
-```{r}
-planes %>% 
-  filter(OP_CARRIER == "B6") %>% 
-  count(DEP_DELAY > 5)
-  ggplot(aes(DEP_TIME,DEP_DELAY,  color = OP_CARRIER)) + 
-  geom_point()
-```
-
-## Get temperate for each incident by hour
-Using Api request below daily 10'000, 5'000 per hour, 600 per minute
-
-```{r}
-#| eval: false
-
-# Function to get weather data for a single row
-get_weather <- function(loc, dat, tim) {
-  weather <- openmeteo::weather_history(
-    location = loc,
-    start = dat,
-    end = dat,
-    hourly = "temperature_2m"
+  filter(OP_CARRIER == "WN") %>% 
+  ggplot(aes(x = Season, y = DEP_DELAY)) + 
+  geom_boxplot() +
+  labs(
+    title = "Boxplots of Departure Delay for carrier"
+  )+
+  scale_y_continuous(
+    limits = c(-10, 10)
   )
+
+```
+```{r}
+planes %>% 
+  group_by(Season) %>% 
+  count(CANCELLED)
+```
+It is interesting that the number of flights are similar across seasons. This may be explain by the fact that this dataset only consists of domestic outgoing flights from LGA. Tourism from different continents is not represented in not dataset.
+
+Is delay influenced by departure time? Let's plot planned departure time (`CRS_DEP_TIME`) vs. Delay time (`DEP_DELAY`) by seasons:
+
+```{r}
+
+planes %>% 
+  ggplot(aes(CRS_DEP_TIME,DEP_DELAY,  color = Season)) + 
+  geom_point() +
+  scale_y_continuous(limits = c(0, 1250)) +
+  scale_x_continuous(limits = c(0,2400)) 
+
   
+```
+This plot is quit interesting and reveals a certain pattern that needs to be considered in our analysis. Firstly, Wikipedia states LGA has a curfew between the hours of 12am and 6am during the warm months of the year. Looking at x axis this curfew is visible. From this plot it is unclear whether planned departure time has an influence on delay. Though it seems as if that there are more delays during the summer. 
+
+Let's look at weekday. Outliers dominate the visuals but we can't use log_10 scale on y axis because we have a lot of on time planes (y = 0) or leaving early planes (y = negative). 0 is -inf and negative numbers are undefined with log10. So we decrease the limits show in the plot
+```{r}
+library(forcats)
+
+planes %>% 
+  mutate(Weekday = fct_relevel(Weekday, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) %>%
+  ggplot(aes(x = "", y = DEP_DELAY)) + 
+  geom_boxplot(outlier.colour = "red",outlier.shape = 1) + 
+  geom_hline(yintercept  = 0, color = "red",linetype='dotted') +
+  facet_wrap(~ Weekday)+ 
+  scale_y_continuous(limits = c(-10,10))
 
   
-  temp <- weather$hourly_temperature_2m[as.integer(substr(tim,1,2)) + 1] # starts at 0 so we add 1 to get correct row in weather table
-  return(temp)
-}
-
-
-df_accidents <- df_accidents%>%
-  mutate(Temp = NA, .after = Time)
-
-
-for(i in 1:5){
-df_temp <- df_accidents %>% 
-    filter(is.na(Temp)) %>%
-    sample_n(600) %>%
-    rowwise() %>%
-    mutate(Temp = get_weather(City, Date, Time), .after = Time) %>%
-    ungroup()
-
-df_accidents <- df_accidents %>%
-  mutate(Temp = ifelse(is.na(Temp), df_temp$Temp[match(Accident.ID, df_temp$Accident.ID)], Temp))
-
-Sys.sleep(60)  # Sleep for 60 seconds (1 minute)
-}
-
-write.csv(df_accidents, "df_accidents_temp.csv", row.names = FALSE)
-```
-
-
-
-## Explore data
-
-### Impact of seasons?
-
-```{r}
-df_accidents %>% 
-  group_by(Year, Month) %>%
-  summarise(sum_Casualties = sum(Casualties), .groups = "drop") %>% 
-  ggplot(
-    aes(x = Month, y = sum_Casualties)
-  ) + 
-  geom_line() + 
-  scale_x_continuous(limits = c(1, 12), breaks = seq(1, 12, by = 1)) +  # Custom ticks
-  theme_minimal()  +
-  facet_wrap(~Year) 
-```
-
-```{r}
-df_accidents %>% 
-  ggplot(aes(x = "", y = Temp)) + 
-  geom_boxplot()
-df_accidents %>% 
-  ggplot(aes(x = Road.Condition, y = Temp)) + 
-  geom_boxplot()
-```
-
-
-```{r}
-df_accidents %>% 
-  filter(Month %in% c(11,12,1)) %>%
-  group_by(Country,Road.Condition)%>%
-  count(Road.Condition) %>% 
-  ungroup() %>%
-  ggplot(aes(x = Country, y = n, color = Road.Condition)) + 
-  geom_point() 
 ```
 ```{r}
-df_accidents %>% 
-  filter(Month %in% c(5,6,7)) %>%
-  count(City, Road.Condition) %>% 
-  group_by(City) %>% 
-  mutate(perc_road = n / sum(n) * 100) %>% 
-  # Create 100% stacked bar plot
-  ggplot(aes(x = perc_road, y = City, fill = Road.Condition)) +
-  geom_bar(stat = "identity", position = "fill") +  # "fill" makes it 100% stacked
-  scale_x_continuous(labels = scales::percent_format()) +  # Convert y-axis to percentage
-  labs(title = "Month: Mai, June, July - Road Conditions of Accidents by Country",
-       x = "Percentage",
-       y = "Country",
-       fill = "Road Condition") +
-  theme_minimal()
-
+planes %>% 
+  mutate(Weekday = fct_relevel(Weekday, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) %>%
+  ggplot(aes(Season, DEP_DELAY)) + 
+  geom_boxplot() + 
+  geom_hline(yintercept  = 0, linetype='dotted',color = "red") +
+  facet_wrap(~Weekday) + 
+  scale_y_continuous(limits = c(-10,10)) 
+  
 ```
 
-## Plot long, lat
-
-```{r}
-library(skimr)
-skim(df_accidents)
-# Load required libraries
-
-```
-
+It is interesting that 75% of planes leave early. It's would be interesting to explore `WHEELS_OFF` variable which is the time point the plane leaves the ground.
 
 
 # Key take aways
