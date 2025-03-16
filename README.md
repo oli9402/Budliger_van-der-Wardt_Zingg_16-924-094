@@ -29,8 +29,7 @@ Group Project for course "Applied Machine Learning and Predictive Modelling 1" i
 
 Dataset used: <https://www.kaggle.com/datasets/yuanyuwendymu/airline-delay-and-cancellation-data-2009-2018/data?select=2018.csv>
 
-Since this dataset is large we only used the plane delays from the year 2018. Furthermore using `read_lines` we only read 10'000 lines of the dataset.
-
+Glossary: <https://www.transtats.bts.gov/Glossary.asp?v0qrA=j>
 
 |variable          |class     |description |
 |:-----------------|:---------|:-----------|
@@ -59,7 +58,7 @@ Since this dataset is large we only used the plane delays from the year 2018. Fu
 |WEATHER_DELAY|     integer|       Delay caused by <b>weather</b> |
 |NAS_DELAY|     integer|       Delay caused by <b> air system</b> |
 |SECURITY_DELAY|     integer|       Delay caused by <b>air system</b> |
-|LATE_AIRCRAFT_DELAY|     integer|      Delay caused by <b>security|</b> |
+|LATE_AIRCRAFT_DELAY|     integer|      Delay caused by <b>security</b> |
 
 
 
