@@ -12,9 +12,6 @@ format:
     toc_depth: 5
     theme: cosmo
     highlight: zenburn
-output: 
-  html_document:
-    output_dir: "../Docs/" 
 ---
 
 # Packages
@@ -160,6 +157,58 @@ planes %>%
 
 It is interesting that 75% of planes leave early. It's would be interesting to explore `WHEELS_OFF` variable which is the time point the plane leaves the ground.
 
+```{r}
+planes %>% 
+  select(DEP_DELAY,ARR_DELAY,CRS_DEP_TIME,WHEELS_OFF,WHEELS_ON, DISTANCE,ACTUAL_ELAPSED_TIME,AIR_TIME) %>% 
+  cor(use = "complete.obs")
+  
+```
+```{r}
+
+planes %>% 
+  ggplot(aes(x = OP_CARRIER, y = WHEELS_OFF)) + 
+  geom_boxplot()
+```
+```{r}
+
+change_to_time <- function(df, var_time){
+  df %>% 
+    mutate({{var_time}} := sprintf("%04d", {{var_time}})) %>%
+    mutate({{var_time}} := format(strptime({{var_time}}, format ="%H%M"), format = "%H:%M")) 
+}
+
+```
+
+```{r}
+value_count <- function(data, group_col) {
+  data %>%
+    count({{group_col}}, name = 'count') %>%
+    mutate(count = prop.table(count) * 100) 
+}
+
+value_count(planes, OP_CARRIER)
+
+```
+
+```{r}
+# library(DataExplorer)
+# create_report(planes, y  = "DEP_DELAY")
+
+```
+
+
+There is no month oktober in the dataset it seems as if september and oktober are taken together. 
+
+```{r}
+planes %>% 
+  group_by(Month) %>% 
+  count()
+```
+```{r}
+planes %>% 
+  count(Weekday, sort = T) 
+  
+```
 
 # Key take aways
 
@@ -204,4 +253,5 @@ It is interesting that 75% of planes leave early. It's would be interesting to e
 **Short description of model:**
 
 **What have we learned?:**
+
 

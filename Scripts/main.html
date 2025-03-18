@@ -330,6 +330,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>It is interesting that 75% of planes leave early. It’s would be interesting to explore <code>WHEELS_OFF</code> variable which is the time point the plane leaves the ground.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>planes <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DEP_DELAY,ARR_DELAY,CRS_DEP_TIME,WHEELS_OFF,WHEELS_ON, DISTANCE,ACTUAL_ELAPSED_TIME,AIR_TIME) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     DEP_DELAY  ARR_DELAY CRS_DEP_TIME  WHEELS_OFF   WHEELS_ON
+DEP_DELAY           1.00000000 0.88794222   0.17802997  0.23297159 0.087967565
+ARR_DELAY           0.88794222 1.00000000   0.14498692  0.21498341 0.090026284
+CRS_DEP_TIME        0.17802997 0.14498692   1.00000000  0.97106762 0.813500830
+WHEELS_OFF          0.23297159 0.21498341   0.97106762  1.00000000 0.827959772
+WHEELS_ON           0.08796756 0.09002628   0.81350083  0.82795977 1.000000000
+DISTANCE            0.05305078 0.03439478  -0.07072394 -0.06033415 0.006648978
+ACTUAL_ELAPSED_TIME 0.06086240 0.19037333  -0.04563512 -0.01602419 0.059612609
+AIR_TIME            0.04836759 0.06952511  -0.07712053 -0.06518530 0.010649528
+                        DISTANCE ACTUAL_ELAPSED_TIME    AIR_TIME
+DEP_DELAY            0.053050775          0.06086240  0.04836759
+ARR_DELAY            0.034394775          0.19037333  0.06952511
+CRS_DEP_TIME        -0.070723941         -0.04563512 -0.07712053
+WHEELS_OFF          -0.060334149         -0.01602419 -0.06518530
+WHEELS_ON            0.006648978          0.05961261  0.01064953
+DISTANCE             1.000000000          0.92985120  0.97898943
+ACTUAL_ELAPSED_TIME  0.929851200          1.00000000  0.95219350
+AIR_TIME             0.978989427          0.95219350  1.00000000</code></pre>
+</div>
+</div>
 </section>
 </section>
 <section id="key-take-aways" class="level1">
