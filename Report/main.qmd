@@ -47,7 +47,7 @@ Short description
 # get working directory if csv not loading or use absolute path
 # getwd() 
 
-planes <- read.csv("./../Data/LGA.csv")
+planes <- load("./../Data/LGA_preprocessed.rda")
 
 ```
 
