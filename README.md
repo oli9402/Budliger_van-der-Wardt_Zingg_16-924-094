@@ -19,11 +19,15 @@ Group Project for course "Applied Machine Learning and Predictive Modelling 1" i
 <b>Directory Structure</b>
 |__ <b>.gitignore</b>
 |__ <b>Data</b>
-    |______ <b>planes.csv</b>
+    |______ <b>LGA.csv</b>
+    |______ <b>LGA_preprocessing.rda</b>   # Binary format of preprocessed LGA.csv
 |__ <b>Scripts</b>
-    |______ <b>preprocessing.qmd</b>
+    |______ <b>preprocessing.r</b>         # Preprocessing raw data and transforming variables
+    |______ <b>exploration.qmd</b>         # Exploration of LGA data set
+|__ <b>Plots_Exploration</b>
+    |______ <b>NAME.rda</b>                # Binary format of plots generated in exploration.qmd and included in Main Report
 |__ <b>Output</b>
-    |______ <b>main.qmd</b>
+    |______ <b>main.qmd</b>                # Main Report 
 </pre>
 
 ## Install 
