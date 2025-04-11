@@ -25,8 +25,8 @@ format:
 # install.packages("tidyverse")
 # install.packages("lubridate")
 # install.packages("gt")
-# install.packages("openmeteo")
-# Load packages ---------------------------
+
+# Load packages -----------------------------
 
 library(tidyverse) # ggplot for plotting, dplyr for data manipulation
 library(lubridate) # package for handling time variable
