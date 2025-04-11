@@ -1,0 +1,256 @@
+---
+title: "Project Title"
+author: 
+- Lenny Budlinger
+- Thomas van der Wardt 
+- Oliver Zingg
+format:
+  html:
+    toc: true
+    number_sections: true
+    toc_float: true
+    toc_depth: 5
+---
+
+# Packages
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| warning: false
+#| error: false
+
+# Install Packages ---------------------------
+
+# install.packages("tidyverse")
+# install.packages("lubridate")
+# install.packages("gt")
+# install.packages("openmeteo")
+# Load packages ---------------------------
+
+library(tidyverse) # ggplot for plotting, dplyr for data manipulation
+library(lubridate) # package for handling time variable
+library(hms) # handling time
+library(gt) # Print tables
+
+```
+
+# Dataset
+
+Short description
+
+## Load
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| warning: false
+
+# Load data ---------------------------
+
+# get working directory if csv not loading or use absolute path
+# getwd() 
+
+planes <- read.csv("./../Data/LGA.csv")
+
+```
+
+## Data transformation
+
+### Add seasons
+
+```{r}
+planes <- planes %>% 
+  mutate(FL_DATE = as.Date(FL_DATE)) %>% 
+  mutate(
+    Year  = format(FL_DATE, "%Y"),
+    Month = as.numeric(format(FL_DATE, "%m")),
+    Day   = format(FL_DATE, "%d")) %>% 
+  mutate(Season = case_when( 
+           Month %in% c(12,01,02) ~ "Winter" ,
+           Month %in% c(03,04,05) ~ "Spring",
+           Month %in% c(06,07,08) ~ "Summer",
+           Month %in% c(09,10,11) ~ "Fall",
+           TRUE ~ NA
+           )) %>% 
+  mutate(Weekday = weekdays(FL_DATE)) %>%
+  mutate(Season = as.factor(Season)) %>% 
+  relocate(Year, Month, Day, Weekday, Season, .after = FL_DATE) 
+```
+
+## Explore
+
+
+```{r}
+planes %>% 
+  ggplot(aes(x = OP_CARRIER, y = DEP_DELAY)) + 
+  geom_boxplot() +
+  labs(
+    title = "Boxplots of Departure Delay for carrier"
+  )+
+  scale_y_continuous(
+    limits = c(-10, 100)
+  )
+
+```
+
+```{r}
+planes %>% 
+  filter(OP_CARRIER == "WN") %>% 
+  ggplot(aes(x = Season, y = DEP_DELAY)) + 
+  geom_boxplot() +
+  labs(
+    title = "Boxplots of Departure Delay for carrier WN"
+  )+
+  scale_y_continuous(
+    limits = c(-10, 10)
+  )
+
+```
+```{r}
+
+planes %>% 
+  group_by(Season) %>% 
+  count(CANCELLED)
+```
+It is interesting that the number of flights are similar across seasons. This may be explain by the fact that this dataset only consists of domestic outgoing flights from LGA. Tourism from different continents is not represented in not dataset.
+
+Is delay influenced by departure time? Let's plot planned departure time (`CRS_DEP_TIME`) vs. Delay time (`DEP_DELAY`) by seasons:
+
+```{r}
+
+planes %>% 
+  ggplot(aes(CRS_DEP_TIME,DEP_DELAY,  color = Season)) + 
+  geom_point() +
+  scale_y_continuous(limits = c(0, 1250)) +
+  scale_x_continuous(limits = c(0,2400)) 
+
+  
+```
+This plot is quit interesting and reveals a certain pattern that needs to be considered in our analysis. Firstly, Wikipedia states LGA has a curfew between the hours of 12am and 6am during the warm months of the year. Looking at x axis this curfew is visible. From this plot it is unclear whether planned departure time has an influence on delay. Though it seems as if that there are more delays during the summer. 
+
+Let's look at weekday. Outlines dominate the visuals but we can't use log_10 scale on y axis because we have a lot of on time planes (y = 0) or leaving early planes (y = negative). 0 is -inf and negative numbers are undefined with log10. So we decrease the limits show in the plot
+```{r}
+library(forcats)
+
+planes %>% 
+  mutate(Weekday = fct_relevel(Weekday, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) %>%
+  ggplot(aes(x = "", y = DEP_DELAY)) + 
+  geom_boxplot(outlier.colour = "red",outlier.shape = 1) + 
+  geom_hline(yintercept  = 0, color = "red",linetype='dotted') +
+  facet_wrap(~ Weekday)+ 
+  scale_y_continuous(limits = c(-10,10))
+
+  
+```
+```{r}
+planes %>% 
+  mutate(Weekday = fct_relevel(Weekday, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) %>%
+  ggplot(aes(Season, DEP_DELAY)) + 
+  geom_boxplot() + 
+  geom_hline(yintercept  = 0, linetype='dotted',color = "red") +
+  facet_wrap(~Weekday) + 
+  scale_y_continuous(limits = c(-10,10)) 
+  
+```
+
+It is interesting that 75% of planes leave early. It's would be interesting to explore `WHEELS_OFF` variable which is the time point the plane leaves the ground.
+
+```{r}
+planes %>% 
+  select(DEP_DELAY,ARR_DELAY,CRS_DEP_TIME,WHEELS_OFF,WHEELS_ON, DISTANCE,ACTUAL_ELAPSED_TIME,AIR_TIME) %>% 
+  cor(use = "complete.obs")
+  
+```
+```{r}
+
+planes %>% 
+  ggplot(aes(x = OP_CARRIER, y = WHEELS_OFF)) + 
+  geom_boxplot()
+```
+```{r}
+
+change_to_time <- function(df, var_time){
+  df %>% 
+    mutate({{var_time}} := sprintf("%04d", {{var_time}})) %>%
+    mutate({{var_time}} := format(strptime({{var_time}}, format ="%H%M"), format = "%H:%M")) 
+}
+
+```
+
+```{r}
+value_count <- function(data, group_col) {
+  data %>%
+    count({{group_col}}, name = 'count') %>%
+    mutate(count = prop.table(count) * 100) 
+}
+
+value_count(planes, OP_CARRIER)
+
+```
+
+```{r}
+# library(DataExplorer)
+# create_report(planes, y  = "DEP_DELAY")
+
+```
+
+
+There is no month oktober in the dataset it seems as if september and oktober are taken together. 
+
+```{r}
+planes %>% 
+  group_by(Month) %>% 
+  count()
+```
+```{r}
+planes %>% 
+  count(Weekday, sort = T) 
+  
+```
+
+# Key take aways
+
+## Problems with modelling and data
+
+## Interpretations of results
+
+# Modelling
+
+## Linear Model
+
+**Short description of model:**
+
+**What have we learned?:**
+
+## GLM Poisson
+
+**Short description of model:**
+
+**What have we learned?:**
+
+## GLM Binomial
+
+**Short description of model:**
+
+**What have we learned?:**
+
+## GAM
+
+**Short description of model:**
+
+**What have we learned?:**
+
+## Neural Network
+
+**Short description of model:**
+
+**What have we learned?:**
+
+## Support Vector Machine
+
+**Short description of model:**
+
+**What have we learned?:**
+
+
