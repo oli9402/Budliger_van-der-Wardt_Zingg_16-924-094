@@ -29,4 +29,4 @@ planes <- planes %>%
 
 
 # Save the preprocessed data
-save(planes, file = "../Data/planes_preprocessed.rda")
+save(planes, file = "../Data/LGA_preprocessed.rda")
