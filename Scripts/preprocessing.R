@@ -29,4 +29,4 @@ planes <- planes %>%
 
 
 # Save the preprocessed data
-write.csv(planes, file = "./../Data/LGA_preprocessed.csv", row.names = FALSE)
+save(planes, file = "planes_preprocessed.rda")
