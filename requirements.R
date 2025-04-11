@@ -1,4 +1,3 @@
-# Package list
 required_packages <- c(
   "tidyverse",     
   "lubridate",           
@@ -7,13 +6,9 @@ required_packages <- c(
   "gt"
 )
 
-
-# Install and load packages
+# Install missing packages without loading
 for (pkg in required_packages) {
-  if (!require(pkg, character.only = TRUE)) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
     install.packages(pkg)
-    library(pkg, character.only = TRUE)
-  } else {
-    library(pkg, character.only = TRUE)
   }
 }

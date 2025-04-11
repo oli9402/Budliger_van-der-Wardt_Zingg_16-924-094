@@ -22,8 +22,18 @@ Group Project for course "Applied Machine Learning and Predictive Modelling 1" i
     |______ <b>planes.csv</b>
 |__ <b>Scripts</b>
     |______ <b>preprocessing.qmd</b>
+|__ <b>Output</b>
     |______ <b>main.qmd</b>
 </pre>
+
+## Install 
+
+Install (if needed) relevant packages. 
+Run the following command in the RStudio console: 
+
+```R
+source("requirements.R")
+```
 
 ## Dataset 
 
