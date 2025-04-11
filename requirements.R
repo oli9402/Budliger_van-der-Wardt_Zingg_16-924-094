@@ -3,7 +3,8 @@ required_packages <- c(
   "lubridate",           
   "hms",        
   "ggplot2",     
-  "gt"
+  "gt",
+  "forcats"
 )
 
 # Install missing packages without loading

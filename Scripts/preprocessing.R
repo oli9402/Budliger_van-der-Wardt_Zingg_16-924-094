@@ -1,4 +1,9 @@
 library(tidyverse)
+library(tidyverse) # ggplot for plotting, dplyr for data manipulation
+library(lubridate) # package for handling time variable
+library(hms) # handling time
+library(forcats) # Reorder factor levels
+
 
 # Load the data
 planes <- read.csv("./../Data/LGA.csv")
