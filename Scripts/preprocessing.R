@@ -1,4 +1,3 @@
-library(tidyverse)
 library(tidyverse) # ggplot for plotting, dplyr for data manipulation
 library(lubridate) # package for handling time variable
 library(hms) # handling time
