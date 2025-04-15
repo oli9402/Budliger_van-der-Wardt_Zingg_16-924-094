@@ -6,13 +6,17 @@ author:
 - Oliver Zingg
 format:
   html:
+    mainfont: "sans-serif"
+    monofont: "monospace"
     code-fold: true
     code-summary: "Show the code"
     code-line-numbers: true
     toc: true
+    toc-location: left-body
     number_sections: true
-    toc_float: true
-    toc_depth: 5
+    toc_depth: 3
+    grid:
+      sidebar-width: 350px
 execute:
   warning: false
   error: false
@@ -28,6 +32,7 @@ library(tidyverse) # ggplot for plotting, dplyr for data manipulation
 library(lubridate) # package for handling time variable
 library(hms) # handling time
 library(gt) # Print tables
+library(DT)
 library(forcats) # Reorder factor levels
 library(kableExtra)
 library(janitor)
@@ -50,63 +55,39 @@ load("./../Data/LGA_preprocessed.rda")
 
 
 ## Description of the LGA Data set
-
-### Flights by Carrier
-
-```{r}
-planes %>% 
-  tabyl(OP_CARRIER) %>%
-  adorn_pct_formatting() %>%
-  arrange(desc(n)) %>% 
-  kable()
-```
-### Total percentage of delayed arrivals
+### Table 
 
 ```{r}
-# Percentage of late arrivals
-planes %>% 
-  mutate(index_late = ifelse(ARR_DELAY > 0, 1, 0)) %>%
-  count(index_late) %>%
-  mutate(percentage = n / sum(n) * 100) 
-```
-
-### Total flights by Carrier and percentage delayed arrivals
-```{r}
-planes %>% 
-  mutate(index_late = ifelse(ARR_DELAY > 0, 1, 0)) %>%
-  group_by(OP_CARRIER, index_late) %>%
-  count() %>%
+# Create table
+table <- planes %>%
+  mutate(index_late_arr = ifelse(ARR_DELAY > 0, 1, 0),
+         index_late_dep = ifelse(DEP_DELAY > 0, 1, 0)) %>%
   group_by(OP_CARRIER) %>%
-  mutate(percentage_late = n / sum(n) * 100) %>%
-  mutate(percentage_late = round(percentage_late, 2)) %>%
-  filter(index_late == 1) %>%
-  arrange(desc(n)) %>%
-  select(-index_late) %>% 
-  kable()
+  summarise(
+    Total_flights = n(),
+    Total_delayed_arr = sum(index_late_arr == 1, na.rm = TRUE),
+    percentage_delayed_arr = Total_delayed_arr / Total_flights * 100,
+    
+    Total_delayed_dep = sum(index_late_dep == 1, na.rm = TRUE),
+    percentage_delayed_dep = Total_delayed_dep / Total_flights * 100,
+    
+    mean_dep_delay = mean(DEP_DELAY, na.rm = TRUE),
+    mean_arr_delay = mean(ARR_DELAY, na.rm = TRUE),
+    mean_distance = mean(DISTANCE, na.rm = TRUE)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    percentage_of_total = Total_flights / sum(Total_flights) * 100
+  ) %>%
+  mutate(across(where(is.double), ~round(.x, 2))) %>% 
+  relocate(percentage_of_total, .after = Total_flights)
+
+# Display table with sortable columns
+datatable(table, rownames = FALSE, class = "compact", options = list(order = list(list(1, 'desc'))))
+
 ```
 
-```{r}
-planes %>% 
-  filter(OP_CARRIER == "WN") %>% 
-  ggplot(aes(x = Season, y = DEP_DELAY)) + 
-  geom_boxplot() +
-  labs(
-    title = "Boxplots of Departure Delay for carrier WN"
-  )+
-  scale_y_continuous(
-    limits = c(-10, 10)
-  )
 
-```
-```{r}
-
-planes %>% 
-  group_by(Season) %>% 
-  count(CANCELLED)
-```
-It is interesting that the number of flights are similar across seasons. This may be explain by the fact that this dataset only consists of domestic outgoing flights from LGA. Tourism from different continents is not represented in not dataset.
-
-Is delay influenced by departure time? Let's plot planned departure time (`CRS_DEP_TIME`) vs. Delay time (`DEP_DELAY`) by seasons:
 
 ```{r}
 
