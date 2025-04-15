@@ -55,13 +55,15 @@ load("./../Data/LGA_preprocessed.rda")
 
 
 ## Description of the LGA Data set
-### Table 
+### Total Flights and Delays
+
+We defined a flight as delayed if the arrival or departure delay is greater than 30 minutes.
 
 ```{r}
 # Create table
 table <- planes %>%
-  mutate(index_late_arr = ifelse(ARR_DELAY > 0, 1, 0),
-         index_late_dep = ifelse(DEP_DELAY > 0, 1, 0)) %>%
+  mutate(index_late_arr = ifelse(ARR_DELAY > 30, 1, 0),
+         index_late_dep = ifelse(DEP_DELAY > 30, 1, 0)) %>%
   group_by(OP_CARRIER) %>%
   summarise(
     Total_flights = n(),
