@@ -16,7 +16,6 @@ format:
 execute:
   warning: false
   error: false
-  warning: false
 ---
 
 # Packages
@@ -30,13 +29,12 @@ library(lubridate) # package for handling time variable
 library(hms) # handling time
 library(gt) # Print tables
 library(forcats) # Reorder factor levels
+library(kableExtra)
+library(janitor)
 
 
 ```
 
-# Dataset
-
-Short description
 
 ## Load
 
@@ -47,47 +45,44 @@ Short description
 # get working directory if csv not loading or use absolute path
 # getwd() 
 
-planes <- load("./../Data/LGA_preprocessed.rda")
-
+load("./../Data/LGA_preprocessed.rda")
 ```
 
-## Data transformation
 
-### Add seasons
+## Description of the LGA Data set
 
-```{r}
-planes <- planes %>% 
-  mutate(FL_DATE = as.Date(FL_DATE)) %>% 
-  mutate(
-    Year  = format(FL_DATE, "%Y"),
-    Month = as.numeric(format(FL_DATE, "%m")),
-    Day   = format(FL_DATE, "%d")) %>% 
-  mutate(Season = case_when( 
-           Month %in% c(12,01,02) ~ "Winter" ,
-           Month %in% c(03,04,05) ~ "Spring",
-           Month %in% c(06,07,08) ~ "Summer",
-           Month %in% c(09,10,11) ~ "Fall",
-           TRUE ~ NA
-           )) %>% 
-  mutate(Weekday = weekdays(FL_DATE)) %>%
-  mutate(Season = as.factor(Season)) %>% 
-  relocate(Year, Month, Day, Weekday, Season, .after = FL_DATE) 
-```
-
-## Explore
-
+### Flights by Carrier
 
 ```{r}
 planes %>% 
-  ggplot(aes(x = OP_CARRIER, y = DEP_DELAY)) + 
-  geom_boxplot() +
-  labs(
-    title = "Boxplots of Departure Delay for carrier"
-  )+
-  scale_y_continuous(
-    limits = c(-10, 100)
-  )
+  tabyl(OP_CARRIER) %>%
+  adorn_pct_formatting() %>%
+  arrange(desc(n)) %>% 
+  kable()
+```
+### Total percentage of delayed arrivals
 
+```{r}
+# Percentage of late arrivals
+planes %>% 
+  mutate(index_late = ifelse(ARR_DELAY > 0, 1, 0)) %>%
+  count(index_late) %>%
+  mutate(percentage = n / sum(n) * 100) 
+```
+
+### Total flights by Carrier and percentage delayed arrivals
+```{r}
+planes %>% 
+  mutate(index_late = ifelse(ARR_DELAY > 0, 1, 0)) %>%
+  group_by(OP_CARRIER, index_late) %>%
+  count() %>%
+  group_by(OP_CARRIER) %>%
+  mutate(percentage_late = n / sum(n) * 100) %>%
+  mutate(percentage_late = round(percentage_late, 2)) %>%
+  filter(index_late == 1) %>%
+  arrange(desc(n)) %>%
+  select(-index_late) %>% 
+  kable()
 ```
 
 ```{r}

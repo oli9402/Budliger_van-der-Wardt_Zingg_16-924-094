@@ -4,7 +4,9 @@ required_packages <- c(
   "hms",        
   "ggplot2",     
   "gt",
-  "forcats"
+  "forcats",
+  "janitor",
+  "kableExtra"
 )
 
 # Install missing packages without loading
