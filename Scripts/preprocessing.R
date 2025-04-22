@@ -5,7 +5,8 @@ library(forcats) # Reorder factor levels
 
 
 # Load the data
-planes <- read.csv("./../Data/LGA.csv")
+planes <- read.csv("./../Data/LGA.csv",
+                   stringsAsFactors = TRUE)
 
 # Change format and add Season, Year, Month, Weekday
 planes <- planes %>% 
@@ -24,8 +25,10 @@ planes <- planes %>%
   mutate(Weekday = weekdays(FL_DATE)) %>%
   mutate(Weekday = fct_relevel(Weekday, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) %>%
   mutate(Season = as.factor(Season)) %>% 
-  relocate(Year, Month, Day, Weekday, Season, .after = FL_DATE) 
+  relocate(Year, Month, Day, Weekday, Season, .after = FL_DATE)  %>% 
+  mutate(across(where(is.character), as.factor))
 
 
 # Save the preprocessed data
 save(planes, file = "../Data/LGA_preprocessed.rda")
+

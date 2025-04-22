@@ -70,16 +70,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="main_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="main_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="main_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<link href="main_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
-<script src="main_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-<link href="main_files/libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
-<script src="main_files/libs/datatables-binding-0.33/datatables.js"></script>
-<script src="main_files/libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<link href="main_files/libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
-<link href="main_files/libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
-<script src="main_files/libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
-<link href="main_files/libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
-<script src="main_files/libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
 
 
 </head>
@@ -92,23 +82,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#packages" id="toc-packages" class="nav-link active" data-scroll-target="#packages">Packages</a>
-  <ul class="collapse">
+  <li><a href="#packages" id="toc-packages" class="nav-link active" data-scroll-target="#packages">Packages</a></li>
   <li><a href="#load" id="toc-load" class="nav-link" data-scroll-target="#load">Load</a></li>
   <li><a href="#description-of-the-lga-data-set" id="toc-description-of-the-lga-data-set" class="nav-link" data-scroll-target="#description-of-the-lga-data-set">Description of the LGA Data set</a>
   <ul class="collapse">
-  <li><a href="#table" id="toc-table" class="nav-link" data-scroll-target="#table">Table</a></li>
+  <li><a href="#total-flights-and-delays" id="toc-total-flights-and-delays" class="nav-link" data-scroll-target="#total-flights-and-delays">Total Flights and Delays</a></li>
+  <li><a href="#depature-times" id="toc-depature-times" class="nav-link" data-scroll-target="#depature-times">Depature times</a></li>
+  <li><a href="#arrival-delay-by-day-and-season" id="toc-arrival-delay-by-day-and-season" class="nav-link" data-scroll-target="#arrival-delay-by-day-and-season">Arrival Delay by Day and Season</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#key-take-aways" id="toc-key-take-aways" class="nav-link" data-scroll-target="#key-take-aways">Key take aways</a>
+  <li><a href="#linear-model" id="toc-linear-model" class="nav-link" data-scroll-target="#linear-model">Linear Model</a>
   <ul class="collapse">
-  <li><a href="#problems-with-modelling-and-data" id="toc-problems-with-modelling-and-data" class="nav-link" data-scroll-target="#problems-with-modelling-and-data">Problems with modelling and data</a></li>
-  <li><a href="#interpretations-of-results" id="toc-interpretations-of-results" class="nav-link" data-scroll-target="#interpretations-of-results">Interpretations of results</a></li>
-  </ul></li>
-  <li><a href="#modelling" id="toc-modelling" class="nav-link" data-scroll-target="#modelling">Modelling</a>
+  <li><a href="#post-hoc-tests" id="toc-post-hoc-tests" class="nav-link" data-scroll-target="#post-hoc-tests">Post-Hoc Tests</a></li>
+  <li><a href="#interpretation-of-final-model" id="toc-interpretation-of-final-model" class="nav-link" data-scroll-target="#interpretation-of-final-model">Interpretation of final model</a>
   <ul class="collapse">
-  <li><a href="#linear-model" id="toc-linear-model" class="nav-link" data-scroll-target="#linear-model">Linear Model</a></li>
-  <li><a href="#glm-poisson" id="toc-glm-poisson" class="nav-link" data-scroll-target="#glm-poisson">GLM Poisson</a></li>
+  <li><a href="#coefficients-of-model" id="toc-coefficients-of-model" class="nav-link" data-scroll-target="#coefficients-of-model">Coefficients of Model</a></li>
+  <li><a href="#lets-explore-our-model-variables-a-bit-more" id="toc-lets-explore-our-model-variables-a-bit-more" class="nav-link" data-scroll-target="#lets-explore-our-model-variables-a-bit-more">Let’s explore our model variables a bit more</a></li>
+  <li><a href="#model-diagnostics" id="toc-model-diagnostics" class="nav-link" data-scroll-target="#model-diagnostics">Model diagnostics</a></li>
+  <li><a href="#lets-look-at-density-plots" id="toc-lets-look-at-density-plots" class="nav-link" data-scroll-target="#lets-look-at-density-plots">Let’s look at density plots</a></li>
+  <li><a href="#transformation" id="toc-transformation" class="nav-link" data-scroll-target="#transformation">Transformation</a></li>
+  <li><a href="#z-normalization" id="toc-z-normalization" class="nav-link" data-scroll-target="#z-normalization">z-normalization</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#glm-poisson" id="toc-glm-poisson" class="nav-link" data-scroll-target="#glm-poisson">GLM Poisson</a>
+  <ul class="collapse">
   <li><a href="#glm-binomial" id="toc-glm-binomial" class="nav-link" data-scroll-target="#glm-binomial">GLM Binomial</a></li>
   <li><a href="#gam" id="toc-gam" class="nav-link" data-scroll-target="#gam">GAM</a></li>
   <li><a href="#neural-network" id="toc-neural-network" class="nav-link" data-scroll-target="#neural-network">Neural Network</a></li>
@@ -151,23 +147,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#packages" id="toc-packages">Packages</a>
-  <ul>
+  <li><a href="#packages" id="toc-packages">Packages</a></li>
   <li><a href="#load" id="toc-load">Load</a></li>
   <li><a href="#description-of-the-lga-data-set" id="toc-description-of-the-lga-data-set">Description of the LGA Data set</a>
   <ul>
-  <li><a href="#table" id="toc-table">Table</a></li>
+  <li><a href="#total-flights-and-delays" id="toc-total-flights-and-delays">Total Flights and Delays</a></li>
+  <li><a href="#depature-times" id="toc-depature-times">Depature times</a></li>
+  <li><a href="#arrival-delay-by-day-and-season" id="toc-arrival-delay-by-day-and-season">Arrival Delay by Day and Season</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#key-take-aways" id="toc-key-take-aways">Key take aways</a>
+  <li><a href="#linear-model" id="toc-linear-model">Linear Model</a>
   <ul>
-  <li><a href="#problems-with-modelling-and-data" id="toc-problems-with-modelling-and-data">Problems with modelling and data</a></li>
-  <li><a href="#interpretations-of-results" id="toc-interpretations-of-results">Interpretations of results</a></li>
-  </ul></li>
-  <li><a href="#modelling" id="toc-modelling">Modelling</a>
+  <li><a href="#post-hoc-tests" id="toc-post-hoc-tests">Post-Hoc Tests</a></li>
+  <li><a href="#interpretation-of-final-model" id="toc-interpretation-of-final-model">Interpretation of final model</a>
   <ul>
-  <li><a href="#linear-model" id="toc-linear-model">Linear Model</a></li>
-  <li><a href="#glm-poisson" id="toc-glm-poisson">GLM Poisson</a></li>
+  <li><a href="#coefficients-of-model" id="toc-coefficients-of-model">Coefficients of Model</a></li>
+  <li><a href="#lets-explore-our-model-variables-a-bit-more" id="toc-lets-explore-our-model-variables-a-bit-more">Let’s explore our model variables a bit more</a></li>
+  <li><a href="#model-diagnostics" id="toc-model-diagnostics">Model diagnostics</a></li>
+  <li><a href="#lets-look-at-density-plots" id="toc-lets-look-at-density-plots">Let’s look at density plots</a></li>
+  <li><a href="#transformation" id="toc-transformation">Transformation</a></li>
+  <li><a href="#z-normalization" id="toc-z-normalization">z-normalization</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#glm-poisson" id="toc-glm-poisson">GLM Poisson</a>
+  <ul>
   <li><a href="#glm-binomial" id="toc-glm-binomial">GLM Binomial</a></li>
   <li><a href="#gam" id="toc-gam">GAM</a></li>
   <li><a href="#neural-network" id="toc-neural-network">Neural Network</a></li>
@@ -175,23 +177,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   </ul>
 </nav>
-<section id="packages" class="level1">
-<h1>Packages</h1>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">Packages</h2>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Load packages -----------------------------</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(tidyverse) <span class="co"># ggplot for plotting, dplyr for data manipulation</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(lubridate) <span class="co"># package for handling time variable</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">library</span>(hms) <span class="co"># handling time</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">library</span>(gt) <span class="co"># Print tables</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">library</span>(DT)</span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="fu">library</span>(forcats) <span class="co"># Reorder factor levels</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="fu">library</span>(kableExtra)</span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Scientific notation</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># Load packages -----------------------------</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">library</span>(tidyverse) <span class="co"># ggplot for plotting, dplyr for data manipulation</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">library</span>(lubridate) <span class="co"># package for handling time variable</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="fu">library</span>(hms) <span class="co"># handling time</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="fu">library</span>(gt) <span class="co"># Print tables</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="fu">library</span>(DT)</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">library</span>(forcats) <span class="co"># Reorder factor levels</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">library</span>(multcomp) <span class="co"># Multiple comparison tests</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
 <section id="load" class="level2">
 <h2 class="anchored" data-anchor-id="load">Load</h2>
 <div class="cell">
@@ -208,15 +215,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="description-of-the-lga-data-set" class="level2">
 <h2 class="anchored" data-anchor-id="description-of-the-lga-data-set">Description of the LGA Data set</h2>
-<section id="table" class="level3">
-<h3 class="anchored" data-anchor-id="table">Table</h3>
+<section id="total-flights-and-delays" class="level3">
+<h3 class="anchored" data-anchor-id="total-flights-and-delays">Total Flights and Delays</h3>
+<p>We defined a flight as delayed if the arrival or departure delay is greater than 30 minutes.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Create table</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>table <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">mutate</span>(<span class="at">index_late_arr =</span> <span class="fu">ifelse</span>(ARR_DELAY <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb3-4"><a href="#cb3-4"></a>         <span class="at">index_late_dep =</span> <span class="fu">ifelse</span>(DEP_DELAY <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">mutate</span>(<span class="at">index_late_arr =</span> <span class="fu">ifelse</span>(ARR_DELAY <span class="sc">&gt;</span> <span class="dv">30</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb3-4"><a href="#cb3-4"></a>         <span class="at">index_late_dep =</span> <span class="fu">ifelse</span>(DEP_DELAY <span class="sc">&gt;</span> <span class="dv">30</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb3-5"><a href="#cb3-5"></a>  <span class="fu">group_by</span>(OP_CARRIER) <span class="sc">%&gt;%</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a>  <span class="fu">summarise</span>(</span>
 <span id="cb3-7"><a href="#cb3-7"></a>    <span class="at">Total_flights =</span> <span class="fu">n</span>(),</span>
@@ -226,54 +234,751 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-11"><a href="#cb3-11"></a>    <span class="at">Total_delayed_dep =</span> <span class="fu">sum</span>(index_late_dep <span class="sc">==</span> <span class="dv">1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
 <span id="cb3-12"><a href="#cb3-12"></a>    <span class="at">percentage_delayed_dep =</span> Total_delayed_dep <span class="sc">/</span> Total_flights <span class="sc">*</span> <span class="dv">100</span>,</span>
 <span id="cb3-13"><a href="#cb3-13"></a>    </span>
-<span id="cb3-14"><a href="#cb3-14"></a>    <span class="at">mean_dep_delay =</span> <span class="fu">mean</span>(DEP_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb3-15"><a href="#cb3-15"></a>    <span class="at">mean_arr_delay =</span> <span class="fu">mean</span>(ARR_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb3-16"><a href="#cb3-16"></a>    <span class="at">mean_distance =</span> <span class="fu">mean</span>(DISTANCE, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-14"><a href="#cb3-14"></a>    <span class="at">median_dep_delay =</span> <span class="fu">median</span>(DEP_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-15"><a href="#cb3-15"></a>    <span class="at">median_arr_delay =</span> <span class="fu">median</span>(ARR_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-16"><a href="#cb3-16"></a>    <span class="at">median_distance =</span> <span class="fu">median</span>(DISTANCE, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-17"><a href="#cb3-17"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb3-18"><a href="#cb3-18"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb3-19"><a href="#cb3-19"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb3-20"><a href="#cb3-20"></a>    <span class="at">percentage_of_total =</span> Total_flights <span class="sc">/</span> <span class="fu">sum</span>(Total_flights) <span class="sc">*</span> <span class="dv">100</span></span>
 <span id="cb3-21"><a href="#cb3-21"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb3-22"><a href="#cb3-22"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.double), <span class="sc">~</span><span class="fu">round</span>(.x, <span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-23"><a href="#cb3-23"></a>  <span class="fu">relocate</span>(percentage_of_total, <span class="at">.after =</span> Total_flights)</span>
-<span id="cb3-24"><a href="#cb3-24"></a></span>
-<span id="cb3-25"><a href="#cb3-25"></a><span class="co"># Display table with sortable columns</span></span>
-<span id="cb3-26"><a href="#cb3-26"></a><span class="fu">datatable</span>(table, <span class="at">rownames =</span> <span class="cn">FALSE</span>, <span class="at">class =</span> <span class="st">"compact"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-10e9eca8c4b3f40adda1" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-10e9eca8c4b3f40adda1">{"x":{"filter":"none","vertical":false,"data":[["9E","AA","B6","CO","DL","EV","F9","FL","MQ","NW","OH","OO","UA","US","WN","XE","YV"],[1547,16968,2899,3666,14455,172,727,5954,11298,8754,11162,27,6578,12774,1422,890,1041],[1.54,16.91,2.89,3.65,14.41,0.17,0.72,5.93,11.26,8.720000000000001,11.12,0.03,6.56,12.73,1.42,0.89,1.04],[502,5699,1237,1390,4781,47,346,2373,3822,3593,5090,13,1965,3416,421,282,335],[32.45,33.59,42.67,37.92,33.08,27.33,47.59,39.86,33.83,41.04,45.6,48.15,29.87,26.74,29.61,31.69,32.18],[484,4364,1126,1443,4086,57,225,2013,2970,3124,3449,10,2002,1660,736,237,278],[31.29,25.72,38.84,39.36,28.27,33.14,30.95,33.81,26.29,35.69,30.9,37.04,30.43,13,51.76,26.63,26.71],[6.95,7.22,13.48,11.26,8.19,10.07,7.18,13.08,6.72,9.27,14.91,25.61,11.2,-1.31,20.02,11.2,13.42],[-0.45,1.35,9.94,6.63,2.6,1.1,7.28,9.27,2.02,5.72,11.22,30.35,0.47,-3.73,3.22,4.81,4.7],[675.78,1029.22,1042.85,1223.26,658.21,631.9,1619,662.1,462.51,838.98,668.66,478,912.12,280.27,513.1,418,229]],"container":"<table class=\"compact\">\n  <thead>\n    <tr>\n      <th>OP_CARRIER<\/th>\n      <th>Total_flights<\/th>\n      <th>percentage_of_total<\/th>\n      <th>Total_delayed_arr<\/th>\n      <th>percentage_delayed_arr<\/th>\n      <th>Total_delayed_dep<\/th>\n      <th>percentage_delayed_dep<\/th>\n      <th>mean_dep_delay<\/th>\n      <th>mean_arr_delay<\/th>\n      <th>mean_distance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,8,9]},{"name":"OP_CARRIER","targets":0},{"name":"Total_flights","targets":1},{"name":"percentage_of_total","targets":2},{"name":"Total_delayed_arr","targets":3},{"name":"percentage_delayed_arr","targets":4},{"name":"Total_delayed_dep","targets":5},{"name":"percentage_delayed_dep","targets":6},{"name":"mean_dep_delay","targets":7},{"name":"mean_arr_delay","targets":8},{"name":"mean_distance","targets":9}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
-<div class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(CRS_DEP_TIME,DEP_DELAY,  <span class="at">color =</span> Season)) <span class="sc">+</span> </span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1250</span>)) <span class="sc">+</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2400</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-23"><a href="#cb3-23"></a>  <span class="fu">relocate</span>(percentage_of_total, <span class="at">.after =</span> Total_flights)  <span class="sc">%&gt;%</span> </span>
+<span id="cb3-24"><a href="#cb3-24"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Total_flights)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-25"><a href="#cb3-25"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a>  <span class="fu">tab_options</span>(</span>
+<span id="cb3-27"><a href="#cb3-27"></a>    <span class="at">table.font.size =</span> <span class="fu">px</span>(<span class="dv">8</span>),</span>
+<span id="cb3-28"><a href="#cb3-28"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
-<figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div id="zjzxcqusdx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zjzxcqusdx table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#zjzxcqusdx thead, #zjzxcqusdx tbody, #zjzxcqusdx tfoot, #zjzxcqusdx tr, #zjzxcqusdx td, #zjzxcqusdx th {
+  border-style: none;
+}
+
+#zjzxcqusdx p {
+  margin: 0;
+  padding: 0;
+}
+
+#zjzxcqusdx .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 8px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#zjzxcqusdx .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#zjzxcqusdx .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#zjzxcqusdx .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#zjzxcqusdx .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#zjzxcqusdx .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#zjzxcqusdx .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#zjzxcqusdx .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#zjzxcqusdx .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#zjzxcqusdx .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#zjzxcqusdx .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zjzxcqusdx .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#zjzxcqusdx .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#zjzxcqusdx .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#zjzxcqusdx .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zjzxcqusdx .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#zjzxcqusdx .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#zjzxcqusdx .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#zjzxcqusdx .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zjzxcqusdx .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#zjzxcqusdx .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zjzxcqusdx .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#zjzxcqusdx .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zjzxcqusdx .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zjzxcqusdx .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zjzxcqusdx .gt_left {
+  text-align: left;
+}
+
+#zjzxcqusdx .gt_center {
+  text-align: center;
+}
+
+#zjzxcqusdx .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#zjzxcqusdx .gt_font_normal {
+  font-weight: normal;
+}
+
+#zjzxcqusdx .gt_font_bold {
+  font-weight: bold;
+}
+
+#zjzxcqusdx .gt_font_italic {
+  font-style: italic;
+}
+
+#zjzxcqusdx .gt_super {
+  font-size: 65%;
+}
+
+#zjzxcqusdx .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#zjzxcqusdx .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#zjzxcqusdx .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#zjzxcqusdx .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#zjzxcqusdx .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#zjzxcqusdx .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#zjzxcqusdx .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#zjzxcqusdx .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#zjzxcqusdx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="OP_CARRIER" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">OP_CARRIER</th>
+<th id="Total_flights" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total_flights</th>
+<th id="percentage_of_total" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">percentage_of_total</th>
+<th id="Total_delayed_arr" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total_delayed_arr</th>
+<th id="percentage_delayed_arr" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">percentage_delayed_arr</th>
+<th id="Total_delayed_dep" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total_delayed_dep</th>
+<th id="percentage_delayed_dep" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">percentage_delayed_dep</th>
+<th id="median_dep_delay" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">median_dep_delay</th>
+<th id="median_arr_delay" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">median_arr_delay</th>
+<th id="median_distance" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">median_distance</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="OP_CARRIER">AA</td>
+<td class="gt_row gt_right" headers="Total_flights">16968</td>
+<td class="gt_row gt_right" headers="percentage_of_total">16.91</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">2086</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">12.29</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">1769</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">10.43</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-3</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-8</td>
+<td class="gt_row gt_right" headers="median_distance">1097</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="OP_CARRIER">DL</td>
+<td class="gt_row gt_right" headers="Total_flights">14455</td>
+<td class="gt_row gt_right" headers="percentage_of_total">14.41</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">1618</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">11.19</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">1359</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">9.40</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-2</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-7</td>
+<td class="gt_row gt_right" headers="median_distance">761</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="OP_CARRIER">US</td>
+<td class="gt_row gt_right" headers="Total_flights">12774</td>
+<td class="gt_row gt_right" headers="percentage_of_total">12.73</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">889</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">6.96</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">580</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">4.54</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-6</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-10</td>
+<td class="gt_row gt_right" headers="median_distance">214</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="OP_CARRIER">MQ</td>
+<td class="gt_row gt_right" headers="Total_flights">11298</td>
+<td class="gt_row gt_right" headers="percentage_of_total">11.26</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">1368</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">12.11</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">1243</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">11.00</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-4</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-7</td>
+<td class="gt_row gt_right" headers="median_distance">431</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="OP_CARRIER">OH</td>
+<td class="gt_row gt_right" headers="Total_flights">11162</td>
+<td class="gt_row gt_right" headers="percentage_of_total">11.12</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">2018</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">18.08</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">1796</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">16.09</td>
+<td class="gt_row gt_right" headers="median_dep_delay">0</td>
+<td class="gt_row gt_right" headers="median_arr_delay">0</td>
+<td class="gt_row gt_right" headers="median_distance">641</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="OP_CARRIER">NW</td>
+<td class="gt_row gt_right" headers="Total_flights">8754</td>
+<td class="gt_row gt_right" headers="percentage_of_total">8.72</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">1219</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">13.93</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">1025</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">11.71</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-2</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-4</td>
+<td class="gt_row gt_right" headers="median_distance">1011</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="OP_CARRIER">UA</td>
+<td class="gt_row gt_right" headers="Total_flights">6578</td>
+<td class="gt_row gt_right" headers="percentage_of_total">6.56</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">840</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">12.77</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">858</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">13.04</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-3</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-11</td>
+<td class="gt_row gt_right" headers="median_distance">733</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="OP_CARRIER">FL</td>
+<td class="gt_row gt_right" headers="Total_flights">5954</td>
+<td class="gt_row gt_right" headers="percentage_of_total">5.93</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">1001</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">16.81</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">923</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">15.50</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-4</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-5</td>
+<td class="gt_row gt_right" headers="median_distance">761</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="OP_CARRIER">CO</td>
+<td class="gt_row gt_right" headers="Total_flights">3666</td>
+<td class="gt_row gt_right" headers="percentage_of_total">3.65</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">510</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">13.91</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">436</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">11.89</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-2</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-5</td>
+<td class="gt_row gt_right" headers="median_distance">1416</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="OP_CARRIER">B6</td>
+<td class="gt_row gt_right" headers="Total_flights">2899</td>
+<td class="gt_row gt_right" headers="percentage_of_total">2.89</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">530</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">18.28</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">474</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">16.35</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-2</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-3</td>
+<td class="gt_row gt_right" headers="median_distance">1076</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="OP_CARRIER">9E</td>
+<td class="gt_row gt_right" headers="Total_flights">1547</td>
+<td class="gt_row gt_right" headers="percentage_of_total">1.54</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">173</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">11.18</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">160</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">10.34</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-3</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-9</td>
+<td class="gt_row gt_right" headers="median_distance">659</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="OP_CARRIER">WN</td>
+<td class="gt_row gt_right" headers="Total_flights">1422</td>
+<td class="gt_row gt_right" headers="percentage_of_total">1.42</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">206</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">14.49</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">244</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">17.16</td>
+<td class="gt_row gt_right" headers="median_dep_delay">1</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-11</td>
+<td class="gt_row gt_right" headers="median_distance">725</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="OP_CARRIER">YV</td>
+<td class="gt_row gt_right" headers="Total_flights">1041</td>
+<td class="gt_row gt_right" headers="percentage_of_total">1.04</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">149</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">14.31</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">155</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">14.89</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-3</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-9</td>
+<td class="gt_row gt_right" headers="median_distance">229</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="OP_CARRIER">XE</td>
+<td class="gt_row gt_right" headers="Total_flights">890</td>
+<td class="gt_row gt_right" headers="percentage_of_total">0.89</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">135</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">15.17</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">131</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">14.72</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-6</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-11</td>
+<td class="gt_row gt_right" headers="median_distance">418</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="OP_CARRIER">F9</td>
+<td class="gt_row gt_right" headers="Total_flights">727</td>
+<td class="gt_row gt_right" headers="percentage_of_total">0.72</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">110</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">15.13</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">70</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">9.63</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-3</td>
+<td class="gt_row gt_right" headers="median_arr_delay">0</td>
+<td class="gt_row gt_right" headers="median_distance">1619</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="OP_CARRIER">EV</td>
+<td class="gt_row gt_right" headers="Total_flights">172</td>
+<td class="gt_row gt_right" headers="percentage_of_total">0.17</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">21</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">12.21</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">24</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">13.95</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-2</td>
+<td class="gt_row gt_right" headers="median_arr_delay">-9</td>
+<td class="gt_row gt_right" headers="median_distance">617</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="OP_CARRIER">OO</td>
+<td class="gt_row gt_right" headers="Total_flights">27</td>
+<td class="gt_row gt_right" headers="percentage_of_total">0.03</td>
+<td class="gt_row gt_right" headers="Total_delayed_arr">7</td>
+<td class="gt_row gt_right" headers="percentage_delayed_arr">25.93</td>
+<td class="gt_row gt_right" headers="Total_delayed_dep">4</td>
+<td class="gt_row gt_right" headers="percentage_delayed_dep">14.81</td>
+<td class="gt_row gt_right" headers="median_dep_delay">-1</td>
+<td class="gt_row gt_right" headers="median_arr_delay">4</td>
+<td class="gt_row gt_right" headers="median_distance">478</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 </div>
 </div>
-<p>This plot is quit interesting and reveals a certain pattern that needs to be considered in our analysis. Firstly, Wikipedia states LGA has a curfew between the hours of 12am and 6am during the warm months of the year. Looking at x axis this curfew is visible. From this plot it is unclear whether planned departure time has an influence on delay. Though it seems as if that there are more delays during the summer.</p>
-<p>Let’s look at weekday. Outlines dominate the visuals but we can’t use log_10 scale on y axis because we have a lot of on time planes (y = 0) or leaving early planes (y = negative). 0 is -inf and negative numbers are undefined with log10. So we decrease the limits show in the plot</p>
+</div>
+</section>
+<section id="depature-times" class="level3">
+<h3 class="anchored" data-anchor-id="depature-times">Depature times</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">mutate</span>(<span class="at">Weekday =</span> <span class="fu">fct_relevel</span>(Weekday, <span class="st">"Monday"</span>, <span class="st">"Tuesday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>, <span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> DEP_DELAY)) <span class="sc">+</span> </span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.colour =</span> <span class="st">"red"</span>,<span class="at">outlier.shape =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept  =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>,<span class="at">linetype=</span><span class="st">'dotted'</span>) <span class="sc">+</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Weekday)<span class="sc">+</span> </span>
-<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="at">planned_first_flight =</span> <span class="fu">min</span>(CRS_DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="at">planned_last_flight =</span> <span class="fu">max</span>(CRS_DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="at">actual_first_flight =</span> <span class="fu">min</span>(DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="at">actual_last_flight =</span> <span class="fu">max</span>(DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">planned_first_flight</th>
+<th style="text-align: right;">planned_last_flight</th>
+<th style="text-align: right;">actual_first_flight</th>
+<th style="text-align: right;">actual_last_flight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">535</td>
+<td style="text-align: right;">2239</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2400</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>If we look at the planned departure times, we see that the first flight is at 5:35 am and the last flight is at 10:39 pm. This departure times are explain by a seasonal curfew between the hours of 12 am and 6 am during the warm months (Source: Wikipedia).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> CRS_DEP_TIME, <span class="at">y =</span> DEP_TIME)) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -283,16 +988,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>This plot shows the planned departure time on the x axis and the actual departure time an the y axis. Points on the diagonal departed on time. On the bottom right of the plot we see a few cases of flights that have a delay and depart on the next day early morning. This should be considered when using <code>DEP_TIME</code> in a statistical model. Since flights before 5 am are systematic different from flights after 5 am since these flights were planned to depart the day before.</p>
+</section>
+<section id="arrival-delay-by-day-and-season" class="level3">
+<h3 class="anchored" data-anchor-id="arrival-delay-by-day-and-season">Arrival Delay by Day and Season</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>planes <span class="sc">%&gt;%</span> </span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">mutate</span>(<span class="at">Weekday =</span> <span class="fu">fct_relevel</span>(Weekday, <span class="st">"Monday"</span>, <span class="st">"Tuesday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>, <span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Season, DEP_DELAY)) <span class="sc">+</span> </span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept  =</span> <span class="dv">0</span>, <span class="at">linetype=</span><span class="st">'dotted'</span>,<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Weekday) <span class="sc">+</span> </span>
-<span id="cb6-7"><a href="#cb6-7"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">10</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> ARR_DELAY)) <span class="sc">+</span> </span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.colour =</span> <span class="st">"red"</span>,<span class="at">outlier.shape =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept  =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>,<span class="at">linetype=</span><span class="st">'dotted'</span>) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Weekday)<span class="sc">+</span> </span>
+<span id="cb6-7"><a href="#cb6-7"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -302,166 +1012,590 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>It is interesting that 75% of planes leave early. It’s would be interesting to explore <code>WHEELS_OFF</code> variable which is the time point the plane leaves the ground.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">select</span>(DEP_DELAY,ARR_DELAY,CRS_DEP_TIME,WHEELS_OFF,WHEELS_ON, DISTANCE,ACTUAL_ELAPSED_TIME,AIR_TIME) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>                     DEP_DELAY  ARR_DELAY CRS_DEP_TIME  WHEELS_OFF   WHEELS_ON
-DEP_DELAY           1.00000000 0.88794222   0.17802997  0.23297159 0.087967565
-ARR_DELAY           0.88794222 1.00000000   0.14498692  0.21498341 0.090026284
-CRS_DEP_TIME        0.17802997 0.14498692   1.00000000  0.97106762 0.813500830
-WHEELS_OFF          0.23297159 0.21498341   0.97106762  1.00000000 0.827959772
-WHEELS_ON           0.08796756 0.09002628   0.81350083  0.82795977 1.000000000
-DISTANCE            0.05305078 0.03439478  -0.07072394 -0.06033415 0.006648978
-ACTUAL_ELAPSED_TIME 0.06086240 0.19037333  -0.04563512 -0.01602419 0.059612609
-AIR_TIME            0.04836759 0.06952511  -0.07712053 -0.06518530 0.010649528
-                        DISTANCE ACTUAL_ELAPSED_TIME    AIR_TIME
-DEP_DELAY            0.053050775          0.06086240  0.04836759
-ARR_DELAY            0.034394775          0.19037333  0.06952511
-CRS_DEP_TIME        -0.070723941         -0.04563512 -0.07712053
-WHEELS_OFF          -0.060334149         -0.01602419 -0.06518530
-WHEELS_ON            0.006648978          0.05961261  0.01064953
-DISTANCE             1.000000000          0.92985120  0.97898943
-ACTUAL_ELAPSED_TIME  0.929851200          1.00000000  0.95219350
-AIR_TIME             0.978989427          0.95219350  1.00000000</code></pre>
-</div>
-</div>
-<div class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> OP_CARRIER, <span class="at">y =</span> WHEELS_OFF)) <span class="sc">+</span> </span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">mutate</span>(<span class="at">Weekday =</span> <span class="fu">fct_relevel</span>(Weekday, <span class="st">"Monday"</span>, <span class="st">"Tuesday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>, <span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Season, ARR_DELAY)) <span class="sc">+</span> </span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span> </span>
+<span id="cb7-5"><a href="#cb7-5"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept  =</span> <span class="dv">0</span>, <span class="at">linetype=</span><span class="st">'dotted'</span>,<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Weekday) <span class="sc">+</span> </span>
+<span id="cb7-7"><a href="#cb7-7"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>Arrival Delay are similar across the weekdays and season. The violin plot give us a feeling of how skewed arrival delay is and how different the median and average are. Other variables in this data set are similarly skewed, therefore modeling the average may not represent the biggest part of the data. We will later see if we can handle this skewness.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>change_to_time <span class="ot">&lt;-</span> <span class="cf">function</span>(df, var_time){</span>
-<span id="cb10-2"><a href="#cb10-2"></a>  df <span class="sc">%&gt;%</span> </span>
-<span id="cb10-3"><a href="#cb10-3"></a>    <span class="fu">mutate</span>({{var_time}} <span class="sc">:</span><span class="er">=</span> <span class="fu">sprintf</span>(<span class="st">"%04d"</span>, {{var_time}})) <span class="sc">%&gt;%</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>    <span class="fu">mutate</span>({{var_time}} <span class="sc">:</span><span class="er">=</span> <span class="fu">format</span>(<span class="fu">strptime</span>({{var_time}}, <span class="at">format =</span><span class="st">"%H%M"</span>), <span class="at">format =</span> <span class="st">"%H:%M"</span>)) </span>
-<span id="cb10-5"><a href="#cb10-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>planes <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(DEP_DELAY,ARR_DELAY,CRS_DEP_TIME,WHEELS_OFF,WHEELS_ON, DISTANCE,ACTUAL_ELAPSED_TIME, TAXI_OUT, TAXI_IN ) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"complete.obs"</span>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Correlation matrix of different variables"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Correlation matrix of different variables</caption>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 10%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 15%">
+<col style="width: 8%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">DEP_DELAY</th>
+<th style="text-align: right;">ARR_DELAY</th>
+<th style="text-align: right;">CRS_DEP_TIME</th>
+<th style="text-align: right;">WHEELS_OFF</th>
+<th style="text-align: right;">WHEELS_ON</th>
+<th style="text-align: right;">DISTANCE</th>
+<th style="text-align: right;">ACTUAL_ELAPSED_TIME</th>
+<th style="text-align: right;">TAXI_OUT</th>
+<th style="text-align: right;">TAXI_IN</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">DEP_DELAY</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.8879422</td>
+<td style="text-align: right;">0.1780300</td>
+<td style="text-align: right;">0.2329716</td>
+<td style="text-align: right;">0.0879676</td>
+<td style="text-align: right;">0.0530508</td>
+<td style="text-align: right;">0.0608624</td>
+<td style="text-align: right;">0.0540390</td>
+<td style="text-align: right;">-0.0049062</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ARR_DELAY</td>
+<td style="text-align: right;">0.8879422</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.1449869</td>
+<td style="text-align: right;">0.2149834</td>
+<td style="text-align: right;">0.0900263</td>
+<td style="text-align: right;">0.0343948</td>
+<td style="text-align: right;">0.1903733</td>
+<td style="text-align: right;">0.4001428</td>
+<td style="text-align: right;">0.0866103</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CRS_DEP_TIME</td>
+<td style="text-align: right;">0.1780300</td>
+<td style="text-align: right;">0.1449869</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9710676</td>
+<td style="text-align: right;">0.8135008</td>
+<td style="text-align: right;">-0.0707239</td>
+<td style="text-align: right;">-0.0456351</td>
+<td style="text-align: right;">0.1120957</td>
+<td style="text-align: right;">-0.0622022</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">WHEELS_OFF</td>
+<td style="text-align: right;">0.2329716</td>
+<td style="text-align: right;">0.2149834</td>
+<td style="text-align: right;">0.9710676</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.8279598</td>
+<td style="text-align: right;">-0.0603341</td>
+<td style="text-align: right;">-0.0160242</td>
+<td style="text-align: right;">0.1730932</td>
+<td style="text-align: right;">-0.0561931</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WHEELS_ON</td>
+<td style="text-align: right;">0.0879676</td>
+<td style="text-align: right;">0.0900263</td>
+<td style="text-align: right;">0.8135008</td>
+<td style="text-align: right;">0.8279598</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.0066490</td>
+<td style="text-align: right;">0.0596126</td>
+<td style="text-align: right;">0.1755272</td>
+<td style="text-align: right;">-0.0181294</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DISTANCE</td>
+<td style="text-align: right;">0.0530508</td>
+<td style="text-align: right;">0.0343948</td>
+<td style="text-align: right;">-0.0707239</td>
+<td style="text-align: right;">-0.0603341</td>
+<td style="text-align: right;">0.0066490</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9298512</td>
+<td style="text-align: right;">-0.0095594</td>
+<td style="text-align: right;">0.1186520</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ACTUAL_ELAPSED_TIME</td>
+<td style="text-align: right;">0.0608624</td>
+<td style="text-align: right;">0.1903733</td>
+<td style="text-align: right;">-0.0456351</td>
+<td style="text-align: right;">-0.0160242</td>
+<td style="text-align: right;">0.0596126</td>
+<td style="text-align: right;">0.9298512</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.2885034</td>
+<td style="text-align: right;">0.2081655</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TAXI_OUT</td>
+<td style="text-align: right;">0.0540390</td>
+<td style="text-align: right;">0.4001428</td>
+<td style="text-align: right;">0.1120957</td>
+<td style="text-align: right;">0.1730932</td>
+<td style="text-align: right;">0.1755272</td>
+<td style="text-align: right;">-0.0095594</td>
+<td style="text-align: right;">0.2885034</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">-0.0091804</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TAXI_IN</td>
+<td style="text-align: right;">-0.0049062</td>
+<td style="text-align: right;">0.0866103</td>
+<td style="text-align: right;">-0.0622022</td>
+<td style="text-align: right;">-0.0561931</td>
+<td style="text-align: right;">-0.0181294</td>
+<td style="text-align: right;">0.1186520</td>
+<td style="text-align: right;">0.2081655</td>
+<td style="text-align: right;">-0.0091804</td>
+<td style="text-align: right;">1.0000000</td>
+</tr>
+</tbody>
+</table>
 </div>
+</div>
+<p>This correlation plot helps us understand the relationship and colinearity among the potential variables used in our models. Some variables are time based (for example: <code>CRS_DEP_TIM</code>, <code>WHEELS_OFF</code>) with small differences, making them nearly perfect correlated. Such variables shouldn’t be included in the model together as they make the coefficients unstable. Other than that interesting potential predictors can be assessed from this correlation matrix.</p>
+</section>
+</section>
+<section id="linear-model" class="level1">
+<h1>Linear Model</h1>
+<p>Aim: - Investigating the factors contributing to delays in arrival.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>value_count <span class="ot">&lt;-</span> <span class="cf">function</span>(data, group_col) {</span>
-<span id="cb11-2"><a href="#cb11-2"></a>  data <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>    <span class="fu">count</span>({{group_col}}, <span class="at">name =</span> <span class="st">'count'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>    <span class="fu">mutate</span>(<span class="at">count =</span> <span class="fu">prop.table</span>(count) <span class="sc">*</span> <span class="dv">100</span>) </span>
-<span id="cb11-5"><a href="#cb11-5"></a>}</span>
-<span id="cb11-6"><a href="#cb11-6"></a></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="fu">value_count</span>(planes, OP_CARRIER)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>planes <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> DEP_DELAY, <span class="at">y =</span> ARR_DELAY)) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb9-6"><a href="#cb9-6"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Influence of Depature Delay on Arrival Delay"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7"></a>       <span class="at">x =</span> <span class="st">"Departure Delay"</span>,</span>
+<span id="cb9-8"><a href="#cb9-8"></a>       <span class="at">y =</span> <span class="st">"Arrival Delay"</span>) </span>
+<span id="cb9-9"><a href="#cb9-9"></a></span>
+<span id="cb9-10"><a href="#cb9-10"></a>planes <span class="sc">%&gt;%</span> </span>
+<span id="cb9-11"><a href="#cb9-11"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> TAXI_OUT, <span class="at">y =</span> ARR_DELAY)) <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb9-15"><a href="#cb9-15"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Influence of Taxi Out on Arrival Delay"</span>,</span>
+<span id="cb9-16"><a href="#cb9-16"></a>       <span class="at">x =</span> <span class="st">"Taxi Out"</span>,</span>
+<span id="cb9-17"><a href="#cb9-17"></a>       <span class="at">y =</span> <span class="st">"Arrival Delay"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the plots above we see that both <code>DEP_DELAY</code> and <code>TAXI_OUT</code> are positively correlated with <code>ARR_DELAY</code>. It’s obvious that a delay in departure leads to a delay in arrival. Furthermore, the skeweness is again visiable in the plot. ## Modelling</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>lm.arrival <span class="ot">&lt;-</span> <span class="fu">lm</span>(ARR_DELAY <span class="sc">~</span> DEP_DELAY, <span class="at">data =</span> planes)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>lm.arrival<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(lm.arrival, . <span class="sc">~</span> . <span class="sc">+</span> TAXI_OUT)</span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="fu">anova</span>(lm.arrival, lm.arrival<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   OP_CARRIER       count
-1          9E  1.54185022
-2          AA 16.91151554
-3          B6  2.88934957
-4          CO  3.65379632
-5          DL 14.40688102
-6          EV  0.17142743
-7          F9  0.72457990
-8          FL  5.93417984
-9          MQ 11.26039030
-10         NW  8.72485897
-11         OH 11.12484302
-12         OO  0.02691012
-13         UA  6.55610262
-14         US 12.73147687
-15         WN  1.41726633
-16         XE  0.88703730
-17         YV  1.03753463</code></pre>
+<pre style="color: blue"><code>Analysis of Variance Table
+
+Model 1: ARR_DELAY ~ DEP_DELAY
+Model 2: ARR_DELAY ~ DEP_DELAY + TAXI_OUT
+  Res.Df      RSS Df Sum of Sq      F                Pr(&gt;F)    
+1  96067 34554235                                              
+2  96066 14239138  1  20315097 137058 &lt; 0.00000000000000022 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
+<p>We can see that the second model with the <code>TAXI_OUT</code> variable significantly improves the model fit.</p>
+<p>Let’s see if we can improve the model further by adding the airlines as predictor.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># library(DataExplorer)</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="co"># create_report(planes, y  = "DEP_DELAY")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>There is no month oktober in the dataset it seems as if september and oktober are taken together.</p>
-<div class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">group_by</span>(Month) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>lm.arrival<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(lm.arrival<span class="fl">.2</span>, . <span class="sc">~</span> . <span class="sc">+</span> OP_CARRIER)</span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">drop1</span>(lm.arrival<span class="fl">.3</span>, <span class="at">test =</span><span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 11 × 2
-# Groups:   Month [11]
-   Month     n
-   &lt;dbl&gt; &lt;int&gt;
- 1     1  8677
- 2     2  8052
- 3     3  8885
- 4     4  8381
- 5     5  8496
- 6     6  8523
- 7     7  9005
- 8     8  8847
- 9     9 15874
-10    11  7699
-11    12  7895</code></pre>
+<pre style="color: blue"><code>Single term deletions
+
+Model:
+ARR_DELAY ~ DEP_DELAY + TAXI_OUT + OP_CARRIER
+           Df Sum of Sq       RSS    AIC   F value                Pr(&gt;F)    
+&lt;none&gt;                   13177731 472814                                    
+DEP_DELAY   1 122296267 135473998 696677 891394.49 &lt; 0.00000000000000022 ***
+TAXI_OUT    1  20788072  33965803 563773 151520.35 &lt; 0.00000000000000022 ***
+OP_CARRIER 16   1061408  14239138 480224    483.52 &lt; 0.00000000000000022 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
+<p>We use <code>drop1</code> function, since <code>OP_CARRIER</code> has more than two levels. The addition of the <code>OP_CARRIER</code> variable significantly improves the model fit.</p>
+<p>It could be more interesting to group the different <code>OP_CARRIER</code> into three categories of Cheap, Mid-tier and expensive airlines. For this we use chatGPT. Having three categories instead of 14 will help us to reduce the complexity of the model and make it easier to interpret and compare different levels of airlines. Especially, since some airlines how low flight counts. Of course these categories may not be complete true for each case. As ChatGPT mentions some airlines blur the categories as they could be considered cheap and or mid-tier and so on.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>planes <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="fu">recode</span>(OP_CARRIER,</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    <span class="co"># Expensive</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>    <span class="st">"AA"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5"></a>    <span class="st">"DL"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6"></a>    <span class="st">"UA"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7"></a>    <span class="st">"CO"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb14-8"><a href="#cb14-8"></a></span>
+<span id="cb14-9"><a href="#cb14-9"></a>    <span class="co"># Cheap</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a>    <span class="st">"B6"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb14-11"><a href="#cb14-11"></a>    <span class="st">"F9"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb14-12"><a href="#cb14-12"></a>    <span class="st">"FL"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb14-13"><a href="#cb14-13"></a>    <span class="st">"WN"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb14-14"><a href="#cb14-14"></a></span>
+<span id="cb14-15"><a href="#cb14-15"></a>    <span class="co"># Mid-tier</span></span>
+<span id="cb14-16"><a href="#cb14-16"></a>    <span class="st">"9E"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb14-17"><a href="#cb14-17"></a>    <span class="st">"EV"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb14-18"><a href="#cb14-18"></a>    <span class="st">"MQ"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb14-19"><a href="#cb14-19"></a>    <span class="st">"OH"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb14-20"><a href="#cb14-20"></a>    <span class="st">"OO"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb14-21"><a href="#cb14-21"></a>    <span class="st">"XE"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb14-22"><a href="#cb14-22"></a>    <span class="st">"YV"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb14-23"><a href="#cb14-23"></a>    <span class="st">"NW"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb14-24"><a href="#cb14-24"></a>    <span class="st">"US"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb14-25"><a href="#cb14-25"></a></span>
+<span id="cb14-26"><a href="#cb14-26"></a>    <span class="at">.default =</span> <span class="cn">NA_character_</span></span>
+<span id="cb14-27"><a href="#cb14-27"></a>  )) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-28"><a href="#cb14-28"></a>  <span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="fu">factor</span>(OP_CARRIER_Tier, </span>
+<span id="cb14-29"><a href="#cb14-29"></a>                                  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Cheap"</span>, <span class="st">"Mid-tier"</span>, <span class="st">"Expensive"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With including the <code>OP_CARRIER_Tier</code> variable we lose the individual information of each airline. Still, this is done because adding <code>OP_CARRIER_Tier</code> and <code>OP_CARRIER</code> would properly lead to rank-deficiency.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>lm.arrival<span class="fl">.4</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(lm.arrival<span class="fl">.3</span>, . <span class="sc">~</span> . <span class="sc">-</span>OP_CARRIER<span class="sc">+</span> OP_CARRIER_Tier)</span>
+<span id="cb15-2"><a href="#cb15-2"></a></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">drop1</span>(lm.arrival<span class="fl">.4</span>, <span class="at">test =</span> <span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre style="color: blue"><code>Single term deletions
+
+Model:
+ARR_DELAY ~ DEP_DELAY + TAXI_OUT + OP_CARRIER_Tier
+                Df Sum of Sq       RSS    AIC   F value                Pr(&gt;F)
+&lt;none&gt;                        14133173 479511                                
+DEP_DELAY        1 122177108 136310281 697241 830444.90 &lt; 0.00000000000000022
+TAXI_OUT         1  20280397  34413571 565003 137847.04 &lt; 0.00000000000000022
+OP_CARRIER_Tier  2    105965  14239138 480224    360.13 &lt; 0.00000000000000022
+                   
+&lt;none&gt;             
+DEP_DELAY       ***
+TAXI_OUT        ***
+OP_CARRIER_Tier ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>After transformation <code>OP_CARRIER_Tier</code> singificantly improves the model.</p>
+<section id="post-hoc-tests" class="level2">
+<h2 class="anchored" data-anchor-id="post-hoc-tests">Post-Hoc Tests</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>ph.test.THSD <span class="ot">&lt;-</span> <span class="fu">glht</span>(lm.arrival<span class="fl">.4</span>,</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    <span class="at">linfct =</span> <span class="fu">mcp</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="st">"Tukey"</span>))</span>
+<span id="cb17-3"><a href="#cb17-3"></a></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="fu">summary</span>(ph.test.THSD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre style="color: blue"><code>
+     Simultaneous Tests for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = ARR_DELAY ~ DEP_DELAY + TAXI_OUT + OP_CARRIER_Tier, 
+    data = planes)
+
+Linear Hypotheses:
+                          Estimate Std. Error t value      Pr(&gt;|t|)    
+Mid-tier - Cheap == 0     -2.89168    0.13077 -22.112 &lt;0.0000000001 ***
+Expensive - Cheap == 0    -3.54434    0.13219 -26.813 &lt;0.0000000001 ***
+Expensive - Mid-tier == 0 -0.65267    0.08342  -7.824 &lt;0.0000000001 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+(Adjusted p values reported -- single-step method)</code></pre>
+</div>
+</div>
+<p>We find strong evidence that all three pairwise differences are not equal to zero. Lets plot the differences:</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">count</span>(Weekday, <span class="at">sort =</span> T) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">5.1</span>,<span class="fl">7.5</span>,<span class="fl">4.1</span>,<span class="fl">2.1</span>))</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">plot</span>(ph.test.THSD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This plots shows us that the the difference between airline tiers is not zero in any case. Furthermore, the differences follow the possible intuition that cheaper flights are more likely to be delayed than mid-tier and expensive flights.</p>
+</section>
+<section id="interpretation-of-final-model" class="level2">
+<h2 class="anchored" data-anchor-id="interpretation-of-final-model">Interpretation of final model</h2>
+<section id="coefficients-of-model" class="level3">
+<h3 class="anchored" data-anchor-id="coefficients-of-model">Coefficients of Model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">summary</span>(lm.arrival<span class="fl">.4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    Weekday     n
-1    Monday 15772
-2 Wednesday 15770
-3   Tuesday 15668
-4  Thursday 15535
-5    Friday 15279
-6    Sunday 13217
-7  Saturday  9093</code></pre>
+<pre style="color: blue"><code>
+Call:
+lm(formula = ARR_DELAY ~ DEP_DELAY + TAXI_OUT + OP_CARRIER_Tier, 
+    data = planes)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-66.813  -7.610  -0.579   6.856 195.722 
+
+Coefficients:
+                           Estimate Std. Error t value            Pr(&gt;|t|)    
+(Intercept)              -26.858032   0.131610 -204.07 &lt;0.0000000000000002 ***
+DEP_DELAY                  0.976010   0.001071  911.29 &lt;0.0000000000000002 ***
+TAXI_OUT                   0.934567   0.002517  371.28 &lt;0.0000000000000002 ***
+OP_CARRIER_TierMid-tier   -2.891678   0.130774  -22.11 &lt;0.0000000000000002 ***
+OP_CARRIER_TierExpensive  -3.544343   0.132189  -26.81 &lt;0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 12.13 on 96064 degrees of freedom
+  (4265 observations deleted due to missingness)
+Multiple R-squared:  0.9135,    Adjusted R-squared:  0.9135 
+F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
 </div>
+<ul>
+<li><code>DEP_DEALY</code>: given all predictors in the model are kept constant, a 1 minute increase in <code>DEP_DELAY</code> leads to an increase in <code>ARR_DELAY</code> of 0.976 minutes on <em>average</em>.</li>
+<li><code>TAXI_OUT</code>: given all predictors in the model are kept constant, a 1 minute increase in <code>TAXI_OUT</code> leads to an increase in <code>ARR_DELAY</code> of 0.935 minutes on <em>average</em>.</li>
+<li><code>Intercept</code>: With <code>DEP_DELAY</code> and <code>TAXI_OUT</code> being 0, the average <code>ARR_DELAY</code> of <code>Cheap Airlines</code> is -26.858. Meaning that on average these flights arrival 27 min early. While a departure delay of zero is realistic and in range of our data, the taxi out time of zero is not realistic. With min of taxi out being 1. We could center <code>TAXI_OUT</code> so that zero represents the average taxi out time.</li>
+<li><code>TierMid-tier</code>: <em>On average</em> Mid-tier airlines arrive 2.892 minutes earlier compared to cheap airlines.<br>
+</li>
+<li><code>TierExpensive</code>: <em>On average</em> Expensive airlines arrive 3.544 minutes earlier compared to cheap airlines.</li>
+</ul>
+</section>
+<section id="lets-explore-our-model-variables-a-bit-more" class="level3">
+<h3 class="anchored" data-anchor-id="lets-explore-our-model-variables-a-bit-more">Let’s explore our model variables a bit more</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(ARR_DELAY, TAXI_OUT, DEP_DELAY),</span>
+<span id="cb22-3"><a href="#cb22-3"></a>               <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb22-4"><a href="#cb22-4"></a>               <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-5"><a href="#cb22-5"></a>  <span class="fu">ggplot</span>( <span class="fu">aes</span>(<span class="at">x =</span> Metric, <span class="at">y =</span> Value)) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Metric), <span class="at">outlier.alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> OP_CARRIER_Tier) <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a>    <span class="fu">labs</span>(</span>
+<span id="cb22-9"><a href="#cb22-9"></a>      <span class="at">title =</span> <span class="st">"Boxplot of Metrics by Carrier Tier"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10"></a>      <span class="at">x =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb22-11"><a href="#cb22-11"></a>      <span class="at">y =</span> <span class="st">"Value"</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a>    ) <span class="sc">+</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb22-14"><a href="#cb22-14"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>These boxplots show the skewedness of the variables. Outliers may play a big role in the model and could drive differences in the averages. Since these outliers are not measurement error we will keep them in the data set. Still, it’s visiable that cheap airlines have more delayed flights (dep and arr)</p>
+</section>
+<section id="model-diagnostics" class="level3">
+<h3 class="anchored" data-anchor-id="model-diagnostics">Model diagnostics</h3>
+</section>
+<section id="lets-look-at-density-plots" class="level3">
+<h3 class="anchored" data-anchor-id="lets-look-at-density-plots">Let’s look at density plots</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">plot</span>(lm.arrival<span class="fl">.4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-18-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-18-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-18-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>The <code>Q-Q plot</code> shows that the residuals are not normally distributed for higher values of <code>ARR_DELAY</code>. Higher arrival delays are underestimated by the model. Intuitively this could make sense, since extreme delay may not be linear anymore and considering the LGA flight curfew this could have an influence as well.</li>
+<li>The overall fit of the model seem acceptable but as already mentioned with increased delay (extreme delays) the model fit decreases.</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(ARR_DELAY, TAXI_OUT, DEP_DELAY),</span>
+<span id="cb24-3"><a href="#cb24-3"></a>               <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb24-4"><a href="#cb24-4"></a>               <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Value, <span class="at">fill =</span> Metric, <span class="at">color =</span> Metric)) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> OP_CARRIER_Tier) <span class="sc">+</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">20</span>, <span class="dv">200</span>) <span class="sc">+</span> </span>
+<span id="cb24-9"><a href="#cb24-9"></a>  <span class="fu">labs</span>(</span>
+<span id="cb24-10"><a href="#cb24-10"></a>    <span class="at">title =</span> <span class="st">"Density of Metrics by Carrier Tier"</span>,</span>
+<span id="cb24-11"><a href="#cb24-11"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
+<span id="cb24-12"><a href="#cb24-12"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb24-13"><a href="#cb24-13"></a>  ) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="transformation" class="level3">
+<h3 class="anchored" data-anchor-id="transformation">Transformation</h3>
+<p>Since we have a lot of negative and zero values, we can’t use log transformation. Therefore we try a cubic root transformation.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>cbrt_transform <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">sign</span>(x) <span class="sc">*</span> <span class="fu">abs</span>(x)<span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb25-3"><a href="#cb25-3"></a>}</span>
+<span id="cb25-4"><a href="#cb25-4"></a></span>
+<span id="cb25-5"><a href="#cb25-5"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-7"><a href="#cb25-7"></a>    <span class="at">cbrt_arr_delay =</span> <span class="fu">cbrt_transform</span>(ARR_DELAY),</span>
+<span id="cb25-8"><a href="#cb25-8"></a>    <span class="at">cbrt_dep_delay =</span> <span class="fu">cbrt_transform</span>(DEP_DELAY),</span>
+<span id="cb25-9"><a href="#cb25-9"></a>    <span class="at">cbrt_taxi_out  =</span> <span class="fu">cbrt_transform</span>(TAXI_OUT)</span>
+<span id="cb25-10"><a href="#cb25-10"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb25-11"><a href="#cb25-11"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(cbrt_arr_delay, cbrt_taxi_out, cbrt_dep_delay),</span>
+<span id="cb25-12"><a href="#cb25-12"></a>               <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb25-13"><a href="#cb25-13"></a>               <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-14"><a href="#cb25-14"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Value, <span class="at">fill =</span> Metric, <span class="at">color =</span> Metric)) <span class="sc">+</span></span>
+<span id="cb25-15"><a href="#cb25-15"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb25-16"><a href="#cb25-16"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> OP_CARRIER_Tier) <span class="sc">+</span></span>
+<span id="cb25-17"><a href="#cb25-17"></a>  <span class="fu">labs</span>(</span>
+<span id="cb25-18"><a href="#cb25-18"></a>    <span class="at">title =</span> <span class="st">"Density of Metrics by Carrier Tier"</span>,</span>
+<span id="cb25-19"><a href="#cb25-19"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
+<span id="cb25-20"><a href="#cb25-20"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb25-21"><a href="#cb25-21"></a>  ) <span class="sc">+</span></span>
+<span id="cb25-22"><a href="#cb25-22"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The cubic root transformation produces a bimodal distribution for the <code>ARR_DELAY</code> and <code>DEP_DELAY</code> variables. Although this reveals an interesting pattern in the data, that most planes are on time (or more specific early) but the distribution shows slight delays to be somewhat common as well. Given the bimodality a normal regression modelling the average may not be better than using untransformed data. Interpretation of the model coefficents would become quit difficult after this transformation.</p>
+</section>
+<section id="z-normalization" class="level3">
+<h3 class="anchored" data-anchor-id="z-normalization">z-normalization</h3>
+<p>To help with interpretation and entangle the relative effects of <code>TAXI_OUT</code> and <code>DEP_DELAY</code> on <code>ARR_DELAY</code> we can z-normalize the variables. The model fit will not change (as shown later). But it will help with interpretation of the intercept since a z-value of zero represents the average of the variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>planes <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-3"><a href="#cb26-3"></a>    <span class="at">z_dep_delay =</span> <span class="fu">scale</span>(DEP_DELAY),</span>
+<span id="cb26-4"><a href="#cb26-4"></a>    <span class="at">z_taxi_out  =</span> <span class="fu">scale</span>(TAXI_OUT)</span>
+<span id="cb26-5"><a href="#cb26-5"></a>  )</span>
+<span id="cb26-6"><a href="#cb26-6"></a></span>
+<span id="cb26-7"><a href="#cb26-7"></a>lm.arrival<span class="fl">.5</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(ARR_DELAY <span class="sc">~</span> z_dep_delay <span class="sc">+</span> z_taxi_out <span class="sc">+</span> OP_CARRIER_Tier, <span class="at">data =</span> planes)</span>
+<span id="cb26-8"><a href="#cb26-8"></a><span class="fu">summary</span>(lm.arrival<span class="fl">.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre style="color: blue"><code>
+Call:
+lm(formula = ARR_DELAY ~ z_dep_delay + z_taxi_out + OP_CARRIER_Tier, 
+    data = planes)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-66.813  -7.610  -0.579   6.856 195.722 
+
+Coefficients:
+                         Estimate Std. Error t value            Pr(&gt;|t|)    
+(Intercept)               6.30437    0.11744   53.68 &lt;0.0000000000000002 ***
+z_dep_delay              35.85451    0.03934  911.29 &lt;0.0000000000000002 ***
+z_taxi_out               14.65554    0.03947  371.28 &lt;0.0000000000000002 ***
+OP_CARRIER_TierMid-tier  -2.89168    0.13077  -22.11 &lt;0.0000000000000002 ***
+OP_CARRIER_TierExpensive -3.54434    0.13219  -26.81 &lt;0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 12.13 on 96064 degrees of freedom
+  (4265 observations deleted due to missingness)
+Multiple R-squared:  0.9135,    Adjusted R-squared:  0.9135 
+F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co">#plot(lm.arrival.5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><code>Intercept</code>: Cheap airlines with average depature delay and average taxi out arrive <em>on average</em> 6.30 minutes late.</li>
+<li><code>TierMid-tier</code>: Mid-tier airlines with average depature delay and average taxi out arrive <em>on average</em> 3.413 minutes late.</li>
+<li><code>TierExpensive</code>: Expensive airlines with average depature delay and average taxi out arrive <em>on average</em> 2.76 minutes late.</li>
+<li>This again shows that using the average for modelling may give us a biased picture.</li>
+<li>We see that <code>z_dep_delay</code> has a higher relative effect on arrival delay than <code>z_taxi_out</code>. This was not so clear in the model without transformation and is likely because depature delay has a larger range compared to taxi out time.</li>
+</ul>
 </section>
 </section>
 </section>
-<section id="key-take-aways" class="level1">
-<h1>Key take aways</h1>
-<section id="problems-with-modelling-and-data" class="level2">
-<h2 class="anchored" data-anchor-id="problems-with-modelling-and-data">Problems with modelling and data</h2>
-</section>
-<section id="interpretations-of-results" class="level2">
-<h2 class="anchored" data-anchor-id="interpretations-of-results">Interpretations of results</h2>
-</section>
-</section>
-<section id="modelling" class="level1">
-<h1>Modelling</h1>
-<section id="linear-model" class="level2">
-<h2 class="anchored" data-anchor-id="linear-model">Linear Model</h2>
-<p><strong>Short description of model:</strong></p>
-<p><strong>What have we learned?:</strong></p>
-</section>
-<section id="glm-poisson" class="level2">
-<h2 class="anchored" data-anchor-id="glm-poisson">GLM Poisson</h2>
-<p><strong>Short description of model:</strong></p>
-<p><strong>What have we learned?:</strong></p>
-</section>
+<section id="glm-poisson" class="level1">
+<h1>GLM Poisson</h1>
 <section id="glm-binomial" class="level2">
 <h2 class="anchored" data-anchor-id="glm-binomial">GLM Binomial</h2>
 <p><strong>Short description of model:</strong></p>

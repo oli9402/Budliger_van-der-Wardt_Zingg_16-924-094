@@ -6,6 +6,7 @@ author:
 - Oliver Zingg
 format:
   html:
+    full_width: true
     mainfont: "sans-serif"
     monofont: "monospace"
     code-fold: true
@@ -16,15 +17,18 @@ format:
     number_sections: true
     toc_depth: 3
     grid:
-      sidebar-width: 350px
+      sidebar-width: 150px
+      margin-width: 5px
 execute:
   warning: false
   error: false
 ---
 
-# Packages
+## Packages
 
 ```{r}
+# Scientific notation
+options(scipen=999)
 
 # Load packages -----------------------------
 
@@ -36,7 +40,7 @@ library(DT)
 library(forcats) # Reorder factor levels
 library(kableExtra)
 library(janitor)
-
+library(multcomp) # Multiple comparison tests
 
 ```
 
@@ -61,7 +65,7 @@ We defined a flight as delayed if the arrival or departure delay is greater than
 
 ```{r}
 # Create table
-table <- planes %>%
+planes %>%
   mutate(index_late_arr = ifelse(ARR_DELAY > 30, 1, 0),
          index_late_dep = ifelse(DEP_DELAY > 30, 1, 0)) %>%
   group_by(OP_CARRIER) %>%
@@ -73,134 +77,356 @@ table <- planes %>%
     Total_delayed_dep = sum(index_late_dep == 1, na.rm = TRUE),
     percentage_delayed_dep = Total_delayed_dep / Total_flights * 100,
     
-    mean_dep_delay = mean(DEP_DELAY, na.rm = TRUE),
-    mean_arr_delay = mean(ARR_DELAY, na.rm = TRUE),
-    mean_distance = mean(DISTANCE, na.rm = TRUE)
+    median_dep_delay = median(DEP_DELAY, na.rm = TRUE),
+    median_arr_delay = median(ARR_DELAY, na.rm = TRUE),
+    median_distance = median(DISTANCE, na.rm = TRUE)
   ) %>%
   ungroup() %>%
   mutate(
     percentage_of_total = Total_flights / sum(Total_flights) * 100
   ) %>%
   mutate(across(where(is.double), ~round(.x, 2))) %>% 
-  relocate(percentage_of_total, .after = Total_flights)
-
-# Display table with sortable columns
-datatable(table, rownames = FALSE, class = "compact", options = list(order = list(list(1, 'desc'))))
+  relocate(percentage_of_total, .after = Total_flights)  %>% 
+  arrange(desc(Total_flights)) %>% 
+  gt() %>%
+  tab_options(
+    table.font.size = px(8),
+  )
 
 ```
 
 
+### Depature times
+```{r}
+
+planes %>%
+  summarise(
+    planned_first_flight = min(CRS_DEP_TIME, na.rm = TRUE),
+    planned_last_flight = max(CRS_DEP_TIME, na.rm = TRUE),
+    actual_first_flight = min(DEP_TIME, na.rm = TRUE),
+    actual_last_flight = max(DEP_TIME, na.rm = TRUE)
+  ) %>% 
+  kable()
+
+```
+
+If we look at the planned departure times, we see that the first flight is at 5:35 am and the last flight is at 10:39 pm. This departure times are explain by a seasonal curfew between the hours of 12 am and 6 am during the warm months (Source: Wikipedia). 
 
 ```{r}
 
-planes %>% 
-  ggplot(aes(CRS_DEP_TIME,DEP_DELAY,  color = Season)) + 
+planes %>%
+  ggplot(aes(x = CRS_DEP_TIME, y = DEP_TIME)) +
   geom_point() +
-  scale_y_continuous(limits = c(0, 1250)) +
-  scale_x_continuous(limits = c(0,2400)) 
+  theme_minimal()
 
-  
+
 ```
-This plot is quit interesting and reveals a certain pattern that needs to be considered in our analysis. Firstly, Wikipedia states LGA has a curfew between the hours of 12am and 6am during the warm months of the year. Looking at x axis this curfew is visible. From this plot it is unclear whether planned departure time has an influence on delay. Though it seems as if that there are more delays during the summer. 
 
-Let's look at weekday. Outlines dominate the visuals but we can't use log_10 scale on y axis because we have a lot of on time planes (y = 0) or leaving early planes (y = negative). 0 is -inf and negative numbers are undefined with log10. So we decrease the limits show in the plot
+This plot shows the planned departure time on the x axis and the actual departure time an the y axis. Points on the diagonal departed on time. On the bottom right of the plot we see a few cases of flights that have a delay and depart on the next day early morning. This should be considered when using `DEP_TIME` in a statistical model. Since flights before 5 am are systematic different from flights after 5 am since these flights were planned to depart the day before. 
+
+### Arrival Delay by Day and Season
 ```{r}
 
 planes %>% 
   mutate(Weekday = fct_relevel(Weekday, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) %>%
-  ggplot(aes(x = "", y = DEP_DELAY)) + 
+  ggplot(aes(x = "", y = ARR_DELAY)) + 
   geom_boxplot(outlier.colour = "red",outlier.shape = 1) + 
   geom_hline(yintercept  = 0, color = "red",linetype='dotted') +
   facet_wrap(~ Weekday)+ 
-  scale_y_continuous(limits = c(-10,10))
+  scale_y_continuous(limits = c(-10,10)) +
+  theme_minimal()
 
   
 ```
 ```{r}
 planes %>% 
   mutate(Weekday = fct_relevel(Weekday, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) %>%
-  ggplot(aes(Season, DEP_DELAY)) + 
-  geom_boxplot() + 
+  ggplot(aes(Season, ARR_DELAY)) + 
+  geom_violin() + 
   geom_hline(yintercept  = 0, linetype='dotted',color = "red") +
   facet_wrap(~Weekday) + 
-  scale_y_continuous(limits = c(-10,10)) 
+  scale_y_continuous(limits = c(-10,100)) +
+  theme_minimal()
   
 ```
-
-It is interesting that 75% of planes leave early. It's would be interesting to explore `WHEELS_OFF` variable which is the time point the plane leaves the ground.
-
-```{r}
-planes %>% 
-  select(DEP_DELAY,ARR_DELAY,CRS_DEP_TIME,WHEELS_OFF,WHEELS_ON, DISTANCE,ACTUAL_ELAPSED_TIME,AIR_TIME) %>% 
-  cor(use = "complete.obs")
-  
-```
+Arrival Delay are similar across the weekdays and season. The violin plot give us a feeling of how skewed arrival delay is and how different the median and average are. Other variables in this data set are similarly skewed, therefore modeling the average may not represent the biggest part of the data. We will later see if we can handle this skewness. 
 ```{r}
 
 planes %>% 
-  ggplot(aes(x = OP_CARRIER, y = WHEELS_OFF)) + 
-  geom_boxplot()
+  dplyr::select(DEP_DELAY,ARR_DELAY,CRS_DEP_TIME,WHEELS_OFF,WHEELS_ON, DISTANCE,ACTUAL_ELAPSED_TIME, TAXI_OUT, TAXI_IN ) %>% 
+  cor(use = "complete.obs") %>% kable(caption = "Correlation matrix of different variables")
+  
+
+
 ```
+
+This correlation plot helps us understand the relationship and colinearity among the potential variables used in our models. Some variables are time based (for example: `CRS_DEP_TIM`, `WHEELS_OFF`) with small differences, making them nearly perfect correlated. Such variables shouldn't be included in the model together as they make the coefficients unstable. Other than that interesting potential predictors can be assessed from this correlation matrix. 
+
+
+
+
+
+
+
+
+# Linear Model
+Aim:
+- Investigating the factors contributing to delays in arrival.
+
+```{r, fig.show="hold", out.width="50%"}
+
+
+planes %>% 
+  ggplot(aes(x = DEP_DELAY, y = ARR_DELAY)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(title="Influence of Depature Delay on Arrival Delay",
+       x = "Departure Delay",
+       y = "Arrival Delay") 
+
+planes %>% 
+  ggplot(aes(x = TAXI_OUT, y = ARR_DELAY)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(title = "Influence of Taxi Out on Arrival Delay",
+       x = "Taxi Out",
+       y = "Arrival Delay") 
+
+
+
+```
+
+From the plots above we see that both `DEP_DELAY` and `TAXI_OUT` are positively correlated with `ARR_DELAY`. It's obvious that a delay in departure leads to a delay in arrival. Furthermore, the skeweness is again visiable in the plot.
+## Modelling
+
+```{r}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
+
+lm.arrival <- lm(ARR_DELAY ~ DEP_DELAY, data = planes)
+lm.arrival.2 <- update(lm.arrival, . ~ . + TAXI_OUT)
+
+
+anova(lm.arrival, lm.arrival.2)
+```
+We can see that the second model with the `TAXI_OUT` variable significantly improves the model fit.
+
+Let's see if we can improve the model further by adding the airlines as predictor.
+
+
+```{r}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
+
+
+lm.arrival.3 <- update(lm.arrival.2, . ~ . + OP_CARRIER)
+
+drop1(lm.arrival.3, test ="F")
+```
+
+We use `drop1` function, since `OP_CARRIER` has more than two levels. The addition of the `OP_CARRIER` variable significantly improves the model fit.
+
+
+It could be more interesting to group the different `OP_CARRIER` into three categories of Cheap, Mid-tier and expensive airlines. For this we use chatGPT. Having three categories instead of 14 will help us to reduce the complexity of the model and make it easier to interpret and compare different levels of airlines. Especially, since some airlines how low flight counts. Of course these categories may not be complete true for each case. As ChatGPT mentions some airlines blur the categories as they could be considered cheap and or mid-tier and so on.  
+
+```{r}
+#| code-fold: false
+
+planes <- planes %>%
+  mutate(OP_CARRIER_Tier = recode(OP_CARRIER,
+    # Expensive
+    "AA" = "Expensive",
+    "DL" = "Expensive",
+    "UA" = "Expensive",
+    "CO" = "Expensive",
+
+    # Cheap
+    "B6" = "Cheap",
+    "F9" = "Cheap",
+    "FL" = "Cheap",
+    "WN" = "Cheap",
+
+    # Mid-tier
+    "9E" = "Mid-tier",
+    "EV" = "Mid-tier",
+    "MQ" = "Mid-tier",
+    "OH" = "Mid-tier",
+    "OO" = "Mid-tier",
+    "XE" = "Mid-tier",
+    "YV" = "Mid-tier",
+    "NW" = "Mid-tier",
+    "US" = "Mid-tier",
+
+    .default = NA_character_
+  )) %>% 
+  mutate(OP_CARRIER_Tier = factor(OP_CARRIER_Tier, 
+                                  levels = c("Cheap", "Mid-tier", "Expensive")))
+
+
+```
+
+With including the `OP_CARRIER_Tier` variable we lose the individual information of each airline. Still, this is done because adding `OP_CARRIER_Tier` and `OP_CARRIER` would properly lead to rank-deficiency.
+
+
+
+```{r}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
+
+lm.arrival.4 <- update(lm.arrival.3, . ~ . -OP_CARRIER+ OP_CARRIER_Tier)
+
+drop1(lm.arrival.4, test = "F")
+```
+After transformation `OP_CARRIER_Tier` singificantly improves the model. 
+
+## Post-Hoc Tests
+```{r}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
+
+ph.test.THSD <- glht(lm.arrival.4,
+    linfct = mcp(OP_CARRIER_Tier = "Tukey"))
+
+summary(ph.test.THSD)
+```
+We find strong evidence that all three pairwise differences are not equal to zero. Lets plot the differences:
+```{r}
+par(mar = c(5.1,7.5,4.1,2.1))
+plot(ph.test.THSD)
+```
+
+This plots shows us that the the difference between airline tiers is not zero in any case. Furthermore, the differences follow the possible intuition that cheaper flights are more likely to be delayed than mid-tier and expensive flights.
+
+## Interpretation of final model
+
+
+### Coefficients of Model
+```{r}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
+
+summary(lm.arrival.4)
+```
+- `DEP_DEALY`: given all predictors in the model are kept constant, a 1 minute increase in `DEP_DELAY` leads to an increase in `ARR_DELAY` of 0.976 minutes on *average*. 
+- `TAXI_OUT`: given all predictors in the model are kept constant, a 1 minute increase in `TAXI_OUT` leads to an increase in `ARR_DELAY` of 0.935 minutes on *average*.
+- `Intercept`: With `DEP_DELAY` and `TAXI_OUT` being 0, the average `ARR_DELAY` of `Cheap Airlines` is -26.858. Meaning that on average these flights arrival 27 min early. While a departure delay of zero is realistic and in range of our data, the taxi out time of zero is not realistic. With min of taxi out being 1. We could center `TAXI_OUT` so that zero represents the average taxi out time.
+- `TierMid-tier`: *On average* Mid-tier airlines arrive 2.892 minutes earlier compared to cheap airlines.  
+- `TierExpensive`: *On average* Expensive airlines arrive 3.544 minutes earlier compared to cheap airlines.
+
+### Let's explore our model variables a bit more
+
 ```{r}
 
-change_to_time <- function(df, var_time){
-  df %>% 
-    mutate({{var_time}} := sprintf("%04d", {{var_time}})) %>%
-    mutate({{var_time}} := format(strptime({{var_time}}, format ="%H%M"), format = "%H:%M")) 
+
+planes %>%
+  pivot_longer(cols = c(ARR_DELAY, TAXI_OUT, DEP_DELAY),
+               names_to = "Metric",
+               values_to = "Value") %>% 
+  ggplot( aes(x = Metric, y = Value)) +
+    geom_boxplot(aes(fill = Metric), outlier.alpha = 0.2) +
+    facet_wrap(~ OP_CARRIER_Tier) +
+    labs(
+      title = "Boxplot of Metrics by Carrier Tier",
+      x = "Metric",
+      y = "Value"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "none")
+
+```
+These boxplots show the skewedness of the variables. Outliers may play a big role in the model and could drive differences in the averages. Since these outliers are not measurement error we will keep them in the data set. Still, it's visiable that cheap airlines have more delayed flights (dep and arr)
+
+### Model diagnostics
+
+### Let's look at density plots
+```{r}
+plot(lm.arrival.4)
+```
+- The `Q-Q plot` shows that the residuals are not normally distributed for higher values of `ARR_DELAY`. Higher arrival delays are underestimated by the model. Intuitively this could make sense, since extreme delay may not be linear anymore and considering the LGA flight curfew this could have an influence as well. 
+- The overall fit of the model seem acceptable but as already mentioned with increased delay (extreme delays) the model fit decreases.
+
+
+
+```{r}
+
+planes %>%
+  pivot_longer(cols = c(ARR_DELAY, TAXI_OUT, DEP_DELAY),
+               names_to = "Metric",
+               values_to = "Value") %>% 
+  ggplot(aes(x = Value, fill = Metric, color = Metric)) +
+  geom_density(alpha = 0.4) +
+  facet_wrap(~ OP_CARRIER_Tier) +
+  xlim(-20, 200) + 
+  labs(
+    title = "Density of Metrics by Carrier Tier",
+    x = "Value",
+    y = "Density"
+  ) +
+  theme_minimal()
+
+```
+### Transformation
+
+Since we have a lot of negative and zero values, we can't use log transformation. Therefore we try a cubic root transformation.
+
+```{r}
+cbrt_transform <- function(x) {
+  sign(x) * abs(x)^(1/3)
 }
 
+planes %>%
+  mutate(
+    cbrt_arr_delay = cbrt_transform(ARR_DELAY),
+    cbrt_dep_delay = cbrt_transform(DEP_DELAY),
+    cbrt_taxi_out  = cbrt_transform(TAXI_OUT)
+  ) %>%
+  pivot_longer(cols = c(cbrt_arr_delay, cbrt_taxi_out, cbrt_dep_delay),
+               names_to = "Metric",
+               values_to = "Value") %>% 
+  ggplot(aes(x = Value, fill = Metric, color = Metric)) +
+  geom_density(alpha = 0.4) +
+  facet_wrap(~ OP_CARRIER_Tier) +
+  labs(
+    title = "Density of Metrics by Carrier Tier",
+    x = "Value",
+    y = "Density"
+  ) +
+  theme_minimal()
 ```
+The cubic root transformation produces a bimodal distribution for the `ARR_DELAY` and `DEP_DELAY` variables. Although this reveals an interesting pattern in the data, that most planes are on time (or more specific early) but the distribution shows slight delays to be somewhat common as well. Given the bimodality a normal regression modelling the average may not be better than using untransformed data. Interpretation of the model coefficents would become quit difficult after this transformation.
+
+### z-normalization
+To help with interpretation and entangle the relative effects of `TAXI_OUT` and `DEP_DELAY` on `ARR_DELAY` we can z-normalize the variables. The model fit will not change (as shown later). But it will help with interpretation of the intercept since a z-value of zero represents the average of the variable.
 
 ```{r}
-value_count <- function(data, group_col) {
-  data %>%
-    count({{group_col}}, name = 'count') %>%
-    mutate(count = prop.table(count) * 100) 
-}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
 
-value_count(planes, OP_CARRIER)
+planes <- planes %>%
+  mutate(
+    z_dep_delay = scale(DEP_DELAY),
+    z_taxi_out  = scale(TAXI_OUT)
+  )
+
+lm.arrival.5 <- lm(ARR_DELAY ~ z_dep_delay + z_taxi_out + OP_CARRIER_Tier, data = planes)
+summary(lm.arrival.5)
+#plot(lm.arrival.5)
 
 ```
 
-```{r}
-# library(DataExplorer)
-# create_report(planes, y  = "DEP_DELAY")
+- `Intercept`: Cheap airlines with average depature delay and average taxi out arrive *on average* 6.30 minutes late.
+- `TierMid-tier`: Mid-tier airlines with average depature delay and average taxi out arrive *on average* 3.413 minutes late.
+- `TierExpensive`: Expensive airlines with average depature delay and average taxi out arrive *on average*  2.76 minutes late.
+- This again shows that using the average for modelling may give us a biased picture. 
+- We see that `z_dep_delay` has a higher relative effect on arrival delay than `z_taxi_out`. This was not so clear in the model without transformation and is likely because depature delay has a larger range compared to taxi out time. 
 
-```
 
 
-There is no month oktober in the dataset it seems as if september and oktober are taken together. 
+# GLM Poisson
 
-```{r}
-planes %>% 
-  group_by(Month) %>% 
-  count()
-```
-```{r}
-planes %>% 
-  count(Weekday, sort = T) 
-  
-```
 
-# Key take aways
-
-## Problems with modelling and data
-
-## Interpretations of results
-
-# Modelling
-
-## Linear Model
-
-**Short description of model:**
-
-**What have we learned?:**
-
-## GLM Poisson
-
-**Short description of model:**
-
-**What have we learned?:**
 
 ## GLM Binomial
 

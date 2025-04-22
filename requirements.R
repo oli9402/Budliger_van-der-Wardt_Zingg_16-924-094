@@ -7,7 +7,8 @@ required_packages <- c(
   "forcats",
   "janitor",
   "kableExtra",
-  "DT"
+  "DT",
+  "multcomp"
 )
 
 # Install missing packages without loading
