@@ -27,6 +27,9 @@ execute:
 ## Packages
 
 ```{r}
+#| message: false
+#| warning: false
+
 # Scientific notation
 options(scipen=999)
 
@@ -41,6 +44,7 @@ library(forcats) # Reorder factor levels
 library(kableExtra)
 library(janitor)
 library(multcomp) # Multiple comparison tests
+library(patchwork) #plots side by side
 
 ```
 
@@ -58,10 +62,11 @@ load("./../Data/LGA_preprocessed.rda")
 ```
 
 
+
 ## Description of the LGA Data set
 ### Total Flights and Delays
 
-We defined a flight as delayed if the arrival or departure delay is greater than 30 minutes.
+For the following table we defined a flight as delayed if the arrival or departure delay is greater than 30 minutes.
 
 ```{r}
 # Create table
@@ -98,7 +103,7 @@ planes %>%
 
 ### Depature times
 ```{r}
-
+#|output: false
 planes %>%
   summarise(
     planned_first_flight = min(CRS_DEP_TIME, na.rm = TRUE),
@@ -113,21 +118,18 @@ planes %>%
 If we look at the planned departure times, we see that the first flight is at 5:35 am and the last flight is at 10:39 pm. This departure times are explain by a seasonal curfew between the hours of 12 am and 6 am during the warm months (Source: Wikipedia). 
 
 ```{r}
-
 planes %>%
   ggplot(aes(x = CRS_DEP_TIME, y = DEP_TIME)) +
   geom_point() +
   theme_minimal()
-
-
 ```
 
 This plot shows the planned departure time on the x axis and the actual departure time an the y axis. Points on the diagonal departed on time. On the bottom right of the plot we see a few cases of flights that have a delay and depart on the next day early morning. This should be considered when using `DEP_TIME` in a statistical model. Since flights before 5 am are systematic different from flights after 5 am since these flights were planned to depart the day before. 
 
 ### Arrival Delay by Day and Season
 ```{r}
-
-planes %>% 
+#| warning: false
+p1 <- planes %>% 
   mutate(Weekday = fct_relevel(Weekday, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) %>%
   ggplot(aes(x = "", y = ARR_DELAY)) + 
   geom_boxplot(outlier.colour = "red",outlier.shape = 1) + 
@@ -136,10 +138,7 @@ planes %>%
   scale_y_continuous(limits = c(-10,10)) +
   theme_minimal()
 
-  
-```
-```{r}
-planes %>% 
+p2 <- planes %>% 
   mutate(Weekday = fct_relevel(Weekday, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) %>%
   ggplot(aes(Season, ARR_DELAY)) + 
   geom_violin() + 
@@ -148,8 +147,10 @@ planes %>%
   scale_y_continuous(limits = c(-10,100)) +
   theme_minimal()
   
+p1 + p2 + plot_layout(ncol = 2)
 ```
-Arrival Delay are similar across the weekdays and season. The violin plot give us a feeling of how skewed arrival delay is and how different the median and average are. Other variables in this data set are similarly skewed, therefore modeling the average may not represent the biggest part of the data. We will later see if we can handle this skewness. 
+
+Arrival Delay are similar across the weekdays and season. On weekends the median of arrival delay seems to be a bit lower. The violin plot give us a feeling of how skewed arrival delay is and how different the median and average are. Other variables in this data set are similarly skewed, therefore modeling the average may not represent the biggest part of the data. We will later see if we can handle this skewness. 
 ```{r}
 
 planes %>% 
@@ -170,13 +171,13 @@ This correlation plot helps us understand the relationship and colinearity among
 
 
 # Linear Model
-Aim:
-- Investigating the factors contributing to delays in arrival.
 
-```{r, fig.show="hold", out.width="50%"}
+**Aim: Investigating the factors contributing to delays in arrival.**
+
+```{r}
 
 
-planes %>% 
+p1 <- planes %>% 
   ggplot(aes(x = DEP_DELAY, y = ARR_DELAY)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -185,7 +186,7 @@ planes %>%
        x = "Departure Delay",
        y = "Arrival Delay") 
 
-planes %>% 
+p2 <- planes %>% 
   ggplot(aes(x = TAXI_OUT, y = ARR_DELAY)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -194,7 +195,7 @@ planes %>%
        x = "Taxi Out",
        y = "Arrival Delay") 
 
-
+p1 + p2 + plot_layout(ncol = 2)
 
 ```
 
@@ -232,7 +233,7 @@ We use `drop1` function, since `OP_CARRIER` has more than two levels. The additi
 It could be more interesting to group the different `OP_CARRIER` into three categories of Cheap, Mid-tier and expensive airlines. For this we use chatGPT. Having three categories instead of 14 will help us to reduce the complexity of the model and make it easier to interpret and compare different levels of airlines. Especially, since some airlines how low flight counts. Of course these categories may not be complete true for each case. As ChatGPT mentions some airlines blur the categories as they could be considered cheap and or mid-tier and so on.  
 
 ```{r}
-#| code-fold: false
+#| code-summary: "Show ChatGPT classification"
 
 planes <- planes %>%
   mutate(OP_CARRIER_Tier = recode(OP_CARRIER,
@@ -279,7 +280,7 @@ lm.arrival.4 <- update(lm.arrival.3, . ~ . -OP_CARRIER+ OP_CARRIER_Tier)
 
 drop1(lm.arrival.4, test = "F")
 ```
-After transformation `OP_CARRIER_Tier` singificantly improves the model. 
+After transformation `OP_CARRIER_Tier` significantly improves the model. 
 
 ## Post-Hoc Tests
 ```{r}
@@ -311,9 +312,9 @@ summary(lm.arrival.4)
 ```
 - `DEP_DEALY`: given all predictors in the model are kept constant, a 1 minute increase in `DEP_DELAY` leads to an increase in `ARR_DELAY` of 0.976 minutes on *average*. 
 - `TAXI_OUT`: given all predictors in the model are kept constant, a 1 minute increase in `TAXI_OUT` leads to an increase in `ARR_DELAY` of 0.935 minutes on *average*.
-- `Intercept`: With `DEP_DELAY` and `TAXI_OUT` being 0, the average `ARR_DELAY` of `Cheap Airlines` is -26.858. Meaning that on average these flights arrival 27 min early. While a departure delay of zero is realistic and in range of our data, the taxi out time of zero is not realistic. With min of taxi out being 1. We could center `TAXI_OUT` so that zero represents the average taxi out time.
-- `TierMid-tier`: *On average* Mid-tier airlines arrive 2.892 minutes earlier compared to cheap airlines.  
-- `TierExpensive`: *On average* Expensive airlines arrive 3.544 minutes earlier compared to cheap airlines.
+- `Intercept`: With `DEP_DELAY` and `TAXI_OUT` being 0, the average `ARR_DELAY` of `Cheap Airlines` is -26.858. Meaning that **on average** these flights arrival 27 min early. While a departure delay of zero is realistic and in range of our data, the taxi out time of zero is not realistic. With min of taxi out being 1. We could center `TAXI_OUT` so that zero represents the average taxi out time.
+- `TierMid-tier`: **on average** Mid-tier airlines arrive 2.892 minutes earlier compared to cheap airlines.  
+- `TierExpensive`: **on average** Expensive airlines arrive 3.544 minutes earlier compared to cheap airlines.
 
 ### Let's explore our model variables a bit more
 
@@ -416,9 +417,9 @@ summary(lm.arrival.5)
 
 ```
 
-- `Intercept`: Cheap airlines with average depature delay and average taxi out arrive *on average* 6.30 minutes late.
-- `TierMid-tier`: Mid-tier airlines with average depature delay and average taxi out arrive *on average* 3.413 minutes late.
-- `TierExpensive`: Expensive airlines with average depature delay and average taxi out arrive *on average*  2.76 minutes late.
+- `Intercept`: Cheap airlines with average depature delay and average taxi out arrive **on average** 6.30 minutes late.
+- `TierMid-tier`: Mid-tier airlines with average depature delay and average taxi out arrive **on average** 3.413 minutes late.
+- `TierExpensive`: Expensive airlines with average depature delay and average taxi out arrive **on average**  2.76 minutes late.
 - This again shows that using the average for modelling may give us a biased picture. 
 - We see that `z_dep_delay` has a higher relative effect on arrival delay than `z_taxi_out`. This was not so clear in the model without transformation and is likely because depature delay has a larger range compared to taxi out time. 
 
@@ -426,30 +427,144 @@ summary(lm.arrival.5)
 
 # GLM Poisson
 
+Airports are hectic and resources can be limited if not managed properly. Coordination is key for good resource allocation. For example to clean the interior of a plane there is only a certain time window available. Since every minute counts we aim to predict the `Taxi in` time of a plane. In the case of plane cleaning, this knowledge would help with coordination and resource allocation. 
+
+```{r}
+
+p1<- planes %>%
+  ggplot(aes(x = ARR_DELAY, y = TAXI_IN)) +
+  geom_point() +
+  geom_smooth(method = "glm",
+              method.args = list(family = "quasipoisson"),
+              formula = y ~ x,
+              se = FALSE,
+              color = "blue")+
+  theme_minimal() + 
+  labs(title="",
+       x = "ARR_DELAY",
+       y = "Taxi In Time") 
+
+p2<- planes %>%
+  ggplot(aes(x = DEP_DELAY, y = TAXI_IN)) +
+  geom_point() +
+  geom_smooth(method = "glm",
+              method.args = list(family = "quasipoisson"),
+              formula = y ~ x,
+              se = FALSE,
+              color = "blue")+
+  theme_minimal() + 
+  labs(title="",
+       x = "DEP_DELAY",
+       y = "Taxi In Time")
+
+p3 <- planes %>%
+  ggplot(aes(x = TAXI_OUT, y = TAXI_IN)) +
+  geom_point() +
+  geom_smooth(method = "glm",
+              method.args = list(family = "quasipoisson"),
+              formula = y ~ x,
+              se = FALSE,
+              color = "blue")+
+  theme_minimal() + 
+  labs(title="",
+       x = "TAXI_OUT",
+       y = "Taxi In Time")
 
 
-## GLM Binomial
+p1 + p2 + p3 + plot_layout(ncol = 3) 
+```
+We see that `ARR_DELAY` seems to have an influence on `TAXI_IN` time. The more delayed a plane arrives the longer it takes to taxi in. 
 
-**Short description of model:**
+```{r}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
 
-**What have we learned?:**
+glm.poisson <- glm(TAXI_IN ~ ARR_DELAY*OP_CARRIER_Tier,
+  family = "quasipoisson",
+  data = planes)
 
-## GAM
+print(summary(glm.poisson)$coefficients %>% round(digits = 7))
+```
 
-**Short description of model:**
+# GLM Binomial
 
-**What have we learned?:**
+[https://www.bazl.admin.ch/bazl/en/home/passagiere/air-passenger-rights/nichtbefoerderung--annullierung-und-grosse-verspaetungen/grosse-verspaetungen.html](Regulation (EC) 261/2004) states a European court of justice ruling that passengers are entitled to compensation if their flight is delayed by more than 3 hours. *Due to the lack of a legal basis, the FOCA is unable to fine an airline for failure to pay compensation in the event of a delay*
 
-## Neural Network
+**Aim: What airline has the most flights with more than 180 minutes delay and how are differences in proportions explained**
 
-**Short description of model:**
 
-**What have we learned?:**
 
-## Support Vector Machine
+## Percentage of flights with more than 180 minutes delay
 
-**Short description of model:**
+```{r}
 
-**What have we learned?:**
+planes %>%
+  mutate(index_late_dep = ifelse(DEP_DELAY > 180, 1, 0)) %>%
+  group_by(OP_CARRIER) %>%
+  summarise(
+    Total_flights = n(),
+    Total_delayed_dep = sum(index_late_dep == 1, na.rm = TRUE),
+    percentage_delayed_dep = Total_delayed_dep / Total_flights * 100,
+    Mean_dep_delay = mean(DEP_DELAY, na.rm = TRUE),
+    Airline_tier = unique(OP_CARRIER_Tier)
+  ) %>%
+  arrange(desc(percentage_delayed_dep)) %>% 
+  head()
+
+```
+
+We see very low percentages of flights that depart later than 180 minutes. 
+
+We will use aggregated data on a airline level. We will end up with 17 data points which should be kept in mind during interpretation. Furthermore, since the percentage of flights arrived 3 hours later is very low and similar. Therefore we will decrease the threshold to 30 minutes which increases the differences between airlines. 
+
+
+### Aggregated Data
+
+```{r}
+planes_agg <- planes %>% 
+  mutate(index_late_dep = ifelse(DEP_DELAY > 30, 1, 0)) %>%
+  group_by(OP_CARRIER) %>%
+  summarise(
+    OP_CARRIER = first(OP_CARRIER),
+    Total_flights = n(),
+    Total_delayed_dep_over30 = sum(index_late_dep == 1, na.rm = TRUE),
+    Total_delayed_dep_under30 = sum(index_late_dep== 0, na.rm = TRUE),
+    Mean_dep_delay = mean(DEP_DELAY, na.rm = TRUE),
+    Mean_arr_delay = mean(ARR_DELAY, na.rm = TRUE),
+    Mean_distance = mean(DISTANCE, na.rm = TRUE),
+    Carrier_tier = unique(OP_CARRIER_Tier),
+    .groups = "drop"
+  ) 
+```
+
+
+```{r}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
+
+glm.late <- glm(cbind(Total_delayed_dep_over30, Total_delayed_dep_under30) ~ 
+                 Carrier_tier + Mean_dep_delay + Mean_distance + Total_flights,
+  family = "quasibinomial",
+  data = na.omit(planes_agg))
+
+print(summary(glm.late)$coefficients)
+```
+
+Adding overdispersion to the model improves the fit. Eliminates most significant effects. There was no evidence found that airlines tiers have an influence on the proportion of flights with more than 30 minutes delay. The intercept (i.e. cheap tier airlines) are not interpreted, since total flights of zero is not realistic. We see that the mean departure delay has a significant effect on the proportion of flights with more than 30 minutes delay. So, an airline with a higher average departure delay has a higher proportion of flights with more than 30 minutes delay.
+
+```{r}
+exp(coef(glm.late)["Mean_dep_delay"]*10) %>% round(digits=2)
+```
+
+More specifically, the odds of airline flights being delayed by more than 30 minutes increase by 2.12 times for each 10 minutes increase in average departure delay and no evidence is found that airline tiers can explain differences in proportions of flights with more than 30 minutes delay. While interpretation one needs to keep in mind that we have few observation on the aggregated level and furthermore, both `Y` and `Mean_dep_delay` are calculated from the same data: `DEP_DELAY`. 
+
+
+
+# Neural Network
+
+
+
+# Support Vector Machine
+
 
 

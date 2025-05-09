@@ -103,13 +103,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#z-normalization" id="toc-z-normalization" class="nav-link" data-scroll-target="#z-normalization">z-normalization</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#glm-poisson" id="toc-glm-poisson" class="nav-link" data-scroll-target="#glm-poisson">GLM Poisson</a>
+  <li><a href="#glm-poisson" id="toc-glm-poisson" class="nav-link" data-scroll-target="#glm-poisson">GLM Poisson</a></li>
+  <li><a href="#glm-binomial" id="toc-glm-binomial" class="nav-link" data-scroll-target="#glm-binomial">GLM Binomial</a>
   <ul class="collapse">
-  <li><a href="#glm-binomial" id="toc-glm-binomial" class="nav-link" data-scroll-target="#glm-binomial">GLM Binomial</a></li>
-  <li><a href="#gam" id="toc-gam" class="nav-link" data-scroll-target="#gam">GAM</a></li>
+  <li><a href="#percentage-of-flights-with-more-than-180-minutes-delay" id="toc-percentage-of-flights-with-more-than-180-minutes-delay" class="nav-link" data-scroll-target="#percentage-of-flights-with-more-than-180-minutes-delay">Percentage of flights with more than 180 minutes delay</a>
+  <ul class="collapse">
+  <li><a href="#aggregated-data" id="toc-aggregated-data" class="nav-link" data-scroll-target="#aggregated-data">Aggregated Data</a></li>
+  </ul></li>
+  </ul></li>
   <li><a href="#neural-network" id="toc-neural-network" class="nav-link" data-scroll-target="#neural-network">Neural Network</a></li>
   <li><a href="#support-vector-machine" id="toc-support-vector-machine" class="nav-link" data-scroll-target="#support-vector-machine">Support Vector Machine</a></li>
-  </ul></li>
   </ul>
 </nav>
 </div>
@@ -168,13 +171,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#z-normalization" id="toc-z-normalization">z-normalization</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#glm-poisson" id="toc-glm-poisson">GLM Poisson</a>
+  <li><a href="#glm-poisson" id="toc-glm-poisson">GLM Poisson</a></li>
+  <li><a href="#glm-binomial" id="toc-glm-binomial">GLM Binomial</a>
   <ul>
-  <li><a href="#glm-binomial" id="toc-glm-binomial">GLM Binomial</a></li>
-  <li><a href="#gam" id="toc-gam">GAM</a></li>
+  <li><a href="#percentage-of-flights-with-more-than-180-minutes-delay" id="toc-percentage-of-flights-with-more-than-180-minutes-delay">Percentage of flights with more than 180 minutes delay</a>
+  <ul>
+  <li><a href="#aggregated-data" id="toc-aggregated-data">Aggregated Data</a></li>
+  </ul></li>
+  </ul></li>
   <li><a href="#neural-network" id="toc-neural-network">Neural Network</a></li>
   <li><a href="#support-vector-machine" id="toc-support-vector-machine">Support Vector Machine</a></li>
-  </ul></li>
   </ul>
 </nav>
 <section id="packages" class="level2">
@@ -195,7 +201,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-11"><a href="#cb1-11"></a><span class="fu">library</span>(forcats) <span class="co"># Reorder factor levels</span></span>
 <span id="cb1-12"><a href="#cb1-12"></a><span class="fu">library</span>(kableExtra)</span>
 <span id="cb1-13"><a href="#cb1-13"></a><span class="fu">library</span>(janitor)</span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">library</span>(multcomp) <span class="co"># Multiple comparison tests</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">library</span>(multcomp) <span class="co"># Multiple comparison tests</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="fu">library</span>(patchwork) <span class="co">#plots side by side</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -217,7 +224,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="description-of-the-lga-data-set">Description of the LGA Data set</h2>
 <section id="total-flights-and-delays" class="level3">
 <h3 class="anchored" data-anchor-id="total-flights-and-delays">Total Flights and Delays</h3>
-<p>We defined a flight as delayed if the arrival or departure delay is greater than 30 minutes.</p>
+<p>For the following table we defined a flight as delayed if the arrival or departure delay is greater than 30 minutes.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
@@ -252,23 +259,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 <div class="cell-output-display">
 <div>
-<div id="zjzxcqusdx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zjzxcqusdx table {
+<div id="ekwtqkadus" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ekwtqkadus table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zjzxcqusdx thead, #zjzxcqusdx tbody, #zjzxcqusdx tfoot, #zjzxcqusdx tr, #zjzxcqusdx td, #zjzxcqusdx th {
+#ekwtqkadus thead, #ekwtqkadus tbody, #ekwtqkadus tfoot, #ekwtqkadus tr, #ekwtqkadus td, #ekwtqkadus th {
   border-style: none;
 }
 
-#zjzxcqusdx p {
+#ekwtqkadus p {
   margin: 0;
   padding: 0;
 }
 
-#zjzxcqusdx .gt_table {
+#ekwtqkadus .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -294,12 +301,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_caption {
+#ekwtqkadus .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zjzxcqusdx .gt_title {
+#ekwtqkadus .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -311,7 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#zjzxcqusdx .gt_subtitle {
+#ekwtqkadus .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -323,7 +330,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#zjzxcqusdx .gt_heading {
+#ekwtqkadus .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -335,13 +342,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_bottom_border {
+#ekwtqkadus .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_col_headings {
+#ekwtqkadus .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -356,7 +363,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_col_heading {
+#ekwtqkadus .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -376,7 +383,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#zjzxcqusdx .gt_column_spanner_outer {
+#ekwtqkadus .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -388,15 +395,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#zjzxcqusdx .gt_column_spanner_outer:first-child {
+#ekwtqkadus .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zjzxcqusdx .gt_column_spanner_outer:last-child {
+#ekwtqkadus .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zjzxcqusdx .gt_column_spanner {
+#ekwtqkadus .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -408,11 +415,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#zjzxcqusdx .gt_spanner_row {
+#ekwtqkadus .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zjzxcqusdx .gt_group_heading {
+#ekwtqkadus .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -438,7 +445,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#zjzxcqusdx .gt_empty_group_heading {
+#ekwtqkadus .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -453,15 +460,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#zjzxcqusdx .gt_from_md > :first-child {
+#ekwtqkadus .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zjzxcqusdx .gt_from_md > :last-child {
+#ekwtqkadus .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zjzxcqusdx .gt_row {
+#ekwtqkadus .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -480,7 +487,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#zjzxcqusdx .gt_stub {
+#ekwtqkadus .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -493,7 +500,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zjzxcqusdx .gt_stub_row_group {
+#ekwtqkadus .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -507,15 +514,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#zjzxcqusdx .gt_row_group_first td {
+#ekwtqkadus .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zjzxcqusdx .gt_row_group_first th {
+#ekwtqkadus .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zjzxcqusdx .gt_summary_row {
+#ekwtqkadus .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -525,16 +532,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zjzxcqusdx .gt_first_summary_row {
+#ekwtqkadus .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_first_summary_row.thick {
+#ekwtqkadus .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zjzxcqusdx .gt_last_summary_row {
+#ekwtqkadus .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -544,7 +551,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_grand_summary_row {
+#ekwtqkadus .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -554,7 +561,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zjzxcqusdx .gt_first_grand_summary_row {
+#ekwtqkadus .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -564,7 +571,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_last_grand_summary_row_top {
+#ekwtqkadus .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -574,11 +581,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_striped {
+#ekwtqkadus .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zjzxcqusdx .gt_table_body {
+#ekwtqkadus .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -587,7 +594,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_footnotes {
+#ekwtqkadus .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -601,7 +608,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_footnote {
+#ekwtqkadus .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -610,7 +617,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zjzxcqusdx .gt_sourcenotes {
+#ekwtqkadus .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -624,7 +631,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zjzxcqusdx .gt_sourcenote {
+#ekwtqkadus .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -632,72 +639,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zjzxcqusdx .gt_left {
+#ekwtqkadus .gt_left {
   text-align: left;
 }
 
-#zjzxcqusdx .gt_center {
+#ekwtqkadus .gt_center {
   text-align: center;
 }
 
-#zjzxcqusdx .gt_right {
+#ekwtqkadus .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zjzxcqusdx .gt_font_normal {
+#ekwtqkadus .gt_font_normal {
   font-weight: normal;
 }
 
-#zjzxcqusdx .gt_font_bold {
+#ekwtqkadus .gt_font_bold {
   font-weight: bold;
 }
 
-#zjzxcqusdx .gt_font_italic {
+#ekwtqkadus .gt_font_italic {
   font-style: italic;
 }
 
-#zjzxcqusdx .gt_super {
+#ekwtqkadus .gt_super {
   font-size: 65%;
 }
 
-#zjzxcqusdx .gt_footnote_marks {
+#ekwtqkadus .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zjzxcqusdx .gt_asterisk {
+#ekwtqkadus .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zjzxcqusdx .gt_indent_1 {
+#ekwtqkadus .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zjzxcqusdx .gt_indent_2 {
+#ekwtqkadus .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zjzxcqusdx .gt_indent_3 {
+#ekwtqkadus .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zjzxcqusdx .gt_indent_4 {
+#ekwtqkadus .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zjzxcqusdx .gt_indent_5 {
+#ekwtqkadus .gt_indent_5 {
   text-indent: 25px;
 }
 
-#zjzxcqusdx .katex-display {
+#ekwtqkadus .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#zjzxcqusdx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ekwtqkadus div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -935,14 +942,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>planes <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb4-3"><a href="#cb4-3"></a>    <span class="at">planned_first_flight =</span> <span class="fu">min</span>(CRS_DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb4-4"><a href="#cb4-4"></a>    <span class="at">planned_last_flight =</span> <span class="fu">max</span>(CRS_DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb4-5"><a href="#cb4-5"></a>    <span class="at">actual_first_flight =</span> <span class="fu">min</span>(DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb4-6"><a href="#cb4-6"></a>    <span class="at">actual_last_flight =</span> <span class="fu">max</span>(DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-7"><a href="#cb4-7"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-8"><a href="#cb4-8"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#|output: false</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="at">planned_first_flight =</span> <span class="fu">min</span>(CRS_DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="at">planned_last_flight =</span> <span class="fu">max</span>(CRS_DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="at">actual_first_flight =</span> <span class="fu">min</span>(DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-7"><a href="#cb4-7"></a>    <span class="at">actual_last_flight =</span> <span class="fu">max</span>(DEP_TIME, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-9"><a href="#cb4-9"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -995,14 +1003,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>planes <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>p1 <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span> </span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">mutate</span>(<span class="at">Weekday =</span> <span class="fu">fct_relevel</span>(Weekday, <span class="st">"Monday"</span>, <span class="st">"Tuesday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>, <span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> ARR_DELAY)) <span class="sc">+</span> </span>
 <span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.colour =</span> <span class="st">"red"</span>,<span class="at">outlier.shape =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
 <span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept  =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>,<span class="at">linetype=</span><span class="st">'dotted'</span>) <span class="sc">+</span></span>
 <span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Weekday)<span class="sc">+</span> </span>
 <span id="cb6-7"><a href="#cb6-7"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">10</span>)) <span class="sc">+</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-8"><a href="#cb6-8"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb6-9"><a href="#cb6-9"></a></span>
+<span id="cb6-10"><a href="#cb6-10"></a>p2 <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span> </span>
+<span id="cb6-11"><a href="#cb6-11"></a>  <span class="fu">mutate</span>(<span class="at">Weekday =</span> <span class="fu">fct_relevel</span>(Weekday, <span class="st">"Monday"</span>, <span class="st">"Tuesday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>, <span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Season, ARR_DELAY)) <span class="sc">+</span> </span>
+<span id="cb6-13"><a href="#cb6-13"></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span> </span>
+<span id="cb6-14"><a href="#cb6-14"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept  =</span> <span class="dv">0</span>, <span class="at">linetype=</span><span class="st">'dotted'</span>,<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Weekday) <span class="sc">+</span> </span>
+<span id="cb6-16"><a href="#cb6-16"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb6-18"><a href="#cb6-18"></a>  </span>
+<span id="cb6-19"><a href="#cb6-19"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1012,33 +1031,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>Arrival Delay are similar across the weekdays and season. On weekends the median of arrival delay seems to be a bit lower. The violin plot give us a feeling of how skewed arrival delay is and how different the median and average are. Other variables in this data set are similarly skewed, therefore modeling the average may not represent the biggest part of the data. We will later see if we can handle this skewness.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">mutate</span>(<span class="at">Weekday =</span> <span class="fu">fct_relevel</span>(Weekday, <span class="st">"Monday"</span>, <span class="st">"Tuesday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>, <span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Season, ARR_DELAY)) <span class="sc">+</span> </span>
-<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span> </span>
-<span id="cb7-5"><a href="#cb7-5"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept  =</span> <span class="dv">0</span>, <span class="at">linetype=</span><span class="st">'dotted'</span>,<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Weekday) <span class="sc">+</span> </span>
-<span id="cb7-7"><a href="#cb7-7"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">100</span>)) <span class="sc">+</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Arrival Delay are similar across the weekdays and season. The violin plot give us a feeling of how skewed arrival delay is and how different the median and average are. Other variables in this data set are similarly skewed, therefore modeling the average may not represent the biggest part of the data. We will later see if we can handle this skewness.</p>
-<div class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(DEP_DELAY,ARR_DELAY,CRS_DEP_TIME,WHEELS_OFF,WHEELS_ON, DISTANCE,ACTUAL_ELAPSED_TIME, TAXI_OUT, TAXI_IN ) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"complete.obs"</span>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Correlation matrix of different variables"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-2"><a href="#cb7-2"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(DEP_DELAY,ARR_DELAY,CRS_DEP_TIME,WHEELS_OFF,WHEELS_ON, DISTANCE,ACTUAL_ELAPSED_TIME, TAXI_OUT, TAXI_IN ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"complete.obs"</span>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Correlation matrix of different variables"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -1187,50 +1186,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="linear-model" class="level1">
 <h1>Linear Model</h1>
-<p>Aim: - Investigating the factors contributing to delays in arrival.</p>
+<p><strong>Aim: Investigating the factors contributing to delays in arrival.</strong></p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> DEP_DELAY, <span class="at">y =</span> ARR_DELAY)) <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb9-6"><a href="#cb9-6"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Influence of Depature Delay on Arrival Delay"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7"></a>       <span class="at">x =</span> <span class="st">"Departure Delay"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8"></a>       <span class="at">y =</span> <span class="st">"Arrival Delay"</span>) </span>
-<span id="cb9-9"><a href="#cb9-9"></a></span>
-<span id="cb9-10"><a href="#cb9-10"></a>planes <span class="sc">%&gt;%</span> </span>
-<span id="cb9-11"><a href="#cb9-11"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> TAXI_OUT, <span class="at">y =</span> ARR_DELAY)) <span class="sc">+</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb9-13"><a href="#cb9-13"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb9-15"><a href="#cb9-15"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Influence of Taxi Out on Arrival Delay"</span>,</span>
-<span id="cb9-16"><a href="#cb9-16"></a>       <span class="at">x =</span> <span class="st">"Taxi Out"</span>,</span>
-<span id="cb9-17"><a href="#cb9-17"></a>       <span class="at">y =</span> <span class="st">"Arrival Delay"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>p1 <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> DEP_DELAY, <span class="at">y =</span> ARR_DELAY)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb8-6"><a href="#cb8-6"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Influence of Depature Delay on Arrival Delay"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7"></a>       <span class="at">x =</span> <span class="st">"Departure Delay"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8"></a>       <span class="at">y =</span> <span class="st">"Arrival Delay"</span>) </span>
+<span id="cb8-9"><a href="#cb8-9"></a></span>
+<span id="cb8-10"><a href="#cb8-10"></a>p2 <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span> </span>
+<span id="cb8-11"><a href="#cb8-11"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> TAXI_OUT, <span class="at">y =</span> ARR_DELAY)) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb8-15"><a href="#cb8-15"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Influence of Taxi Out on Arrival Delay"</span>,</span>
+<span id="cb8-16"><a href="#cb8-16"></a>       <span class="at">x =</span> <span class="st">"Taxi Out"</span>,</span>
+<span id="cb8-17"><a href="#cb8-17"></a>       <span class="at">y =</span> <span class="st">"Arrival Delay"</span>) </span>
+<span id="cb8-18"><a href="#cb8-18"></a></span>
+<span id="cb8-19"><a href="#cb8-19"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>From the plots above we see that both <code>DEP_DELAY</code> and <code>TAXI_OUT</code> are positively correlated with <code>ARR_DELAY</code>. It’s obvious that a delay in departure leads to a delay in arrival. Furthermore, the skeweness is again visiable in the plot. ## Modelling</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>lm.arrival <span class="ot">&lt;-</span> <span class="fu">lm</span>(ARR_DELAY <span class="sc">~</span> DEP_DELAY, <span class="at">data =</span> planes)</span>
-<span id="cb10-2"><a href="#cb10-2"></a>lm.arrival<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(lm.arrival, . <span class="sc">~</span> . <span class="sc">+</span> TAXI_OUT)</span>
-<span id="cb10-3"><a href="#cb10-3"></a></span>
-<span id="cb10-4"><a href="#cb10-4"></a></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="fu">anova</span>(lm.arrival, lm.arrival<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>lm.arrival <span class="ot">&lt;-</span> <span class="fu">lm</span>(ARR_DELAY <span class="sc">~</span> DEP_DELAY, <span class="at">data =</span> planes)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>lm.arrival<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(lm.arrival, . <span class="sc">~</span> . <span class="sc">+</span> TAXI_OUT)</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="fu">anova</span>(lm.arrival, lm.arrival<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="color: blue"><code>Analysis of Variance Table
 
@@ -1246,9 +1240,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>We can see that the second model with the <code>TAXI_OUT</code> variable significantly improves the model fit.</p>
 <p>Let’s see if we can improve the model further by adding the airlines as predictor.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>lm.arrival<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(lm.arrival<span class="fl">.2</span>, . <span class="sc">~</span> . <span class="sc">+</span> OP_CARRIER)</span>
-<span id="cb12-2"><a href="#cb12-2"></a></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">drop1</span>(lm.arrival<span class="fl">.3</span>, <span class="at">test =</span><span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>lm.arrival<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(lm.arrival<span class="fl">.2</span>, . <span class="sc">~</span> . <span class="sc">+</span> OP_CARRIER)</span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">drop1</span>(lm.arrival<span class="fl">.3</span>, <span class="at">test =</span><span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="color: blue"><code>Single term deletions
 
@@ -1266,41 +1260,44 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>We use <code>drop1</code> function, since <code>OP_CARRIER</code> has more than two levels. The addition of the <code>OP_CARRIER</code> variable significantly improves the model fit.</p>
 <p>It could be more interesting to group the different <code>OP_CARRIER</code> into three categories of Cheap, Mid-tier and expensive airlines. For this we use chatGPT. Having three categories instead of 14 will help us to reduce the complexity of the model and make it easier to interpret and compare different levels of airlines. Especially, since some airlines how low flight counts. Of course these categories may not be complete true for each case. As ChatGPT mentions some airlines blur the categories as they could be considered cheap and or mid-tier and so on.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>planes <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="fu">recode</span>(OP_CARRIER,</span>
-<span id="cb14-3"><a href="#cb14-3"></a>    <span class="co"># Expensive</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a>    <span class="st">"AA"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
-<span id="cb14-5"><a href="#cb14-5"></a>    <span class="st">"DL"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
-<span id="cb14-6"><a href="#cb14-6"></a>    <span class="st">"UA"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
-<span id="cb14-7"><a href="#cb14-7"></a>    <span class="st">"CO"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
-<span id="cb14-8"><a href="#cb14-8"></a></span>
-<span id="cb14-9"><a href="#cb14-9"></a>    <span class="co"># Cheap</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a>    <span class="st">"B6"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
-<span id="cb14-11"><a href="#cb14-11"></a>    <span class="st">"F9"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
-<span id="cb14-12"><a href="#cb14-12"></a>    <span class="st">"FL"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
-<span id="cb14-13"><a href="#cb14-13"></a>    <span class="st">"WN"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
-<span id="cb14-14"><a href="#cb14-14"></a></span>
-<span id="cb14-15"><a href="#cb14-15"></a>    <span class="co"># Mid-tier</span></span>
-<span id="cb14-16"><a href="#cb14-16"></a>    <span class="st">"9E"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
-<span id="cb14-17"><a href="#cb14-17"></a>    <span class="st">"EV"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
-<span id="cb14-18"><a href="#cb14-18"></a>    <span class="st">"MQ"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
-<span id="cb14-19"><a href="#cb14-19"></a>    <span class="st">"OH"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
-<span id="cb14-20"><a href="#cb14-20"></a>    <span class="st">"OO"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
-<span id="cb14-21"><a href="#cb14-21"></a>    <span class="st">"XE"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
-<span id="cb14-22"><a href="#cb14-22"></a>    <span class="st">"YV"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
-<span id="cb14-23"><a href="#cb14-23"></a>    <span class="st">"NW"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
-<span id="cb14-24"><a href="#cb14-24"></a>    <span class="st">"US"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
-<span id="cb14-25"><a href="#cb14-25"></a></span>
-<span id="cb14-26"><a href="#cb14-26"></a>    <span class="at">.default =</span> <span class="cn">NA_character_</span></span>
-<span id="cb14-27"><a href="#cb14-27"></a>  )) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-28"><a href="#cb14-28"></a>  <span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="fu">factor</span>(OP_CARRIER_Tier, </span>
-<span id="cb14-29"><a href="#cb14-29"></a>                                  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Cheap"</span>, <span class="st">"Mid-tier"</span>, <span class="st">"Expensive"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Show ChatGPT classification</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>planes <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="fu">recode</span>(OP_CARRIER,</span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="co"># Expensive</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="st">"AA"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5"></a>    <span class="st">"DL"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb13-6"><a href="#cb13-6"></a>    <span class="st">"UA"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7"></a>    <span class="st">"CO"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a>    <span class="co"># Cheap</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a>    <span class="st">"B6"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11"></a>    <span class="st">"F9"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb13-12"><a href="#cb13-12"></a>    <span class="st">"FL"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb13-13"><a href="#cb13-13"></a>    <span class="st">"WN"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb13-14"><a href="#cb13-14"></a></span>
+<span id="cb13-15"><a href="#cb13-15"></a>    <span class="co"># Mid-tier</span></span>
+<span id="cb13-16"><a href="#cb13-16"></a>    <span class="st">"9E"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb13-17"><a href="#cb13-17"></a>    <span class="st">"EV"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb13-18"><a href="#cb13-18"></a>    <span class="st">"MQ"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb13-19"><a href="#cb13-19"></a>    <span class="st">"OH"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb13-20"><a href="#cb13-20"></a>    <span class="st">"OO"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb13-21"><a href="#cb13-21"></a>    <span class="st">"XE"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb13-22"><a href="#cb13-22"></a>    <span class="st">"YV"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb13-23"><a href="#cb13-23"></a>    <span class="st">"NW"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb13-24"><a href="#cb13-24"></a>    <span class="st">"US"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb13-25"><a href="#cb13-25"></a></span>
+<span id="cb13-26"><a href="#cb13-26"></a>    <span class="at">.default =</span> <span class="cn">NA_character_</span></span>
+<span id="cb13-27"><a href="#cb13-27"></a>  )) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-28"><a href="#cb13-28"></a>  <span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="fu">factor</span>(OP_CARRIER_Tier, </span>
+<span id="cb13-29"><a href="#cb13-29"></a>                                  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Cheap"</span>, <span class="st">"Mid-tier"</span>, <span class="st">"Expensive"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>With including the <code>OP_CARRIER_Tier</code> variable we lose the individual information of each airline. Still, this is done because adding <code>OP_CARRIER_Tier</code> and <code>OP_CARRIER</code> would properly lead to rank-deficiency.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>lm.arrival<span class="fl">.4</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(lm.arrival<span class="fl">.3</span>, . <span class="sc">~</span> . <span class="sc">-</span>OP_CARRIER<span class="sc">+</span> OP_CARRIER_Tier)</span>
-<span id="cb15-2"><a href="#cb15-2"></a></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">drop1</span>(lm.arrival<span class="fl">.4</span>, <span class="at">test =</span> <span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>lm.arrival<span class="fl">.4</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(lm.arrival<span class="fl">.3</span>, . <span class="sc">~</span> . <span class="sc">-</span>OP_CARRIER<span class="sc">+</span> OP_CARRIER_Tier)</span>
+<span id="cb14-2"><a href="#cb14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="fu">drop1</span>(lm.arrival<span class="fl">.4</span>, <span class="at">test =</span> <span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="color: blue"><code>Single term deletions
 
@@ -1320,14 +1317,14 @@ OP_CARRIER_Tier ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p>After transformation <code>OP_CARRIER_Tier</code> singificantly improves the model.</p>
+<p>After transformation <code>OP_CARRIER_Tier</code> significantly improves the model.</p>
 <section id="post-hoc-tests" class="level2">
 <h2 class="anchored" data-anchor-id="post-hoc-tests">Post-Hoc Tests</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>ph.test.THSD <span class="ot">&lt;-</span> <span class="fu">glht</span>(lm.arrival<span class="fl">.4</span>,</span>
-<span id="cb17-2"><a href="#cb17-2"></a>    <span class="at">linfct =</span> <span class="fu">mcp</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="st">"Tukey"</span>))</span>
-<span id="cb17-3"><a href="#cb17-3"></a></span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="fu">summary</span>(ph.test.THSD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>ph.test.THSD <span class="ot">&lt;-</span> <span class="fu">glht</span>(lm.arrival<span class="fl">.4</span>,</span>
+<span id="cb16-2"><a href="#cb16-2"></a>    <span class="at">linfct =</span> <span class="fu">mcp</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="st">"Tukey"</span>))</span>
+<span id="cb16-3"><a href="#cb16-3"></a></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">summary</span>(ph.test.THSD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="color: blue"><code>
      Simultaneous Tests for General Linear Hypotheses
@@ -1352,13 +1349,13 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">5.1</span>,<span class="fl">7.5</span>,<span class="fl">4.1</span>,<span class="fl">2.1</span>))</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">plot</span>(ph.test.THSD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">5.1</span>,<span class="fl">7.5</span>,<span class="fl">4.1</span>,<span class="fl">2.1</span>))</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">plot</span>(ph.test.THSD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1370,7 +1367,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 <section id="coefficients-of-model" class="level3">
 <h3 class="anchored" data-anchor-id="coefficients-of-model">Coefficients of Model</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">summary</span>(lm.arrival<span class="fl">.4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">summary</span>(lm.arrival<span class="fl">.4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="color: blue"><code>
 Call:
@@ -1400,10 +1397,10 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 <ul>
 <li><code>DEP_DEALY</code>: given all predictors in the model are kept constant, a 1 minute increase in <code>DEP_DELAY</code> leads to an increase in <code>ARR_DELAY</code> of 0.976 minutes on <em>average</em>.</li>
 <li><code>TAXI_OUT</code>: given all predictors in the model are kept constant, a 1 minute increase in <code>TAXI_OUT</code> leads to an increase in <code>ARR_DELAY</code> of 0.935 minutes on <em>average</em>.</li>
-<li><code>Intercept</code>: With <code>DEP_DELAY</code> and <code>TAXI_OUT</code> being 0, the average <code>ARR_DELAY</code> of <code>Cheap Airlines</code> is -26.858. Meaning that on average these flights arrival 27 min early. While a departure delay of zero is realistic and in range of our data, the taxi out time of zero is not realistic. With min of taxi out being 1. We could center <code>TAXI_OUT</code> so that zero represents the average taxi out time.</li>
-<li><code>TierMid-tier</code>: <em>On average</em> Mid-tier airlines arrive 2.892 minutes earlier compared to cheap airlines.<br>
+<li><code>Intercept</code>: With <code>DEP_DELAY</code> and <code>TAXI_OUT</code> being 0, the average <code>ARR_DELAY</code> of <code>Cheap Airlines</code> is -26.858. Meaning that <strong>on average</strong> these flights arrival 27 min early. While a departure delay of zero is realistic and in range of our data, the taxi out time of zero is not realistic. With min of taxi out being 1. We could center <code>TAXI_OUT</code> so that zero represents the average taxi out time.</li>
+<li><code>TierMid-tier</code>: <strong>on average</strong> Mid-tier airlines arrive 2.892 minutes earlier compared to cheap airlines.<br>
 </li>
-<li><code>TierExpensive</code>: <em>On average</em> Expensive airlines arrive 3.544 minutes earlier compared to cheap airlines.</li>
+<li><code>TierExpensive</code>: <strong>on average</strong> Expensive airlines arrive 3.544 minutes earlier compared to cheap airlines.</li>
 </ul>
 </section>
 <section id="lets-explore-our-model-variables-a-bit-more" class="level3">
@@ -1411,25 +1408,25 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>planes <span class="sc">%&gt;%</span></span>
-<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(ARR_DELAY, TAXI_OUT, DEP_DELAY),</span>
-<span id="cb22-3"><a href="#cb22-3"></a>               <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
-<span id="cb22-4"><a href="#cb22-4"></a>               <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-5"><a href="#cb22-5"></a>  <span class="fu">ggplot</span>( <span class="fu">aes</span>(<span class="at">x =</span> Metric, <span class="at">y =</span> Value)) <span class="sc">+</span></span>
-<span id="cb22-6"><a href="#cb22-6"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Metric), <span class="at">outlier.alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb22-7"><a href="#cb22-7"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> OP_CARRIER_Tier) <span class="sc">+</span></span>
-<span id="cb22-8"><a href="#cb22-8"></a>    <span class="fu">labs</span>(</span>
-<span id="cb22-9"><a href="#cb22-9"></a>      <span class="at">title =</span> <span class="st">"Boxplot of Metrics by Carrier Tier"</span>,</span>
-<span id="cb22-10"><a href="#cb22-10"></a>      <span class="at">x =</span> <span class="st">"Metric"</span>,</span>
-<span id="cb22-11"><a href="#cb22-11"></a>      <span class="at">y =</span> <span class="st">"Value"</span></span>
-<span id="cb22-12"><a href="#cb22-12"></a>    ) <span class="sc">+</span></span>
-<span id="cb22-13"><a href="#cb22-13"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb22-14"><a href="#cb22-14"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(ARR_DELAY, TAXI_OUT, DEP_DELAY),</span>
+<span id="cb21-3"><a href="#cb21-3"></a>               <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4"></a>               <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-5"><a href="#cb21-5"></a>  <span class="fu">ggplot</span>( <span class="fu">aes</span>(<span class="at">x =</span> Metric, <span class="at">y =</span> Value)) <span class="sc">+</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Metric), <span class="at">outlier.alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> OP_CARRIER_Tier) <span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a>    <span class="fu">labs</span>(</span>
+<span id="cb21-9"><a href="#cb21-9"></a>      <span class="at">title =</span> <span class="st">"Boxplot of Metrics by Carrier Tier"</span>,</span>
+<span id="cb21-10"><a href="#cb21-10"></a>      <span class="at">x =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb21-11"><a href="#cb21-11"></a>      <span class="at">y =</span> <span class="st">"Value"</span></span>
+<span id="cb21-12"><a href="#cb21-12"></a>    ) <span class="sc">+</span></span>
+<span id="cb21-13"><a href="#cb21-13"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb21-14"><a href="#cb21-14"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1444,33 +1441,33 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">plot</span>(lm.arrival<span class="fl">.4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">plot</span>(lm.arrival<span class="fl">.4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-18-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-17-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-18-3.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-17-3.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-18-4.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-17-4.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1482,25 +1479,25 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>planes <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(ARR_DELAY, TAXI_OUT, DEP_DELAY),</span>
-<span id="cb24-3"><a href="#cb24-3"></a>               <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
-<span id="cb24-4"><a href="#cb24-4"></a>               <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Value, <span class="at">fill =</span> Metric, <span class="at">color =</span> Metric)) <span class="sc">+</span></span>
-<span id="cb24-6"><a href="#cb24-6"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb24-7"><a href="#cb24-7"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> OP_CARRIER_Tier) <span class="sc">+</span></span>
-<span id="cb24-8"><a href="#cb24-8"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">20</span>, <span class="dv">200</span>) <span class="sc">+</span> </span>
-<span id="cb24-9"><a href="#cb24-9"></a>  <span class="fu">labs</span>(</span>
-<span id="cb24-10"><a href="#cb24-10"></a>    <span class="at">title =</span> <span class="st">"Density of Metrics by Carrier Tier"</span>,</span>
-<span id="cb24-11"><a href="#cb24-11"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
-<span id="cb24-12"><a href="#cb24-12"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
-<span id="cb24-13"><a href="#cb24-13"></a>  ) <span class="sc">+</span></span>
-<span id="cb24-14"><a href="#cb24-14"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(ARR_DELAY, TAXI_OUT, DEP_DELAY),</span>
+<span id="cb23-3"><a href="#cb23-3"></a>               <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb23-4"><a href="#cb23-4"></a>               <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-5"><a href="#cb23-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Value, <span class="at">fill =</span> Metric, <span class="at">color =</span> Metric)) <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> OP_CARRIER_Tier) <span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">20</span>, <span class="dv">200</span>) <span class="sc">+</span> </span>
+<span id="cb23-9"><a href="#cb23-9"></a>  <span class="fu">labs</span>(</span>
+<span id="cb23-10"><a href="#cb23-10"></a>    <span class="at">title =</span> <span class="st">"Density of Metrics by Carrier Tier"</span>,</span>
+<span id="cb23-11"><a href="#cb23-11"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
+<span id="cb23-12"><a href="#cb23-12"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb23-13"><a href="#cb23-13"></a>  ) <span class="sc">+</span></span>
+<span id="cb23-14"><a href="#cb23-14"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1512,33 +1509,33 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>cbrt_transform <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">sign</span>(x) <span class="sc">*</span> <span class="fu">abs</span>(x)<span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span>
-<span id="cb25-3"><a href="#cb25-3"></a>}</span>
-<span id="cb25-4"><a href="#cb25-4"></a></span>
-<span id="cb25-5"><a href="#cb25-5"></a>planes <span class="sc">%&gt;%</span></span>
-<span id="cb25-6"><a href="#cb25-6"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb25-7"><a href="#cb25-7"></a>    <span class="at">cbrt_arr_delay =</span> <span class="fu">cbrt_transform</span>(ARR_DELAY),</span>
-<span id="cb25-8"><a href="#cb25-8"></a>    <span class="at">cbrt_dep_delay =</span> <span class="fu">cbrt_transform</span>(DEP_DELAY),</span>
-<span id="cb25-9"><a href="#cb25-9"></a>    <span class="at">cbrt_taxi_out  =</span> <span class="fu">cbrt_transform</span>(TAXI_OUT)</span>
-<span id="cb25-10"><a href="#cb25-10"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb25-11"><a href="#cb25-11"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(cbrt_arr_delay, cbrt_taxi_out, cbrt_dep_delay),</span>
-<span id="cb25-12"><a href="#cb25-12"></a>               <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
-<span id="cb25-13"><a href="#cb25-13"></a>               <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb25-14"><a href="#cb25-14"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Value, <span class="at">fill =</span> Metric, <span class="at">color =</span> Metric)) <span class="sc">+</span></span>
-<span id="cb25-15"><a href="#cb25-15"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb25-16"><a href="#cb25-16"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> OP_CARRIER_Tier) <span class="sc">+</span></span>
-<span id="cb25-17"><a href="#cb25-17"></a>  <span class="fu">labs</span>(</span>
-<span id="cb25-18"><a href="#cb25-18"></a>    <span class="at">title =</span> <span class="st">"Density of Metrics by Carrier Tier"</span>,</span>
-<span id="cb25-19"><a href="#cb25-19"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
-<span id="cb25-20"><a href="#cb25-20"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
-<span id="cb25-21"><a href="#cb25-21"></a>  ) <span class="sc">+</span></span>
-<span id="cb25-22"><a href="#cb25-22"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>cbrt_transform <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">sign</span>(x) <span class="sc">*</span> <span class="fu">abs</span>(x)<span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>}</span>
+<span id="cb24-4"><a href="#cb24-4"></a></span>
+<span id="cb24-5"><a href="#cb24-5"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-7"><a href="#cb24-7"></a>    <span class="at">cbrt_arr_delay =</span> <span class="fu">cbrt_transform</span>(ARR_DELAY),</span>
+<span id="cb24-8"><a href="#cb24-8"></a>    <span class="at">cbrt_dep_delay =</span> <span class="fu">cbrt_transform</span>(DEP_DELAY),</span>
+<span id="cb24-9"><a href="#cb24-9"></a>    <span class="at">cbrt_taxi_out  =</span> <span class="fu">cbrt_transform</span>(TAXI_OUT)</span>
+<span id="cb24-10"><a href="#cb24-10"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb24-11"><a href="#cb24-11"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(cbrt_arr_delay, cbrt_taxi_out, cbrt_dep_delay),</span>
+<span id="cb24-12"><a href="#cb24-12"></a>               <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb24-13"><a href="#cb24-13"></a>               <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-14"><a href="#cb24-14"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Value, <span class="at">fill =</span> Metric, <span class="at">color =</span> Metric)) <span class="sc">+</span></span>
+<span id="cb24-15"><a href="#cb24-15"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb24-16"><a href="#cb24-16"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> OP_CARRIER_Tier) <span class="sc">+</span></span>
+<span id="cb24-17"><a href="#cb24-17"></a>  <span class="fu">labs</span>(</span>
+<span id="cb24-18"><a href="#cb24-18"></a>    <span class="at">title =</span> <span class="st">"Density of Metrics by Carrier Tier"</span>,</span>
+<span id="cb24-19"><a href="#cb24-19"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
+<span id="cb24-20"><a href="#cb24-20"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb24-21"><a href="#cb24-21"></a>  ) <span class="sc">+</span></span>
+<span id="cb24-22"><a href="#cb24-22"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1549,14 +1546,14 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 <h3 class="anchored" data-anchor-id="z-normalization">z-normalization</h3>
 <p>To help with interpretation and entangle the relative effects of <code>TAXI_OUT</code> and <code>DEP_DELAY</code> on <code>ARR_DELAY</code> we can z-normalize the variables. The model fit will not change (as shown later). But it will help with interpretation of the intercept since a z-value of zero represents the average of the variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>planes <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb26-3"><a href="#cb26-3"></a>    <span class="at">z_dep_delay =</span> <span class="fu">scale</span>(DEP_DELAY),</span>
-<span id="cb26-4"><a href="#cb26-4"></a>    <span class="at">z_taxi_out  =</span> <span class="fu">scale</span>(TAXI_OUT)</span>
-<span id="cb26-5"><a href="#cb26-5"></a>  )</span>
-<span id="cb26-6"><a href="#cb26-6"></a></span>
-<span id="cb26-7"><a href="#cb26-7"></a>lm.arrival<span class="fl">.5</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(ARR_DELAY <span class="sc">~</span> z_dep_delay <span class="sc">+</span> z_taxi_out <span class="sc">+</span> OP_CARRIER_Tier, <span class="at">data =</span> planes)</span>
-<span id="cb26-8"><a href="#cb26-8"></a><span class="fu">summary</span>(lm.arrival<span class="fl">.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>planes <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-3"><a href="#cb25-3"></a>    <span class="at">z_dep_delay =</span> <span class="fu">scale</span>(DEP_DELAY),</span>
+<span id="cb25-4"><a href="#cb25-4"></a>    <span class="at">z_taxi_out  =</span> <span class="fu">scale</span>(TAXI_OUT)</span>
+<span id="cb25-5"><a href="#cb25-5"></a>  )</span>
+<span id="cb25-6"><a href="#cb25-6"></a></span>
+<span id="cb25-7"><a href="#cb25-7"></a>lm.arrival<span class="fl">.5</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(ARR_DELAY <span class="sc">~</span> z_dep_delay <span class="sc">+</span> z_taxi_out <span class="sc">+</span> OP_CARRIER_Tier, <span class="at">data =</span> planes)</span>
+<span id="cb25-8"><a href="#cb25-8"></a><span class="fu">summary</span>(lm.arrival<span class="fl">.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="color: blue"><code>
 Call:
@@ -1582,12 +1579,12 @@ Residual standard error: 12.13 on 96064 degrees of freedom
 Multiple R-squared:  0.9135,    Adjusted R-squared:  0.9135 
 F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co">#plot(lm.arrival.5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co">#plot(lm.arrival.5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li><code>Intercept</code>: Cheap airlines with average depature delay and average taxi out arrive <em>on average</em> 6.30 minutes late.</li>
-<li><code>TierMid-tier</code>: Mid-tier airlines with average depature delay and average taxi out arrive <em>on average</em> 3.413 minutes late.</li>
-<li><code>TierExpensive</code>: Expensive airlines with average depature delay and average taxi out arrive <em>on average</em> 2.76 minutes late.</li>
+<li><code>Intercept</code>: Cheap airlines with average depature delay and average taxi out arrive <strong>on average</strong> 6.30 minutes late.</li>
+<li><code>TierMid-tier</code>: Mid-tier airlines with average depature delay and average taxi out arrive <strong>on average</strong> 3.413 minutes late.</li>
+<li><code>TierExpensive</code>: Expensive airlines with average depature delay and average taxi out arrive <strong>on average</strong> 2.76 minutes late.</li>
 <li>This again shows that using the average for modelling may give us a biased picture.</li>
 <li>We see that <code>z_dep_delay</code> has a higher relative effect on arrival delay than <code>z_taxi_out</code>. This was not so clear in the model without transformation and is likely because depature delay has a larger range compared to taxi out time.</li>
 </ul>
@@ -1596,26 +1593,180 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 </section>
 <section id="glm-poisson" class="level1">
 <h1>GLM Poisson</h1>
-<section id="glm-binomial" class="level2">
-<h2 class="anchored" data-anchor-id="glm-binomial">GLM Binomial</h2>
-<p><strong>Short description of model:</strong></p>
-<p><strong>What have we learned?:</strong></p>
+<p>Airports are hectic and resources can be limited if not managed properly. Coordination is key for good resource allocation. For example to clean the interior of a plane there is only a certain time window available. Since every minute counts we aim to predict the <code>Taxi in</code> time of a plane. In the case of plane cleaning, this knowledge would help with coordination and resource allocation.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>p1<span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ARR_DELAY, <span class="at">y =</span> TAXI_IN)) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"quasipoisson"</span>),</span>
+<span id="cb28-6"><a href="#cb28-6"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb28-7"><a href="#cb28-7"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb28-8"><a href="#cb28-8"></a>              <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb28-10"><a href="#cb28-10"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">""</span>,</span>
+<span id="cb28-11"><a href="#cb28-11"></a>       <span class="at">x =</span> <span class="st">"ARR_DELAY"</span>,</span>
+<span id="cb28-12"><a href="#cb28-12"></a>       <span class="at">y =</span> <span class="st">"Taxi In Time"</span>) </span>
+<span id="cb28-13"><a href="#cb28-13"></a></span>
+<span id="cb28-14"><a href="#cb28-14"></a>p2<span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb28-15"><a href="#cb28-15"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> DEP_DELAY, <span class="at">y =</span> TAXI_IN)) <span class="sc">+</span></span>
+<span id="cb28-16"><a href="#cb28-16"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb28-17"><a href="#cb28-17"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>,</span>
+<span id="cb28-18"><a href="#cb28-18"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"quasipoisson"</span>),</span>
+<span id="cb28-19"><a href="#cb28-19"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb28-20"><a href="#cb28-20"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb28-21"><a href="#cb28-21"></a>              <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb28-22"><a href="#cb28-22"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb28-23"><a href="#cb28-23"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">""</span>,</span>
+<span id="cb28-24"><a href="#cb28-24"></a>       <span class="at">x =</span> <span class="st">"DEP_DELAY"</span>,</span>
+<span id="cb28-25"><a href="#cb28-25"></a>       <span class="at">y =</span> <span class="st">"Taxi In Time"</span>)</span>
+<span id="cb28-26"><a href="#cb28-26"></a></span>
+<span id="cb28-27"><a href="#cb28-27"></a>p3 <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb28-28"><a href="#cb28-28"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> TAXI_OUT, <span class="at">y =</span> TAXI_IN)) <span class="sc">+</span></span>
+<span id="cb28-29"><a href="#cb28-29"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb28-30"><a href="#cb28-30"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>,</span>
+<span id="cb28-31"><a href="#cb28-31"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"quasipoisson"</span>),</span>
+<span id="cb28-32"><a href="#cb28-32"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb28-33"><a href="#cb28-33"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb28-34"><a href="#cb28-34"></a>              <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb28-35"><a href="#cb28-35"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb28-36"><a href="#cb28-36"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">""</span>,</span>
+<span id="cb28-37"><a href="#cb28-37"></a>       <span class="at">x =</span> <span class="st">"TAXI_OUT"</span>,</span>
+<span id="cb28-38"><a href="#cb28-38"></a>       <span class="at">y =</span> <span class="st">"Taxi In Time"</span>)</span>
+<span id="cb28-39"><a href="#cb28-39"></a></span>
+<span id="cb28-40"><a href="#cb28-40"></a></span>
+<span id="cb28-41"><a href="#cb28-41"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">ncol =</span> <span class="dv">3</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We see that <code>ARR_DELAY</code> seems to have an influence on <code>TAXI_IN</code> time. The more delayed a plane arrives the longer it takes to taxi in.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>glm.poisson <span class="ot">&lt;-</span> <span class="fu">glm</span>(TAXI_IN <span class="sc">~</span> ARR_DELAY<span class="sc">*</span>OP_CARRIER_Tier,</span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="at">family =</span> <span class="st">"quasipoisson"</span>,</span>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="at">data =</span> planes)</span>
+<span id="cb29-4"><a href="#cb29-4"></a></span>
+<span id="cb29-5"><a href="#cb29-5"></a><span class="fu">print</span>(<span class="fu">summary</span>(glm.poisson)<span class="sc">$</span>coefficients <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre style="color: blue"><code>                                     Estimate Std. Error    t value  Pr(&gt;|t|)
+(Intercept)                         1.9777051  0.0063070 313.572945 0.0000000
+ARR_DELAY                           0.0006679  0.0001187   5.627072 0.0000000
+OP_CARRIER_TierMid-tier            -0.1370338  0.0070907 -19.325908 0.0000000
+OP_CARRIER_TierExpensive            0.1691667  0.0069746  24.254637 0.0000000
+ARR_DELAY:OP_CARRIER_TierMid-tier   0.0004641  0.0001388   3.342644 0.0008302
+ARR_DELAY:OP_CARRIER_TierExpensive  0.0009579  0.0001345   7.121269 0.0000000</code></pre>
+</div>
+</div>
 </section>
-<section id="gam" class="level2">
-<h2 class="anchored" data-anchor-id="gam">GAM</h2>
-<p><strong>Short description of model:</strong></p>
-<p><strong>What have we learned?:</strong></p>
+<section id="glm-binomial" class="level1">
+<h1>GLM Binomial</h1>
+<p><a href="Regulation%20(EC)%20261/2004">https://www.bazl.admin.ch/bazl/en/home/passagiere/air-passenger-rights/nichtbefoerderung–annullierung-und-grosse-verspaetungen/grosse-verspaetungen.html</a> states a European court of justice ruling that passengers are entitled to compensation if their flight is delayed by more than 3 hours. <em>Due to the lack of a legal basis, the FOCA is unable to fine an airline for failure to pay compensation in the event of a delay</em></p>
+<p><strong>Aim: What airline has the most flights with more than 180 minutes delay and how are differences in proportions explained</strong></p>
+<section id="percentage-of-flights-with-more-than-180-minutes-delay" class="level2">
+<h2 class="anchored" data-anchor-id="percentage-of-flights-with-more-than-180-minutes-delay">Percentage of flights with more than 180 minutes delay</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">mutate</span>(<span class="at">index_late_dep =</span> <span class="fu">ifelse</span>(DEP_DELAY <span class="sc">&gt;</span> <span class="dv">180</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">group_by</span>(OP_CARRIER) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb31-5"><a href="#cb31-5"></a>    <span class="at">Total_flights =</span> <span class="fu">n</span>(),</span>
+<span id="cb31-6"><a href="#cb31-6"></a>    <span class="at">Total_delayed_dep =</span> <span class="fu">sum</span>(index_late_dep <span class="sc">==</span> <span class="dv">1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb31-7"><a href="#cb31-7"></a>    <span class="at">percentage_delayed_dep =</span> Total_delayed_dep <span class="sc">/</span> Total_flights <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb31-8"><a href="#cb31-8"></a>    <span class="at">Mean_dep_delay =</span> <span class="fu">mean</span>(DEP_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb31-9"><a href="#cb31-9"></a>    <span class="at">Airline_tier =</span> <span class="fu">unique</span>(OP_CARRIER_Tier)</span>
+<span id="cb31-10"><a href="#cb31-10"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb31-11"><a href="#cb31-11"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(percentage_delayed_dep)) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-12"><a href="#cb31-12"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  OP_CARRIER Total_flights Total_delayed_dep percentage_delayed_dep
+  &lt;fct&gt;              &lt;int&gt;             &lt;int&gt;                  &lt;dbl&gt;
+1 OO                    27                 1                   3.70
+2 WN                  1422                40                   2.81
+3 FL                  5954               107                   1.80
+4 XE                   890                14                   1.57
+5 CO                  3666                53                   1.45
+6 YV                  1041                15                   1.44
+# ℹ 2 more variables: Mean_dep_delay &lt;dbl&gt;, Airline_tier &lt;fct&gt;</code></pre>
+</div>
+</div>
+<p>We see very low percentages of flights that depart later than 180 minutes.</p>
+<p>We will use aggregated data on a airline level. We will end up with 17 data points which should be kept in mind during interpretation. Furthermore, since the percentage of flights arrived 3 hours later is very low and similar. Therefore we will decrease the threshold to 30 minutes which increases the differences between airlines.</p>
+<section id="aggregated-data" class="level3">
+<h3 class="anchored" data-anchor-id="aggregated-data">Aggregated Data</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>planes_agg <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span> </span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">mutate</span>(<span class="at">index_late_dep =</span> <span class="fu">ifelse</span>(DEP_DELAY <span class="sc">&gt;</span> <span class="dv">30</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">group_by</span>(OP_CARRIER) <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb33-5"><a href="#cb33-5"></a>    <span class="at">OP_CARRIER =</span> <span class="fu">first</span>(OP_CARRIER),</span>
+<span id="cb33-6"><a href="#cb33-6"></a>    <span class="at">Total_flights =</span> <span class="fu">n</span>(),</span>
+<span id="cb33-7"><a href="#cb33-7"></a>    <span class="at">Total_delayed_dep_over30 =</span> <span class="fu">sum</span>(index_late_dep <span class="sc">==</span> <span class="dv">1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-8"><a href="#cb33-8"></a>    <span class="at">Total_delayed_dep_under30 =</span> <span class="fu">sum</span>(index_late_dep<span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-9"><a href="#cb33-9"></a>    <span class="at">Mean_dep_delay =</span> <span class="fu">mean</span>(DEP_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-10"><a href="#cb33-10"></a>    <span class="at">Mean_arr_delay =</span> <span class="fu">mean</span>(ARR_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-11"><a href="#cb33-11"></a>    <span class="at">Mean_distance =</span> <span class="fu">mean</span>(DISTANCE, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-12"><a href="#cb33-12"></a>    <span class="at">Carrier_tier =</span> <span class="fu">unique</span>(OP_CARRIER_Tier),</span>
+<span id="cb33-13"><a href="#cb33-13"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb33-14"><a href="#cb33-14"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>glm.late <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">cbind</span>(Total_delayed_dep_over30, Total_delayed_dep_under30) <span class="sc">~</span> </span>
+<span id="cb34-2"><a href="#cb34-2"></a>                 Carrier_tier <span class="sc">+</span> Mean_dep_delay <span class="sc">+</span> Mean_distance <span class="sc">+</span> Total_flights,</span>
+<span id="cb34-3"><a href="#cb34-3"></a>  <span class="at">family =</span> <span class="st">"quasibinomial"</span>,</span>
+<span id="cb34-4"><a href="#cb34-4"></a>  <span class="at">data =</span> <span class="fu">na.omit</span>(planes_agg))</span>
+<span id="cb34-5"><a href="#cb34-5"></a></span>
+<span id="cb34-6"><a href="#cb34-6"></a><span class="fu">print</span>(<span class="fu">summary</span>(glm.late)<span class="sc">$</span>coefficients)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre style="color: blue"><code>                             Estimate     Std. Error     t value
+(Intercept)           -2.884661712402 0.185236007853 -15.5728994
+Carrier_tierMid-tier   0.039102667464 0.107499989922   0.3637458
+Carrier_tierExpensive -0.077424057928 0.125873286598  -0.6150952
+Mean_dep_delay         0.075350839553 0.008433785936   8.9344027
+Mean_distance          0.000194295108 0.000156893908   1.2383853
+Total_flights          0.000004283091 0.000008836257   0.4847178
+                               Pr(&gt;|t|)
+(Intercept)           0.000000007676316
+Carrier_tierMid-tier  0.722942397711622
+Carrier_tierExpensive 0.551004409194349
+Mean_dep_delay        0.000002251561208
+Mean_distance         0.241350687512443
+Total_flights         0.637384586921758</code></pre>
+</div>
+</div>
+<p>Adding overdispersion to the model improves the fit. Eliminates most significant effects. There was no evidence found that airlines tiers have an influence on the proportion of flights with more than 30 minutes delay. The intercept (i.e.&nbsp;cheap tier airlines) are not interpreted, since total flights of zero is not realistic. We see that the mean departure delay has a significant effect on the proportion of flights with more than 30 minutes delay. So, an airline with a higher average departure delay has a higher proportion of flights with more than 30 minutes delay.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(glm.late)[<span class="st">"Mean_dep_delay"</span>]<span class="sc">*</span><span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="at">digits=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean_dep_delay 
+          2.12 </code></pre>
+</div>
+</div>
+<p>More specifically, the odds of airline flights being delayed by more than 30 minutes increase by 2.12 times for each 10 minutes increase in average departure delay and no evidence is found that airline tiers can explain differences in proportions of flights with more than 30 minutes delay. While interpretation one needs to keep in mind that we have few observation on the aggregated level and furthermore, both <code>Y</code> and <code>Mean_dep_delay</code> are calculated from the same data: <code>DEP_DELAY</code>.</p>
 </section>
-<section id="neural-network" class="level2">
-<h2 class="anchored" data-anchor-id="neural-network">Neural Network</h2>
-<p><strong>Short description of model:</strong></p>
-<p><strong>What have we learned?:</strong></p>
 </section>
-<section id="support-vector-machine" class="level2">
-<h2 class="anchored" data-anchor-id="support-vector-machine">Support Vector Machine</h2>
-<p><strong>Short description of model:</strong></p>
-<p><strong>What have we learned?:</strong></p>
 </section>
+<section id="neural-network" class="level1">
+<h1>Neural Network</h1>
+</section>
+<section id="support-vector-machine" class="level1">
+<h1>Support Vector Machine</h1>
 </section>
 
 </main>
