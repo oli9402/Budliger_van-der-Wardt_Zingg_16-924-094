@@ -9,7 +9,7 @@ required_packages <- c(
   "kableExtra",
   "DT",
   "multcomp",
-  "e17071",
+  "e1071",
   "kernlab",
   "RColorBewer"
  
