@@ -566,5 +566,58 @@ More specifically, the odds of airline flights being delayed by more than 30 min
 
 # Support Vector Machine
 
+## EDA and Data Preprocessing
+
+The first step involves selecting the dependent variable for classification using the Support Vector Machine (SVM) model. From a customer-oriented perspective, a key concern is whether a flight will arrive on time or experience a delay. The dataset includes a column labeled ARR_DELAY, which records the total delay in minutes upon arrival. To proceed, it is essential to examine the distribution of arrival delays in the dataset.
+
+```{r}
+hist(planes$ARR_DELAY,
+     main = "Histogram of Arrival Delays",
+     xlab = "Arrival Delay (minutes)",
+     col = "skyblue",
+     border = "white",
+     breaks = 50)
+
+plot(density(planes$ARR_DELAY, na.rm = TRUE),
+     main = "Density Plot of Arrival Delays",
+     xlab = "Arrival Delay (minutes)",
+     col = "darkgreen")
+```
+
+The plotted data indicates that arrival delays are relatively symmetrically distributed around zero, with some degree of variation. While a small number of flights experience significant delays, early arrivals are less extreme in comparison. Given that this study employs a classification approach—transforming continuous delay values into categorical labels—the impact of such outliers is mitigated. Unlike regression tasks, where precise delay durations significantly affect the model, classification focuses on threshold-based categorization, reducing the influence of extreme values.
+
+The next step involves preprocessing the dataset by introducing a new binary target column. This column assigns a value of 1 to flights with an arrival delay greater than zero, indicating a delayed arrival, and a value of 0 to flights that arrived on time or early (arrival delay less than or equal to zero).
+
+To evaluate the balance of the newly created target variable, we analyzeits class distribution. This allows us to assess the proportion of delayed versus non-delayed flights in the dataset.
+
+```{r}
+
+planes$DELAYED <- ifelse(planes$ARR_DELAY > 0, 1, 0)
+
+barplot(table(planes$DELAYED),
+        names.arg = c("On Time (0)", "Delayed (1)"),
+        col = c("lightgreen", "salmon"),
+        main = "Distribution of Flight Delays",
+        ylab = "Number of Flights")
+     
+pie(table(planes$DELAYED),
+    labels = c("On Time", "Delayed"),
+    col = c("lightblue", "orange"),
+    main = "Proportion of Delayed Flights")
+    
+mean(planes$DELAYED, na.rm = TRUE)
+
+```
+
+The plot shows that 36.75% of the flights are classified as delayed. This indicates a reasonably balanced distribution between delayed and non-delayed flights, which is suitable for training a classification model like SVM.
+
+## SVM Modeling
+
+## Model Evaluation
+
+## Interpretation
+
+
+
 
 
