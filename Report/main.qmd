@@ -638,7 +638,6 @@ Consistent with the approach used in the linear model, airlines are categorized 
 
 ```{r}
 planes_svm <- planes[, c("FL_DATE",
-                         "OP_CARRIER",
                          "OP_CARRIER_FL_NUM",
                          "DEST",
                          "CRS_DEP_TIME",
@@ -650,14 +649,16 @@ planes_svm <- planes[, c("FL_DATE",
 ```
 
 
-To incorporate the features OP_CARRIER_Tier and OP_CARRIER into the model, one-hot encoding is applied. This transformation converts categorical variables into a numerical format suitable for input into the SVM classifier.
+The OP_CARRIER feature is excluded from the model, as its information is sufficiently represented by the OP_CARRIER_Tier variable. To prepare OP_CARRIER_Tier for use in the SVM classifier, one-hot encoding is applied. This converts the categorical tier levels into a numerical format appropriate for classification.
+
 
 ```{r}
 planes_svm <- cbind(planes_svm, model.matrix(~ OP_CARRIER_Tier - 1, data = planes_svm))
-planes_svm <- cbind(planes_svm, model.matrix(~ OP_CARRIER - 1, data = planes_svm))
 ```
 
 To utilize the date-related columns effectively, an appropriate transformation strategy must be established. Initially, the FL_DATE field is categorized into two temporal dimensions: weekday versus weekend, and calendar quarters. The use of calendar quarters is chosen over seasonal labels, as seasonal patterns vary significantly across different regions of the United States.
+
+```{r}
 
 planes_svm$DayType <- ifelse(weekdays(planes_svm$FL_DATE) %in% c("Saturday", "Sunday"),
                              "Weekend", "Weekday")
@@ -665,19 +666,104 @@ planes_svm$Quarter <- quarters(planes_svm$FL_DATE)
 
 planes_svm$DayType <- factor(planes_svm$DayType, levels = c("Weekday", "Weekend"))
 planes_svm$Quarter <- factor(planes_svm$Quarter, levels = c("Q1", "Q2", "Q3", "Q4"))
-
 daytype_dummies <- model.matrix(~ DayType - 1, data = planes_svm)
 quarter_dummies <- model.matrix(~ Quarter - 1, data = planes_svm)
-
 planes_svm <- cbind(planes_svm, daytype_dummies, quarter_dummies)
 planes_svm$DayType <- NULL
 planes_svm$Quarter <- NULL
+```
 
-        
+For the scheduled departure time (CRS_DEP_TIME) and scheduled arrival time (CRS_ARR_TIME) we will use cyclical encoding (see https://scholarworks.calstate.edu/downloads/pv63g5147).
 
 
+```{r}
+to_minutes <- function(hhmm) {
+  hours <- hhmm %/% 100
+  minutes <- hhmm %% 100
+  return(hours * 60 + minutes)
+}
+
+planes_svm$DEP_MIN <- to_minutes(planes_svm$CRS_DEP_TIME)
+planes_svm$ARR_MIN <- to_minutes(planes_svm$CRS_ARR_TIME)
+max_minutes <- 24 * 60  # total minutes in a day
+planes_svm$DEP_SIN <- sin(2 * pi * planes_svm$DEP_MIN / max_minutes)
+planes_svm$DEP_COS <- cos(2 * pi * planes_svm$DEP_MIN / max_minutes)
+planes_svm$ARR_SIN <- sin(2 * pi * planes_svm$ARR_MIN / max_minutes)
+planes_svm$ARR_COS <- cos(2 * pi * planes_svm$ARR_MIN / max_minutes)
+
+planes_svm <- subset(planes_svm, select = -c(CRS_DEP_TIME, CRS_ARR_TIME, DEP_MIN, ARR_MIN))
+```
+
+It would be interesting to also utilize the destination codes. Lets analyze the distribution of the destionation codes.
+
+```{r}
+length(unique(planes_svm$DEST))
+dest_counts <- as.data.frame(table(planes_svm$DEST))
+ggplot(dest_counts, aes(x = reorder(Var1, -Freq), y = Freq)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Distribution of Flight Counts by Destination",
+       x = NULL,
+       y = "Number of Flights") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+```
+The dataset includes 60 unique destination airports, exhibiting a long-tail distribution in terms of frequency. To manage this categorical feature effectively, destinations are first grouped based on traffic volume before applying one-hot encoding. Specifically, the eight most frequent destination airports are classified as "high-frequency," while the remaining airports are grouped into an "other" category. 
+
+```{r}
+dest_freq <- sort(table(planes_svm$DEST), decreasing = TRUE)
+top_10_dest <- names(dest_freq)[1:8]
+planes_svm$DEST_GROUPED <- ifelse(planes_svm$DEST %in% top_10_dest, "High", "Other")
+planes_svm$DEST_GROUPED <- factor(planes_svm$DEST_GROUPED, levels = c("Other", "High"))
 
 
+ggplot(planes_svm, aes(x = DEST_GROUPED)) +
+  geom_bar(fill = "tomato") +
+  labs(title = "Distribution of Destination Tiers",
+       x = "Destination Tier",
+       y = "Number of Flights") +
+  theme_minimal()
+
+```
+  
+Visual inspection of the resulting distribution reveals a relatively balanced split between the two groups, supporting the decision to proceed with this categorization. Let's one-hot encode the destination group and remove redundant columns. Redundant columns, including the original destination identifier and the carrier flight number, are removed, as they do not contribute meaningful predictive value. 
+
+```{r}
+dest_dummies <- model.matrix(~ DEST_GROUPED - 1, data = planes_svm)
+planes_svm <- cbind(planes_svm, dest_dummies)
+planes_svm$DEST_GROUPED <- NULL
+planes_svm$DEST <- NULL
+planes_svm$FL_DATE <- NULL
+planes_svm$OP_CARRIER_FL_NUM <- NULL
+```
+
+At this stage, the final set of features is defined.  The remaining non-categorical features are then normalized to ensure they are on a consistent scale.
+
+| Variable              | Class   | Description                                                        |
+|-----------------------|---------|--------------------------------------------------------------------|
+| CRS_ELAPSED_TIME      | integer | Planned time amount needed for the flight trip                     |
+| DISTANCE              | integer | Distance between two airports                                      |
+| DELAYED               | integer | Target: 1 if ARR_DELAY > 0, else 0                                 |
+| OP_CARRIER_Tier_*     | numeric | One-hot encoded carrier category (e.g., major, regional, low-cost) |
+| DayType_*             | numeric | One-hot encoded day type (Weekday, Weekend)                        |
+| Quarter_*             | numeric | One-hot encoded calendar quarter (Q1–Q4)                           |
+| DEP_SIN, DEP_COS      | numeric | Cyclical encoding of scheduled departure time                      |
+| ARR_SIN, ARR_COS      | numeric | Cyclical encoding of scheduled arrival time                        |
+| DEST_GROUPEDHigh      | numeric | One-hot encoded indicator for high-traffic destinations            |
+
+We will choose  z-score scaling, see https://forecastegy.com/posts/does-svm-need-feature-scaling-or-normalization/
+
+```{r}
+cols_to_normalize <- c("CRS_ELAPSED_TIME", "DISTANCE", 
+                       "DEP_SIN", "DEP_COS", 
+                       "ARR_SIN", "ARR_COS")
+
+planes_svm[cols_to_normalize] <- scale(planes_svm[cols_to_normalize])
+
+scaling_params <- attributes(scale(planes_svm[cols_to_normalize]))
+```
+
+Now the data is ready train and test a svm to predict DELAYED.
 
 ## SVM Modeling
 set.seed(10)
