@@ -808,7 +808,8 @@ predictions <- predict(svm_model, newdata = svm_test_data)
 conf_matrix <- confusionMatrix(predictions, svm_test_data$DELAYED, positive = "1")
 print(conf_matrix)
 
-Nest step is to sampling = smote to make our train data more balanced.
+Next step is to sampling = smote to make our train data more balanced.
+And then make our own dataframe right at the beginning of the code and take the airline classifier into our code on our on dataframe.
 
 
 ## Model Evaluation
