@@ -11,7 +11,7 @@ required_packages <- c(
   "multcomp",
   "e1071",
   "kernlab",
-  "RColorBewer"
+  "RColorBrewer"
  
 )
 
