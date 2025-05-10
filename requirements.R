@@ -8,7 +8,11 @@ required_packages <- c(
   "janitor",
   "kableExtra",
   "DT",
-  "multcomp"
+  "multcomp",
+  "e17071",
+  "kernlab",
+  "RColorBewer"
+ 
 )
 
 # Install missing packages without loading
