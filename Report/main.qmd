@@ -45,6 +45,10 @@ library(kableExtra)
 library(janitor)
 library(multcomp) # Multiple comparison tests
 library(patchwork) #plots side by side
+library(kernlab) # SVM methodology
+library(e1071) # SVM methodology
+library(ISLR) # contains example data set "Khan"
+library(RColorBrewer) 
 
 ```
 
@@ -59,6 +63,8 @@ library(patchwork) #plots side by side
 # getwd() 
 
 load("./../Data/LGA_preprocessed.rda")
+
+
 ```
 
 
@@ -613,9 +619,71 @@ mean(planes$DELAYED, na.rm = TRUE)
 
 The plot shows that 36.75% of the flights are classified as delayed. This indicates a reasonably balanced distribution between delayed and non-delayed flights, which is suitable for training a classification model like SVM.
 
+### Feature Selection & Engineering
+
+Consistent with the approach used in the linear model, airlines are categorized into three pricing tiers: low-cost, mid-tier, and premium carriers. A key requirement for the SVM classification task is to limit input features to those available prior to flight departure. This ensures that the model operates under realistic conditions where only pre-departure information is accessible. Accordingly, the initial set of features will be selected based on their availability before takeoff.:
+
+| Variable            | Class      | Description                                                                 |
+|---------------------|------------|-----------------------------------------------------------------------------|
+| FL_DATE             | Date       | Date of the flight (yy/mm/dd)                                               |
+| OP_CARRIER          | character  | Airline Identifier                                                          |
+| OP_CARRIER_FL_NUM   | integer    | Flight Number                                                               |
+| DEST                | character  | Destination Airport Code                                                    |
+| CRS_DEP_TIME        | Date       | Planned Departure Time (HH:MM)                                              |
+| CRS_ARR_TIME        | Date       | Planned Arrival Time                                                        |
+| CRS_ELAPSED_TIME    | integer    | Planned time amount needed for the flight trip                              |
+| DISTANCE            | integer    | Distance between two airports                                               |
+| OP_CARRIER_Tier     | character  | Category of carrier (e.g., major, regional)                                 |
+| DELAYED             | integer    | Target: 1 if ARR_DELAY > 0, else 0        
+
+```{r}
+planes_svm <- planes[, c("FL_DATE",
+                         "OP_CARRIER",
+                         "OP_CARRIER_FL_NUM",
+                         "DEST",
+                         "CRS_DEP_TIME",
+                         "CRS_ARR_TIME",
+                         "CRS_ELAPSED_TIME",
+                         "DISTANCE",
+                         "OP_CARRIER_Tier",
+                         "DELAYED")]
+```
+
+
+To incorporate the features OP_CARRIER_Tier and OP_CARRIER into the model, one-hot encoding is applied. This transformation converts categorical variables into a numerical format suitable for input into the SVM classifier.
+
+```{r}
+planes_svm <- cbind(planes_svm, model.matrix(~ OP_CARRIER_Tier - 1, data = planes_svm))
+planes_svm <- cbind(planes_svm, model.matrix(~ OP_CARRIER - 1, data = planes_svm))
+```
+
+To utilize the date-related columns effectively, an appropriate transformation strategy must be established. Initially, the FL_DATE field is categorized into two temporal dimensions: weekday versus weekend, and calendar quarters. The use of calendar quarters is chosen over seasonal labels, as seasonal patterns vary significantly across different regions of the United States.
+
+planes_svm$DayType <- ifelse(weekdays(planes_svm$FL_DATE) %in% c("Saturday", "Sunday"),
+                             "Weekend", "Weekday")
+planes_svm$Quarter <- quarters(planes_svm$FL_DATE)
+
+planes_svm$DayType <- factor(planes_svm$DayType, levels = c("Weekday", "Weekend"))
+planes_svm$Quarter <- factor(planes_svm$Quarter, levels = c("Q1", "Q2", "Q3", "Q4"))
+
+daytype_dummies <- model.matrix(~ DayType - 1, data = planes_svm)
+quarter_dummies <- model.matrix(~ Quarter - 1, data = planes_svm)
+
+planes_svm <- cbind(planes_svm, daytype_dummies, quarter_dummies)
+planes_svm$DayType <- NULL
+planes_svm$Quarter <- NULL
+
+        
+
+
+
+
+
 ## SVM Modeling
+set.seed(10)
 
 ### Feature Selection
+
 
 
 ## Model Evaluation
