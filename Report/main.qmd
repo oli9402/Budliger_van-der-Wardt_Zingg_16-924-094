@@ -830,21 +830,24 @@ svm_train_index <- createDataPartition(planes_svm$DELAYED, p = 0.7, list = FALSE
 svm_train_data <- planes_svm[svm_train_index, ]
 svm_test_data  <- planes_svm[-svm_train_index, ]
 
-subset_index <- createDataPartition(svm_train_data$DELAYED, p = 0.3, list = FALSE)
+subset_index <- createDataPartition(svm_train_data$DELAYED, p = 0.5, list = FALSE)
 svm_train_data <- svm_train_data[subset_index, ]
 
 svm_train_data$DELAYED <- factor(svm_train_data$DELAYED, levels = c("0", "1"))
 svm_test_data$DELAYED  <- factor(svm_test_data$DELAYED, levels = c("0", "1"))
 
+
 train_control <- trainControl(method = "cv",
                               number = 5,
-                              verboseIter = TRUE)
+                              verboseIter = TRUE,
+                              allowParallel = FALSE )
 
 svm_model <- train(DELAYED ~ ., 
                    data = svm_train_data,
                    method = "svmRadial",
                    trControl = train_control,
-                   tuneLength = 3
+                   tuneLength = 3,
+                   preProcess = NULL
                    )
 
 predictions <- predict(svm_model, newdata = svm_test_data)
@@ -870,7 +873,8 @@ svm_test_data$DELAYED  <- factor(svm_test_data$DELAYED, levels = c("0", "1"))
 train_control <- trainControl(method = "cv",
                               number = 5,
                               sampling = "down",   
-                              verboseIter = TRUE)
+                              verboseIter = TRUE,
+                              allowParallel = FALSE )
 
 svm_model <- train(DELAYED ~ ., 
                    data = svm_train_data,
@@ -954,6 +958,8 @@ Following feature selection using a Random Forest approach, the SVM model yielde
 
 ## Interpretation
 The SVM model implemented using the caret framework consistently underperforms in detecting delayed flights. While it maintains high specificity across all configurations, sensitivity remains low, limiting its utility for identifying delays. Neither downsampling nor feature selection yielded substantial improvements in balanced accuracy or discriminative power. Among the configurations tested, the initial model exhibited the best overall performance in terms of accuracy and specificity, despite its poor sensitivity. To improve results, future tests should focus on addressing class imbalance through more advanced resampling strategies, refining the SVM kernel and hyperparameters, or exploring alternative classification approaches such as gradient boosting or ensemble methods that are better suited for imbalanced datasets. A central question in this analysis is identifying which factors—available well before a flight departs—can serve as reliable indicators of arrival delays. Understanding and leveraging such pre-departure features is critical for developing predictive models that can inform operational decision-making in advance.
+
+Another last step before submitting: Increase the training sample, but this  does significantly increase the computational time.
 
 
 
