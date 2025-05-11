@@ -959,7 +959,7 @@ Following feature selection using a Random Forest approach, the SVM model yielde
 ## Interpretation
 The SVM model implemented using the caret framework consistently underperforms in detecting delayed flights. While it maintains high specificity across all configurations, sensitivity remains low, limiting its utility for identifying delays. Neither downsampling nor feature selection yielded substantial improvements in balanced accuracy or discriminative power. Among the configurations tested, the initial model exhibited the best overall performance in terms of accuracy and specificity, despite its poor sensitivity. To improve results, future tests should focus on addressing class imbalance through more advanced resampling strategies, refining the SVM kernel and hyperparameters, or exploring alternative classification approaches such as gradient boosting or ensemble methods that are better suited for imbalanced datasets. A central question in this analysis is identifying which factors—available well before a flight departs—can serve as reliable indicators of arrival delays. Understanding and leveraging such pre-departure features is critical for developing predictive models that can inform operational decision-making in advance.
 
-Another last step before submitting: Increase the training sample, but this  does significantly increase the computational time.
+Another last step before submitting: Increase the training sample, but this does significantly increase the computational time.
 
 
 
