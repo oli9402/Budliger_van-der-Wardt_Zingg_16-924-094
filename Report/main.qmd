@@ -50,6 +50,7 @@ library(e1071) # SVM methodology
 library(ISLR) # contains example data set "Khan"
 library(RColorBrewer) 
 library(caret)
+library(DMwR)  # SMOTE 
 
 ```
 
@@ -809,7 +810,9 @@ conf_matrix <- confusionMatrix(predictions, svm_test_data$DELAYED, positive = "1
 print(conf_matrix)
 
 Next step is to sampling = smote to make our train data more balanced.
-And then make our own dataframe right at the beginning of the code and take the airline classifier into our code on our on dataframe.
+
+
+
 
 
 ## Model Evaluation
