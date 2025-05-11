@@ -50,7 +50,6 @@ library(e1071) # SVM methodology
 library(ISLR) # contains example data set "Khan"
 library(RColorBrewer) 
 library(caret)
-library(DMwR)  # SMOTE 
 
 ```
 
@@ -781,6 +780,8 @@ Now the data is ready train and test a svm to predict DELAYED.
 
 First, we use e1071 on the whole dataset. Because the dataset is quite large we initially want to make a quick performance analysis and therefore use tuneLenght = 1 with 5-fold cross validation. Also we first use a subset of the dataset with 50% to speed up computation for training.
 
+```{r}
+
 set.seed(123)
 svm_train_index <- createDataPartition(planes_svm$DELAYED, p = 0.7, list = FALSE)
 svm_train_data <- planes_svm[svm_train_index, ]
@@ -796,21 +797,47 @@ train_control <- trainControl(method = "cv",
                               number = 5,
                               verboseIter = TRUE)
 
-class_weights <- ifelse(svm_train_data$DELAYED == "1", 2, 1)
-
 svm_model <- train(DELAYED ~ ., 
                    data = svm_train_data,
                    method = "svmRadial",
                    trControl = train_control,
-                   tuneLength = 3,
-                   weights = class_weights)
+                   tuneLength = 3
+                   )
 
 predictions <- predict(svm_model, newdata = svm_test_data)
 conf_matrix <- confusionMatrix(predictions, svm_test_data$DELAYED, positive = "1")
 print(conf_matrix)
 
-Next step is to sampling = smote to make our train data more balanced.
+```
 
+<Interpretation>
+Next step is use downsampling and remove the class weights, with sampling = "down" and then compare the results.
+
+svm_train_index <- createDataPartition(planes_svm$DELAYED, p = 0.7, list = FALSE)
+svm_train_data <- planes_svm[svm_train_index, ]
+svm_test_data  <- planes_svm[-svm_train_index, ]
+
+subset_index <- createDataPartition(svm_train_data$DELAYED, p = 0.5, list = FALSE)
+svm_train_data <- svm_train_data[subset_index, ]
+
+svm_train_data$DELAYED <- factor(svm_train_data$DELAYED, levels = c("0", "1"))
+svm_test_data$DELAYED  <- factor(svm_test_data$DELAYED, levels = c("0", "1"))
+
+train_control <- trainControl(method = "cv",
+                              number = 3,
+                              sampling = "down",   
+                              verboseIter = TRUE)
+
+svm_model <- train(DELAYED ~ ., 
+                   data = svm_train_data,
+                   method = "svmRadial",
+                   trControl = train_control,
+                   tuneLength = 2,
+                   preProcess = NULL)
+
+predictions <- predict(svm_model, newdata = svm_test_data)
+conf_matrix <- confusionMatrix(predictions, svm_test_data$DELAYED, positive = "1")
+print(conf_matrix)
 
 
 
