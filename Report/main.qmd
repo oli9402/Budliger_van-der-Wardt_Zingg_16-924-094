@@ -830,7 +830,7 @@ svm_train_index <- createDataPartition(planes_svm$DELAYED, p = 0.7, list = FALSE
 svm_train_data <- planes_svm[svm_train_index, ]
 svm_test_data  <- planes_svm[-svm_train_index, ]
 
-subset_index <- createDataPartition(svm_train_data$DELAYED, p = 0.5, list = FALSE)
+subset_index <- createDataPartition(svm_train_data$DELAYED, p = 0.3, list = FALSE)
 svm_train_data <- svm_train_data[subset_index, ]
 
 svm_train_data$DELAYED <- factor(svm_train_data$DELAYED, levels = c("0", "1"))
