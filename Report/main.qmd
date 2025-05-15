@@ -581,16 +581,16 @@ More specifically, the odds of airline flights being delayed by more than 30 min
 The first step involves selecting the dependent variable for classification using the Support Vector Machine (SVM) model. From a customer-oriented perspective, a key concern is whether a flight will arrive on time or experience a delay. The dataset includes a column labeled ARR_DELAY, which records the total delay in minutes upon arrival. To proceed, it is essential to examine the distribution of arrival delays in the dataset.
 
 ```{r}
-planes_intial_svm <- planes
+planes_initial_svm <- planes
 
-hist(planes_intial_svm$ARR_DELAY,
+hist(planes_initial_svm$ARR_DELAY,
      main = "Histogram of Arrival Delays",
      xlab = "Arrival Delay (minutes)",
      col = "skyblue",
      border = "white",
      breaks = 50)
 
-plot(density(plane_inital_svms$ARR_DELAY, na.rm = TRUE),
+plot(density(planes_initial_svm$ARR_DELAY, na.rm = TRUE),
      main = "Density Plot of Arrival Delays",
      xlab = "Arrival Delay (minutes)",
      col = "darkgreen")
@@ -818,7 +818,7 @@ Now the data is ready train and test a svm to predict DELAYED.
 
 ## SVM Modeling
 
-To conduct an initial performance evaluation, the SVM model is trained using the caret package with the e1071 implementation. Given the size of the dataset, a 30% subset is used to reduce computational time during training. The tuneLength parameter is set to 3, combined with 5-fold cross-validation, to enable a quick, preliminary analysis of model performance while minimizing training overhead.
+To conduct an initial performance evaluation, the SVM model is trained using the caret package with the e1071 implementation. Given the size of the dataset, a 50% subset is used to reduce computational time during training. The tuneLength parameter is set to 3, combined with 5-fold cross-validation, to enable a quick, preliminary analysis of model performance while minimizing training overhead.
 
 
 ```{r}
