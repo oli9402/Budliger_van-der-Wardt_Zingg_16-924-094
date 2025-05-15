@@ -603,7 +603,6 @@ The next step involves preprocessing the dataset by introducing a new binary tar
 To evaluate the balance of the newly created target variable, we analyzeits class distribution. This allows us to assess the proportion of delayed versus non-delayed flights in the dataset.
 
 ```{r}
-
 sum(is.na(planes_intial_svm$DELAYED))
 length(planes_initial_svm$DELAYED)
 
@@ -788,7 +787,7 @@ planes_svm$OP_CARRIER_FL_NUM <- NULL
 planes_svm$OP_CARRIER_Tier <- NULL
 ```
 
-At this stage, the final set of features is defined.  The remaining non-categorical features are then normalized to ensure they are on a consistent scale.
+At this stage, the final set of features is defined.
 
 | Variable              | Class   | Description                                                        |
 |-----------------------|---------|--------------------------------------------------------------------|
@@ -802,19 +801,9 @@ At this stage, the final set of features is defined.  The remaining non-categori
 | ARR_SIN, ARR_COS      | numeric | Cyclical encoding of scheduled arrival time                        |
 | DEST_GROUPEDHigh      | numeric | One-hot encoded indicator for high-traffic destinations            |
 
-We will choose  z-score scaling, see https://forecastegy.com/posts/does-svm-need-feature-scaling-or-normalization/
+Now the data is ready train and test a svm to predict DELAYED. All features are then normalized to ensure they are on a consistent scale.
+We will choose  z-score scaling, but after splitting the data see https://forecastegy.com/posts/does-svm-need-feature-scaling-or-normalization/
 
-```{r}
-cols_to_normalize <- c("CRS_ELAPSED_TIME", "DISTANCE", 
-                       "DEP_SIN", "DEP_COS", 
-                       "ARR_SIN", "ARR_COS")
-
-planes_svm[cols_to_normalize] <- scale(planes_svm[cols_to_normalize])
-
-scaling_params <- attributes(scale(planes_svm[cols_to_normalize]))
-```
-
-Now the data is ready train and test a svm to predict DELAYED.
 
 ## SVM Modeling
 
@@ -836,6 +825,21 @@ svm_train_data <- svm_train_data[subset_index, ]
 svm_train_data$DELAYED <- factor(svm_train_data$DELAYED, levels = c("0", "1"))
 svm_test_data$DELAYED  <- factor(svm_test_data$DELAYED, levels = c("0", "1"))
 
+preds <- setdiff(names(svm_train_data), "DELAYED")
+
+train_scaled   <- scale(svm_train_data[preds])
+scaling_params <- attributes(train_scaled)
+#   scaling_params$`scaled:center`  = per-feature means
+#   scaling_params$`scaled:scale`   = per-feature sds
+
+svm_train_data[preds] <- train_scaled
+
+svm_test_data[preds] <- scale(
+  svm_test_data[preds],
+  center = scaling_params$`scaled:center`,
+  scale  = scaling_params$`scaled:scale`
+)
+
 
 train_control <- trainControl(method = "cv",
                               number = 5,
@@ -856,19 +860,12 @@ print(conf_matrix)
 
 ```
 
-The Support Vector Machine (SVM) model achieved an accuracy of 65.12%, which is only marginally higher than the no-information rate of 64.02%. While the model performs well in identifying non-delayed flights, as indicated by a high specificity of 91.1%, its sensitivity is considerably low at 18.8%, reflecting a significant challenge in detecting delayed flights. The balanced accuracy of 55.0% and a modest Cohen’s kappa of 0.116 further underscore the model’s limited effectiveness in handling class imbalance. To improve performance, particularly in predicting delays, the next step involves applying downsampling using the parameter sampling = "down". This aims to balance the class distribution and enhance the model’s ability to detect delayed flights.
+
+The Support Vector Machine (SVM) model achieved an accuracy of 64.58%, which is only marginally higher than the no-information rate of 63.05%. However, since the primary objective is to identify delayed flights, overall accuracy is less meaningful due to class imbalance. The model demonstrates high specificity (92.74%)—indicating strong performance in recognizing non-delayed flights—but its sensitivity is critically low at 16.5%, highlighting a substantial weakness in detecting the target class (delays). The balanced accuracy of 54.6% and a low kappa of 0.1087 further emphasize the model’s poor discriminatory power for delayed flights. To address this, the next step is to apply downsampling (via sampling = "down") to reduce the dominance of the majority class and improve the model’s ability to correctly identify delayed flights.
 
 ```{r}
-set.seed(123)
-svm_train_index <- createDataPartition(planes_svm$DELAYED, p = 0.7, list = FALSE)
-svm_train_data <- planes_svm[svm_train_index, ]
-svm_test_data  <- planes_svm[-svm_train_index, ]
+#set.seed(123)
 
-subset_index <- createDataPartition(svm_train_data$DELAYED, p = 0.5, list = FALSE)
-svm_train_data <- svm_train_data[subset_index, ]
-
-svm_train_data$DELAYED <- factor(svm_train_data$DELAYED, levels = c("0", "1"))
-svm_test_data$DELAYED  <- factor(svm_test_data$DELAYED, levels = c("0", "1"))
 
 train_control <- trainControl(method = "cv",
                               number = 5,
@@ -883,84 +880,87 @@ svm_model <- train(DELAYED ~ .,
                    tuneLength = 3,
                    preProcess = NULL)
 
-predictions <- predict(svm_model, newdata = svm_test_data)
-conf_matrix <- confusionMatrix(predictions, svm_test_data$DELAYED, positive = "1")
-print(conf_matrix)
+predictions_b <- predict(svm_model, newdata = svm_test_data)
+conf_matrix_b <- confusionMatrix(predictions_b, svm_test_data$DELAYED, positive = "1")
+print(conf_matrix_b)
 ```
 
-After down-sampling, the SVM model achieved an accuracy of 59.6%, below the baseline (63.0%). Sensitivity improved significantly (63.5%) compared to the previous model, indicating better identification of delayed flights, though specificity decreased (57.3%). Despite higher balanced accuracy (60.4%) and improved kappa (0.194), the overall predictive performance remains modest. The trade-off of increased sensitivity with lower accuracy and specificity should be carefully considered depending on business priorities. The next step is to test recursive feature selection to remove unhelpful features, and to run the test without downsampling.
+After downsampling, the SVM model achieved an accuracy of 60.1%, below the baseline of 63.05%, but sensitivity improved to 62.82%, indicating better detection of delayed flights—the primary goal. Specificity dropped to 58.51%, reflecting more false positives. Despite lower accuracy, balanced accuracy rose to 60.67% and kappa improved to 0.199, showing a better balance between classes. This trade-off is acceptable given the focus on delays. The next step is to apply recursive feature elimination (RFE) and rerun the model.
 
 
 ```{r}
 set.seed(123)
-svm_train_index <- createDataPartition(planes_svm$DELAYED, p = 0.7, list = FALSE)
-train_full      <- planes_svm[svm_train_index, ]
-test_data       <- planes_svm[-svm_train_index, ]
 
-slice30_idx <- createDataPartition(train_full$DELAYED, p = 0.3, list = FALSE)
-slice30     <- train_full[slice30_idx, ]
+slice30_idx <- createDataPartition(svm_train_data$DELAYED, p = 0.3, list = FALSE)
+slice30     <- svm_train_data[slice30_idx, ]
+slice30$DELAYED <- factor(slice30$DELAYED, levels = c("0","1"))
+
 
 slice90_idx <- createDataPartition(slice30$DELAYED, p = 0.9, list = FALSE)
-slice90     <- slice30[slice20_idx, ]
+slice90     <- slice30[slice90_idx, ]
 
-slice20$DELAYED <- factor(slice20$DELAYED, levels = c("0","1"))
+x_rfe   <- model.matrix(DELAYED ~ . - 1, data = slice90)
+y_rfe   <- slice90$DELAYED
 
-x_rfe <- model.matrix(DELAYED ~ . - 1, data = slice90)
-y_rfe <- slice90$DELAYED
+rfe_ctrl <- rfeControl(
+  functions     = rfFuncs,
+  method        = "cv",
+  number        = 4,
+  repeats       = 2,
+  verbose       = TRUE,
+  allowParallel = FALSE
+)
 
-rfe_ctrl <- rfeControl(functions     = rfFuncs,
-                       method        = "cv",
-                       number        = 2,
-                       verbose       = TRUE,
-                       allowParallel = FALSE)
-
-rfe_results <- rfe(x          = x_rfe,
-                   y          = y_rfe,
-                   sizes      = c(5,10),
-                   rfeControl = rfe_ctrl)
+rfe_results <- rfe(
+  x          = x_rfe,
+  y          = y_rfe,
+  sizes      = c(1,2,3,4,5, 6, 7, 8, 9, 10, 11),
+  rfeControl = rfe_ctrl
+)
 
 selected_features <- predictors(rfe_results)
 print(selected_features)
 
+train_sel <- data.frame(
+  svm_train_data[, selected_features, drop = FALSE],
+  DELAYED = svm_train_data$DELAYED
+)
 
-slice30$DELAYED <- factor(slice30$DELAYED, levels = c("0","1"))
-test_data$DELAYED <- factor(test_data$DELAYED, levels = c("0","1"))
-
-x_train30 <- model.matrix(DELAYED ~ . - 1, data = slice30)
-x_test   <- model.matrix(DELAYED ~ . - 1, data = test_data)
-
-train_sel <- data.frame(x_train30[, selected_features, drop = FALSE],
-                        DELAYED = slice30$DELAYED)
-test_sel  <- data.frame(x_test[,   selected_features, drop = FALSE],
-                        DELAYED = test_data$DELAYED)
+test_sel <- data.frame(
+  svm_test_data[, selected_features, drop = FALSE],
+  DELAYED = svm_test_data$DELAYED
+)
 
 train_ctrl <- trainControl(
-  method        = "cv",
-  number        = 5,
-  verboseIter   = TRUE,
-  allowParallel = FALSE 
+  method      = "cv",
+  number      = 5,
+  sampling    = "down",
+  verboseIter = TRUE,
+  allowParallel = FALSE
 )
 
 svm_model <- train(
-  DELAYED  ~ .,
-  data      = train_sel,
-  method    = "svmRadial",
-  trControl = train_ctrl,
-  tuneLength= 3
+  DELAYED    ~ .,
+  data       = train_sel,
+  method     = "svmRadial",
+  trControl  = train_ctrl,
+  tuneLength = 3,
+  preProcess = NULL 
 )
 
-preds    <- predict(svm_model, newdata = test_sel)
-conf_mat <- confusionMatrix(preds, test_sel$DELAYED, positive = "1")
-print(conf_mat)
+predicitons_c    <- predict(svm_model, newdata = test_sel)
+conf_matrix_c <- confusionMatrix(predicitons_c, test_sel$DELAYED, positive = "1")
+print(conf_matrix_c)
 
 ```
-Following feature selection using a Random Forest approach, the SVM model yielded an accuracy of 63.8%, only slightly above the baseline rate of 63.2%. However, sensitivity dropped significantly to 5.2%, indicating a substantial inability to identify delayed flights. In contrast, specificity remained high at 98.0%, showing that non-delayed flights were consistently classified correctly. The resulting balanced accuracy of 51.6% and a low Cohen’s kappa of 0.039 highlight the model’s limited discriminative power. These outcomes suggest that, despite the application of advanced feature selection, the model remains ineffective in reliably detecting flight delays.
+After feature selection, sensitivity is 63.6%, slightly improving the detection of delayed flights, while overall accuracy dropped slightly to 58.0%.
 
 ## Interpretation
-The SVM model implemented using the caret framework consistently underperforms in detecting delayed flights. While it maintains high specificity across all configurations, sensitivity remains low, limiting its utility for identifying delays. Neither downsampling nor feature selection yielded substantial improvements in balanced accuracy or discriminative power. Among the configurations tested, the initial model exhibited the best overall performance in terms of accuracy and specificity, despite its poor sensitivity. To improve results, future tests should focus on addressing class imbalance through more advanced resampling strategies, refining the SVM kernel and hyperparameters, or exploring alternative classification approaches such as gradient boosting or ensemble methods that are better suited for imbalanced datasets. A central question in this analysis is identifying which factors—available well before a flight departs—can serve as reliable indicators of arrival delays. Understanding and leveraging such pre-departure features is critical for developing predictive models that can inform operational decision-making in advance.
 
-Another last step before submitting: Increase the training sample, but this does significantly increase the computational time.
+The initial SVM model struggled to detect delayed flights due to class imbalance, achieving high specificity but very low sensitivity. Downsampling improved sensitivity significantly, aligning better with the goal of identifying delays, though accuracy declined. Feature selection further raised sensitivity to 63.6%, but other performance metrics deteriorated. Overall, all models demonstrate limited predictive power in this context.
 
+After tackling the class imbalance via downsampling, the model was able to predict 
+To improve results, future tests should focus on addressing class imbalance through more advanced resampling strategies, refining the SVM kernel and hyperparameters, or exploring alternative classification approaches such as gradient boosting or ensemble methods that are better suited for imbalanced datasets. A central question in this analysis is identifying which factors—available well before a flight departs—can serve as reliable indicators of arrival delays. Understanding and leveraging such pre-departure features is critical for developing predictive models that can inform operational decision-making in advance.
 
 
 
