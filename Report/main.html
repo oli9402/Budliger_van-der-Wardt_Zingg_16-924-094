@@ -103,6 +103,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#z-normalization" id="toc-z-normalization" class="nav-link" data-scroll-target="#z-normalization">z-normalization</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#gam" id="toc-gam" class="nav-link" data-scroll-target="#gam">GAM</a></li>
   <li><a href="#glm-poisson" id="toc-glm-poisson" class="nav-link" data-scroll-target="#glm-poisson">GLM Poisson</a></li>
   <li><a href="#glm-binomial" id="toc-glm-binomial" class="nav-link" data-scroll-target="#glm-binomial">GLM Binomial</a>
   <ul class="collapse">
@@ -111,8 +112,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#aggregated-data" id="toc-aggregated-data" class="nav-link" data-scroll-target="#aggregated-data">Aggregated Data</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#neural-network" id="toc-neural-network" class="nav-link" data-scroll-target="#neural-network">Neural Network</a></li>
-  <li><a href="#support-vector-machine" id="toc-support-vector-machine" class="nav-link" data-scroll-target="#support-vector-machine">Support Vector Machine</a></li>
+  <li><a href="#neural-network" id="toc-neural-network" class="nav-link" data-scroll-target="#neural-network">Neural Network</a>
+  <ul class="collapse">
+  <li><a href="#features" id="toc-features" class="nav-link" data-scroll-target="#features">Features</a></li>
+  </ul></li>
+  <li><a href="#support-vector-machine" id="toc-support-vector-machine" class="nav-link" data-scroll-target="#support-vector-machine">Support Vector Machine</a>
+  <ul class="collapse">
+  <li><a href="#eda-and-data-preprocessing" id="toc-eda-and-data-preprocessing" class="nav-link" data-scroll-target="#eda-and-data-preprocessing">EDA and Data Preprocessing</a>
+  <ul class="collapse">
+  <li><a href="#selecting-the-target-variable" id="toc-selecting-the-target-variable" class="nav-link" data-scroll-target="#selecting-the-target-variable">Selecting the Target Variable</a></li>
+  <li><a href="#feature-selection-engineering" id="toc-feature-selection-engineering" class="nav-link" data-scroll-target="#feature-selection-engineering">Feature Selection &amp; Engineering</a></li>
+  </ul></li>
+  <li><a href="#svm-modeling" id="toc-svm-modeling" class="nav-link" data-scroll-target="#svm-modeling">SVM Modeling</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
 </div>
@@ -171,6 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#z-normalization" id="toc-z-normalization">z-normalization</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#gam" id="toc-gam">GAM</a></li>
   <li><a href="#glm-poisson" id="toc-glm-poisson">GLM Poisson</a></li>
   <li><a href="#glm-binomial" id="toc-glm-binomial">GLM Binomial</a>
   <ul>
@@ -179,8 +194,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#aggregated-data" id="toc-aggregated-data">Aggregated Data</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#neural-network" id="toc-neural-network">Neural Network</a></li>
-  <li><a href="#support-vector-machine" id="toc-support-vector-machine">Support Vector Machine</a></li>
+  <li><a href="#neural-network" id="toc-neural-network">Neural Network</a>
+  <ul>
+  <li><a href="#features" id="toc-features">Features</a></li>
+  </ul></li>
+  <li><a href="#support-vector-machine" id="toc-support-vector-machine">Support Vector Machine</a>
+  <ul>
+  <li><a href="#eda-and-data-preprocessing" id="toc-eda-and-data-preprocessing">EDA and Data Preprocessing</a>
+  <ul>
+  <li><a href="#selecting-the-target-variable" id="toc-selecting-the-target-variable">Selecting the Target Variable</a></li>
+  <li><a href="#feature-selection-engineering" id="toc-feature-selection-engineering">Feature Selection &amp; Engineering</a></li>
+  </ul></li>
+  <li><a href="#svm-modeling" id="toc-svm-modeling">SVM Modeling</a></li>
+  <li><a href="#interpretation" id="toc-interpretation">Interpretation</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
   </ul>
 </nav>
 <section id="packages" class="level2">
@@ -202,7 +230,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12"></a><span class="fu">library</span>(kableExtra)</span>
 <span id="cb1-13"><a href="#cb1-13"></a><span class="fu">library</span>(janitor)</span>
 <span id="cb1-14"><a href="#cb1-14"></a><span class="fu">library</span>(multcomp) <span class="co"># Multiple comparison tests</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="fu">library</span>(patchwork) <span class="co">#plots side by side</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="fu">library</span>(patchwork) <span class="co">#plots side by side</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="fu">library</span>(kernlab) <span class="co"># SVM methodology</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="fu">library</span>(e1071) <span class="co"># SVM methodology</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="fu">library</span>(ISLR) <span class="co"># contains example data set "Khan"</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="fu">library</span>(RColorBrewer) </span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="fu">library</span>(caret)</span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="fu">library</span>(doParallel)</span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="fu">library</span>(randomForest) <span class="co">#For feature selection</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="fu">library</span>(caret)</span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="fu">library</span>(keras)</span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="fu">library</span>(ROSE)</span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="fu">library</span>(pROC)</span>
+<span id="cb1-27"><a href="#cb1-27"></a><span class="fu">library</span>(DMwR2) </span>
+<span id="cb1-28"><a href="#cb1-28"></a><span class="fu">library</span>(mgcv)</span>
+<span id="cb1-29"><a href="#cb1-29"></a><span class="fu">library</span>(smotefamily)</span>
+<span id="cb1-30"><a href="#cb1-30"></a><span class="fu">library</span>(tensorflow)</span>
+<span id="cb1-31"><a href="#cb1-31"></a><span class="fu">library</span>(car)</span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="fu">library</span>(keras)</span>
+<span id="cb1-33"><a href="#cb1-33"></a><span class="fu">library</span>(neuralnet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -259,23 +305,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 <div class="cell-output-display">
 <div>
-<div id="ekwtqkadus" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ekwtqkadus table {
+<div id="fqsctskoii" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fqsctskoii table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ekwtqkadus thead, #ekwtqkadus tbody, #ekwtqkadus tfoot, #ekwtqkadus tr, #ekwtqkadus td, #ekwtqkadus th {
+#fqsctskoii thead, #fqsctskoii tbody, #fqsctskoii tfoot, #fqsctskoii tr, #fqsctskoii td, #fqsctskoii th {
   border-style: none;
 }
 
-#ekwtqkadus p {
+#fqsctskoii p {
   margin: 0;
   padding: 0;
 }
 
-#ekwtqkadus .gt_table {
+#fqsctskoii .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -301,12 +347,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_caption {
+#fqsctskoii .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ekwtqkadus .gt_title {
+#fqsctskoii .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -318,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#ekwtqkadus .gt_subtitle {
+#fqsctskoii .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -330,7 +376,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#ekwtqkadus .gt_heading {
+#fqsctskoii .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -342,13 +388,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_bottom_border {
+#fqsctskoii .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_col_headings {
+#fqsctskoii .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -363,7 +409,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_col_heading {
+#fqsctskoii .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -383,7 +429,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#ekwtqkadus .gt_column_spanner_outer {
+#fqsctskoii .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -395,15 +441,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#ekwtqkadus .gt_column_spanner_outer:first-child {
+#fqsctskoii .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ekwtqkadus .gt_column_spanner_outer:last-child {
+#fqsctskoii .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ekwtqkadus .gt_column_spanner {
+#fqsctskoii .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -415,11 +461,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#ekwtqkadus .gt_spanner_row {
+#fqsctskoii .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ekwtqkadus .gt_group_heading {
+#fqsctskoii .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -445,7 +491,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#ekwtqkadus .gt_empty_group_heading {
+#fqsctskoii .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -460,15 +506,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#ekwtqkadus .gt_from_md > :first-child {
+#fqsctskoii .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ekwtqkadus .gt_from_md > :last-child {
+#fqsctskoii .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ekwtqkadus .gt_row {
+#fqsctskoii .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -487,7 +533,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#ekwtqkadus .gt_stub {
+#fqsctskoii .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -500,7 +546,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ekwtqkadus .gt_stub_row_group {
+#fqsctskoii .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -514,15 +560,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#ekwtqkadus .gt_row_group_first td {
+#fqsctskoii .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ekwtqkadus .gt_row_group_first th {
+#fqsctskoii .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ekwtqkadus .gt_summary_row {
+#fqsctskoii .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -532,16 +578,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ekwtqkadus .gt_first_summary_row {
+#fqsctskoii .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_first_summary_row.thick {
+#fqsctskoii .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ekwtqkadus .gt_last_summary_row {
+#fqsctskoii .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -551,7 +597,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_grand_summary_row {
+#fqsctskoii .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -561,7 +607,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ekwtqkadus .gt_first_grand_summary_row {
+#fqsctskoii .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -571,7 +617,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_last_grand_summary_row_top {
+#fqsctskoii .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -581,11 +627,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_striped {
+#fqsctskoii .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ekwtqkadus .gt_table_body {
+#fqsctskoii .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -594,7 +640,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_footnotes {
+#fqsctskoii .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -608,7 +654,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_footnote {
+#fqsctskoii .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -617,7 +663,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ekwtqkadus .gt_sourcenotes {
+#fqsctskoii .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -631,7 +677,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ekwtqkadus .gt_sourcenote {
+#fqsctskoii .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -639,72 +685,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ekwtqkadus .gt_left {
+#fqsctskoii .gt_left {
   text-align: left;
 }
 
-#ekwtqkadus .gt_center {
+#fqsctskoii .gt_center {
   text-align: center;
 }
 
-#ekwtqkadus .gt_right {
+#fqsctskoii .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ekwtqkadus .gt_font_normal {
+#fqsctskoii .gt_font_normal {
   font-weight: normal;
 }
 
-#ekwtqkadus .gt_font_bold {
+#fqsctskoii .gt_font_bold {
   font-weight: bold;
 }
 
-#ekwtqkadus .gt_font_italic {
+#fqsctskoii .gt_font_italic {
   font-style: italic;
 }
 
-#ekwtqkadus .gt_super {
+#fqsctskoii .gt_super {
   font-size: 65%;
 }
 
-#ekwtqkadus .gt_footnote_marks {
+#fqsctskoii .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ekwtqkadus .gt_asterisk {
+#fqsctskoii .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ekwtqkadus .gt_indent_1 {
+#fqsctskoii .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ekwtqkadus .gt_indent_2 {
+#fqsctskoii .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ekwtqkadus .gt_indent_3 {
+#fqsctskoii .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ekwtqkadus .gt_indent_4 {
+#fqsctskoii .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ekwtqkadus .gt_indent_5 {
+#fqsctskoii .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ekwtqkadus .katex-display {
+#fqsctskoii .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ekwtqkadus div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#fqsctskoii div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1213,7 +1259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1263,7 +1309,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <details class="code-fold">
 <summary>Show ChatGPT classification</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>planes <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="fu">recode</span>(OP_CARRIER,</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> dplyr<span class="sc">::</span><span class="fu">recode</span>(OP_CARRIER,</span>
 <span id="cb13-3"><a href="#cb13-3"></a>    <span class="co"># Expensive</span></span>
 <span id="cb13-4"><a href="#cb13-4"></a>    <span class="st">"AA"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
 <span id="cb13-5"><a href="#cb13-5"></a>    <span class="st">"DL"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
@@ -1431,7 +1477,7 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 </div>
 </div>
 </div>
-<p>These boxplots show the skewedness of the variables. Outliers may play a big role in the model and could drive differences in the averages. Since these outliers are not measurement error we will keep them in the data set. Still, it’s visiable that cheap airlines have more delayed flights (dep and arr)</p>
+<p>These boxplots show the skewedness of the variables. Outliers may play a big role in the model and could drive differences in the averages. Since these outliers are not measurement error we will keep them in the data set. Still, it’s visible that cheap airlines have more delayed flights (dep and arr)</p>
 </section>
 <section id="model-diagnostics" class="level3">
 <h3 class="anchored" data-anchor-id="model-diagnostics">Model diagnostics</h3>
@@ -1473,8 +1519,8 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 </div>
 </div>
 <ul>
-<li>The <code>Q-Q plot</code> shows that the residuals are not normally distributed for higher values of <code>ARR_DELAY</code>. Higher arrival delays are underestimated by the model. Intuitively this could make sense, since extreme delay may not be linear anymore and considering the LGA flight curfew this could have an influence as well.</li>
-<li>The overall fit of the model seem acceptable but as already mentioned with increased delay (extreme delays) the model fit decreases.</li>
+<li>The <code>Q-Q plot</code> shows that the residuals are not normally distributed for higher values of <code>ARR_DELAY</code>.</li>
+<li>The <code>Fitted vs. Residuals plot</code> shows a clear case of heteroscedasticity where the variance is not constant across predicted values.</li>
 </ul>
 <div class="cell">
 <details class="code-fold">
@@ -1588,8 +1634,105 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 <li>This again shows that using the average for modelling may give us a biased picture.</li>
 <li>We see that <code>z_dep_delay</code> has a higher relative effect on arrival delay than <code>z_taxi_out</code>. This was not so clear in the model without transformation and is likely because depature delay has a larger range compared to taxi out time.</li>
 </ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">vif</span>(lm.arrival<span class="fl">.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    GVIF Df GVIF^(1/(2*Df))
+z_dep_delay     1.006435  1        1.003212
+z_taxi_out      1.012167  1        1.006065
+OP_CARRIER_Tier 1.012168  2        1.003028</code></pre>
+</div>
+</div>
+<p>No collinearity problem</p>
 </section>
 </section>
+</section>
+<section id="gam" class="level1">
+<h1>GAM</h1>
+<p>To increase flexibilty in our model we use GAM in our last created model</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>gam.arrival<span class="fl">.5</span> <span class="ot">&lt;-</span> <span class="fu">gam</span>(ARR_DELAY <span class="sc">~</span> <span class="fu">s</span>(z_dep_delay) <span class="sc">+</span> <span class="fu">s</span>(z_taxi_out, <span class="at">by =</span> OP_CARRIER_Tier) <span class="sc">+</span> OP_CARRIER_Tier, <span class="at">data =</span> planes)</span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">summary</span>(gam.arrival<span class="fl">.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre style="color: blue"><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+ARR_DELAY ~ s(z_dep_delay) + s(z_taxi_out, by = OP_CARRIER_Tier) + 
+    OP_CARRIER_Tier
+
+Parametric coefficients:
+                         Estimate Std. Error t value            Pr(&gt;|t|)    
+(Intercept)                6.1165     0.1206   50.72 &lt;0.0000000000000002 ***
+OP_CARRIER_TierMid-tier   -2.6551     0.1334  -19.90 &lt;0.0000000000000002 ***
+OP_CARRIER_TierExpensive  -3.4284     0.1350  -25.40 &lt;0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate significance of smooth terms:
+                                         edf Ref.df     F             p-value
+s(z_dep_delay)                         7.625  8.402 99789 &lt;0.0000000000000002
+s(z_taxi_out):OP_CARRIER_TierCheap     4.502  5.217  2536 &lt;0.0000000000000002
+s(z_taxi_out):OP_CARRIER_TierMid-tier  5.105  6.007 11151 &lt;0.0000000000000002
+s(z_taxi_out):OP_CARRIER_TierExpensive 5.317  6.154  9839 &lt;0.0000000000000002
+                                          
+s(z_dep_delay)                         ***
+s(z_taxi_out):OP_CARRIER_TierCheap     ***
+s(z_taxi_out):OP_CARRIER_TierMid-tier  ***
+s(z_taxi_out):OP_CARRIER_TierExpensive ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-sq.(adj) =  0.914   Deviance explained = 91.4%
+GCV = 145.54  Scale est. = 145.5     n = 96069</code></pre>
+</div>
+</div>
+<p>We have high estimated degrees of freedom for our predictors indicating possible non-linearity in our relationship</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">plot</span>(gam.arrival<span class="fl">.5</span>, <span class="at">residuals =</span> <span class="cn">TRUE</span>, <span class="at">select =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">gam.check</span>(gam.arrival<span class="fl">.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Method: GCV   Optimizer: magic
+Smoothing parameter selection converged after 7 iterations.
+The RMS GCV score gradient at convergence was 0.00004131617 .
+The Hessian was positive definite.
+Model rank =  39 / 39 
+
+Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+indicate that k is too low, especially if edf is close to k'.
+
+                                         k'  edf k-index p-value
+s(z_dep_delay)                         9.00 7.63    1.00    0.48
+s(z_taxi_out):OP_CARRIER_TierCheap     9.00 4.50    1.01    0.70
+s(z_taxi_out):OP_CARRIER_TierMid-tier  9.00 5.11    1.01    0.65
+s(z_taxi_out):OP_CARRIER_TierExpensive 9.00 5.32    1.01    0.66</code></pre>
+</div>
+</div>
 </section>
 <section id="glm-poisson" class="level1">
 <h1>GLM Poisson</h1>
@@ -1597,63 +1740,63 @@ F-statistic: 2.535e+05 on 4 and 96064 DF,  p-value: &lt; 0.00000000000000022</co
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>p1<span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ARR_DELAY, <span class="at">y =</span> TAXI_IN)) <span class="sc">+</span></span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb28-4"><a href="#cb28-4"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>,</span>
-<span id="cb28-5"><a href="#cb28-5"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"quasipoisson"</span>),</span>
-<span id="cb28-6"><a href="#cb28-6"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
-<span id="cb28-7"><a href="#cb28-7"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb28-8"><a href="#cb28-8"></a>              <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
-<span id="cb28-9"><a href="#cb28-9"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb28-10"><a href="#cb28-10"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">""</span>,</span>
-<span id="cb28-11"><a href="#cb28-11"></a>       <span class="at">x =</span> <span class="st">"ARR_DELAY"</span>,</span>
-<span id="cb28-12"><a href="#cb28-12"></a>       <span class="at">y =</span> <span class="st">"Taxi In Time"</span>) </span>
-<span id="cb28-13"><a href="#cb28-13"></a></span>
-<span id="cb28-14"><a href="#cb28-14"></a>p2<span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
-<span id="cb28-15"><a href="#cb28-15"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> DEP_DELAY, <span class="at">y =</span> TAXI_IN)) <span class="sc">+</span></span>
-<span id="cb28-16"><a href="#cb28-16"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb28-17"><a href="#cb28-17"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>,</span>
-<span id="cb28-18"><a href="#cb28-18"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"quasipoisson"</span>),</span>
-<span id="cb28-19"><a href="#cb28-19"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
-<span id="cb28-20"><a href="#cb28-20"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb28-21"><a href="#cb28-21"></a>              <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
-<span id="cb28-22"><a href="#cb28-22"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb28-23"><a href="#cb28-23"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">""</span>,</span>
-<span id="cb28-24"><a href="#cb28-24"></a>       <span class="at">x =</span> <span class="st">"DEP_DELAY"</span>,</span>
-<span id="cb28-25"><a href="#cb28-25"></a>       <span class="at">y =</span> <span class="st">"Taxi In Time"</span>)</span>
-<span id="cb28-26"><a href="#cb28-26"></a></span>
-<span id="cb28-27"><a href="#cb28-27"></a>p3 <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
-<span id="cb28-28"><a href="#cb28-28"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> TAXI_OUT, <span class="at">y =</span> TAXI_IN)) <span class="sc">+</span></span>
-<span id="cb28-29"><a href="#cb28-29"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb28-30"><a href="#cb28-30"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>,</span>
-<span id="cb28-31"><a href="#cb28-31"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"quasipoisson"</span>),</span>
-<span id="cb28-32"><a href="#cb28-32"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
-<span id="cb28-33"><a href="#cb28-33"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb28-34"><a href="#cb28-34"></a>              <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
-<span id="cb28-35"><a href="#cb28-35"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb28-36"><a href="#cb28-36"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">""</span>,</span>
-<span id="cb28-37"><a href="#cb28-37"></a>       <span class="at">x =</span> <span class="st">"TAXI_OUT"</span>,</span>
-<span id="cb28-38"><a href="#cb28-38"></a>       <span class="at">y =</span> <span class="st">"Taxi In Time"</span>)</span>
-<span id="cb28-39"><a href="#cb28-39"></a></span>
-<span id="cb28-40"><a href="#cb28-40"></a></span>
-<span id="cb28-41"><a href="#cb28-41"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">ncol =</span> <span class="dv">3</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>p1<span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ARR_DELAY, <span class="at">y =</span> TAXI_IN)) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>,</span>
+<span id="cb35-5"><a href="#cb35-5"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"quasipoisson"</span>),</span>
+<span id="cb35-6"><a href="#cb35-6"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb35-7"><a href="#cb35-7"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb35-8"><a href="#cb35-8"></a>              <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb35-9"><a href="#cb35-9"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb35-10"><a href="#cb35-10"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">""</span>,</span>
+<span id="cb35-11"><a href="#cb35-11"></a>       <span class="at">x =</span> <span class="st">"ARR_DELAY"</span>,</span>
+<span id="cb35-12"><a href="#cb35-12"></a>       <span class="at">y =</span> <span class="st">"Taxi In Time"</span>) </span>
+<span id="cb35-13"><a href="#cb35-13"></a></span>
+<span id="cb35-14"><a href="#cb35-14"></a>p2<span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb35-15"><a href="#cb35-15"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> DEP_DELAY, <span class="at">y =</span> TAXI_IN)) <span class="sc">+</span></span>
+<span id="cb35-16"><a href="#cb35-16"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb35-17"><a href="#cb35-17"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>,</span>
+<span id="cb35-18"><a href="#cb35-18"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"quasipoisson"</span>),</span>
+<span id="cb35-19"><a href="#cb35-19"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb35-20"><a href="#cb35-20"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb35-21"><a href="#cb35-21"></a>              <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb35-22"><a href="#cb35-22"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb35-23"><a href="#cb35-23"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">""</span>,</span>
+<span id="cb35-24"><a href="#cb35-24"></a>       <span class="at">x =</span> <span class="st">"DEP_DELAY"</span>,</span>
+<span id="cb35-25"><a href="#cb35-25"></a>       <span class="at">y =</span> <span class="st">"Taxi In Time"</span>)</span>
+<span id="cb35-26"><a href="#cb35-26"></a></span>
+<span id="cb35-27"><a href="#cb35-27"></a>p3 <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span></span>
+<span id="cb35-28"><a href="#cb35-28"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> TAXI_OUT, <span class="at">y =</span> TAXI_IN)) <span class="sc">+</span></span>
+<span id="cb35-29"><a href="#cb35-29"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb35-30"><a href="#cb35-30"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>,</span>
+<span id="cb35-31"><a href="#cb35-31"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"quasipoisson"</span>),</span>
+<span id="cb35-32"><a href="#cb35-32"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb35-33"><a href="#cb35-33"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb35-34"><a href="#cb35-34"></a>              <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb35-35"><a href="#cb35-35"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb35-36"><a href="#cb35-36"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">""</span>,</span>
+<span id="cb35-37"><a href="#cb35-37"></a>       <span class="at">x =</span> <span class="st">"TAXI_OUT"</span>,</span>
+<span id="cb35-38"><a href="#cb35-38"></a>       <span class="at">y =</span> <span class="st">"Taxi In Time"</span>)</span>
+<span id="cb35-39"><a href="#cb35-39"></a></span>
+<span id="cb35-40"><a href="#cb35-40"></a></span>
+<span id="cb35-41"><a href="#cb35-41"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">ncol =</span> <span class="dv">3</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="main_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>We see that <code>ARR_DELAY</code> seems to have an influence on <code>TAXI_IN</code> time. The more delayed a plane arrives the longer it takes to taxi in.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>glm.poisson <span class="ot">&lt;-</span> <span class="fu">glm</span>(TAXI_IN <span class="sc">~</span> ARR_DELAY<span class="sc">*</span>OP_CARRIER_Tier,</span>
-<span id="cb29-2"><a href="#cb29-2"></a>  <span class="at">family =</span> <span class="st">"quasipoisson"</span>,</span>
-<span id="cb29-3"><a href="#cb29-3"></a>  <span class="at">data =</span> planes)</span>
-<span id="cb29-4"><a href="#cb29-4"></a></span>
-<span id="cb29-5"><a href="#cb29-5"></a><span class="fu">print</span>(<span class="fu">summary</span>(glm.poisson)<span class="sc">$</span>coefficients <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>glm.poisson <span class="ot">&lt;-</span> <span class="fu">glm</span>(TAXI_IN <span class="sc">~</span> ARR_DELAY<span class="sc">*</span>OP_CARRIER_Tier,</span>
+<span id="cb36-2"><a href="#cb36-2"></a>  <span class="at">family =</span> <span class="st">"quasipoisson"</span>,</span>
+<span id="cb36-3"><a href="#cb36-3"></a>  <span class="at">data =</span> planes)</span>
+<span id="cb36-4"><a href="#cb36-4"></a></span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="fu">print</span>(<span class="fu">summary</span>(glm.poisson)<span class="sc">$</span>coefficients <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="color: blue"><code>                                     Estimate Std. Error    t value  Pr(&gt;|t|)
 (Intercept)                         1.9777051  0.0063070 313.572945 0.0000000
@@ -1674,18 +1817,18 @@ ARR_DELAY:OP_CARRIER_TierExpensive  0.0009579  0.0001345   7.121269 0.0000000</c
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>planes <span class="sc">%&gt;%</span></span>
-<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">mutate</span>(<span class="at">index_late_dep =</span> <span class="fu">ifelse</span>(DEP_DELAY <span class="sc">&gt;</span> <span class="dv">180</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">group_by</span>(OP_CARRIER) <span class="sc">%&gt;%</span></span>
-<span id="cb31-4"><a href="#cb31-4"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb31-5"><a href="#cb31-5"></a>    <span class="at">Total_flights =</span> <span class="fu">n</span>(),</span>
-<span id="cb31-6"><a href="#cb31-6"></a>    <span class="at">Total_delayed_dep =</span> <span class="fu">sum</span>(index_late_dep <span class="sc">==</span> <span class="dv">1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb31-7"><a href="#cb31-7"></a>    <span class="at">percentage_delayed_dep =</span> Total_delayed_dep <span class="sc">/</span> Total_flights <span class="sc">*</span> <span class="dv">100</span>,</span>
-<span id="cb31-8"><a href="#cb31-8"></a>    <span class="at">Mean_dep_delay =</span> <span class="fu">mean</span>(DEP_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb31-9"><a href="#cb31-9"></a>    <span class="at">Airline_tier =</span> <span class="fu">unique</span>(OP_CARRIER_Tier)</span>
-<span id="cb31-10"><a href="#cb31-10"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb31-11"><a href="#cb31-11"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(percentage_delayed_dep)) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-12"><a href="#cb31-12"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>planes <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a>  <span class="fu">mutate</span>(<span class="at">index_late_dep =</span> <span class="fu">ifelse</span>(DEP_DELAY <span class="sc">&gt;</span> <span class="dv">180</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="#cb38-3"></a>  <span class="fu">group_by</span>(OP_CARRIER) <span class="sc">%&gt;%</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb38-5"><a href="#cb38-5"></a>    <span class="at">Total_flights =</span> <span class="fu">n</span>(),</span>
+<span id="cb38-6"><a href="#cb38-6"></a>    <span class="at">Total_delayed_dep =</span> <span class="fu">sum</span>(index_late_dep <span class="sc">==</span> <span class="dv">1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb38-7"><a href="#cb38-7"></a>    <span class="at">percentage_delayed_dep =</span> Total_delayed_dep <span class="sc">/</span> Total_flights <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb38-8"><a href="#cb38-8"></a>    <span class="at">Mean_dep_delay =</span> <span class="fu">mean</span>(DEP_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb38-9"><a href="#cb38-9"></a>    <span class="at">Airline_tier =</span> <span class="fu">unique</span>(OP_CARRIER_Tier)</span>
+<span id="cb38-10"><a href="#cb38-10"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb38-11"><a href="#cb38-11"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(percentage_delayed_dep)) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-12"><a href="#cb38-12"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 6
@@ -1707,29 +1850,29 @@ ARR_DELAY:OP_CARRIER_TierExpensive  0.0009579  0.0001345   7.121269 0.0000000</c
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>planes_agg <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span> </span>
-<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">mutate</span>(<span class="at">index_late_dep =</span> <span class="fu">ifelse</span>(DEP_DELAY <span class="sc">&gt;</span> <span class="dv">30</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">group_by</span>(OP_CARRIER) <span class="sc">%&gt;%</span></span>
-<span id="cb33-4"><a href="#cb33-4"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb33-5"><a href="#cb33-5"></a>    <span class="at">OP_CARRIER =</span> <span class="fu">first</span>(OP_CARRIER),</span>
-<span id="cb33-6"><a href="#cb33-6"></a>    <span class="at">Total_flights =</span> <span class="fu">n</span>(),</span>
-<span id="cb33-7"><a href="#cb33-7"></a>    <span class="at">Total_delayed_dep_over30 =</span> <span class="fu">sum</span>(index_late_dep <span class="sc">==</span> <span class="dv">1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb33-8"><a href="#cb33-8"></a>    <span class="at">Total_delayed_dep_under30 =</span> <span class="fu">sum</span>(index_late_dep<span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb33-9"><a href="#cb33-9"></a>    <span class="at">Mean_dep_delay =</span> <span class="fu">mean</span>(DEP_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb33-10"><a href="#cb33-10"></a>    <span class="at">Mean_arr_delay =</span> <span class="fu">mean</span>(ARR_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb33-11"><a href="#cb33-11"></a>    <span class="at">Mean_distance =</span> <span class="fu">mean</span>(DISTANCE, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb33-12"><a href="#cb33-12"></a>    <span class="at">Carrier_tier =</span> <span class="fu">unique</span>(OP_CARRIER_Tier),</span>
-<span id="cb33-13"><a href="#cb33-13"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb33-14"><a href="#cb33-14"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>planes_agg <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">mutate</span>(<span class="at">index_late_dep =</span> <span class="fu">ifelse</span>(DEP_DELAY <span class="sc">&gt;</span> <span class="dv">30</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a>  <span class="fu">group_by</span>(OP_CARRIER) <span class="sc">%&gt;%</span></span>
+<span id="cb40-4"><a href="#cb40-4"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb40-5"><a href="#cb40-5"></a>    <span class="at">OP_CARRIER =</span> <span class="fu">first</span>(OP_CARRIER),</span>
+<span id="cb40-6"><a href="#cb40-6"></a>    <span class="at">Total_flights =</span> <span class="fu">n</span>(),</span>
+<span id="cb40-7"><a href="#cb40-7"></a>    <span class="at">Total_delayed_dep_over30 =</span> <span class="fu">sum</span>(index_late_dep <span class="sc">==</span> <span class="dv">1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-8"><a href="#cb40-8"></a>    <span class="at">Total_delayed_dep_under30 =</span> <span class="fu">sum</span>(index_late_dep<span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-9"><a href="#cb40-9"></a>    <span class="at">Mean_dep_delay =</span> <span class="fu">mean</span>(DEP_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-10"><a href="#cb40-10"></a>    <span class="at">Mean_arr_delay =</span> <span class="fu">mean</span>(ARR_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-11"><a href="#cb40-11"></a>    <span class="at">Mean_distance =</span> <span class="fu">mean</span>(DISTANCE, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-12"><a href="#cb40-12"></a>    <span class="at">Carrier_tier =</span> <span class="fu">unique</span>(OP_CARRIER_Tier),</span>
+<span id="cb40-13"><a href="#cb40-13"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb40-14"><a href="#cb40-14"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>glm.late <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">cbind</span>(Total_delayed_dep_over30, Total_delayed_dep_under30) <span class="sc">~</span> </span>
-<span id="cb34-2"><a href="#cb34-2"></a>                 Carrier_tier <span class="sc">+</span> Mean_dep_delay <span class="sc">+</span> Mean_distance <span class="sc">+</span> Total_flights,</span>
-<span id="cb34-3"><a href="#cb34-3"></a>  <span class="at">family =</span> <span class="st">"quasibinomial"</span>,</span>
-<span id="cb34-4"><a href="#cb34-4"></a>  <span class="at">data =</span> <span class="fu">na.omit</span>(planes_agg))</span>
-<span id="cb34-5"><a href="#cb34-5"></a></span>
-<span id="cb34-6"><a href="#cb34-6"></a><span class="fu">print</span>(<span class="fu">summary</span>(glm.late)<span class="sc">$</span>coefficients)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>glm.late <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">cbind</span>(Total_delayed_dep_over30, Total_delayed_dep_under30) <span class="sc">~</span> </span>
+<span id="cb41-2"><a href="#cb41-2"></a>                 Carrier_tier <span class="sc">+</span> Mean_dep_delay <span class="sc">+</span> Mean_distance <span class="sc">+</span> Total_flights,</span>
+<span id="cb41-3"><a href="#cb41-3"></a>  <span class="at">family =</span> <span class="st">"quasibinomial"</span>,</span>
+<span id="cb41-4"><a href="#cb41-4"></a>  <span class="at">data =</span> <span class="fu">na.omit</span>(planes_agg))</span>
+<span id="cb41-5"><a href="#cb41-5"></a></span>
+<span id="cb41-6"><a href="#cb41-6"></a><span class="fu">print</span>(<span class="fu">summary</span>(glm.late)<span class="sc">$</span>coefficients)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="color: blue"><code>                             Estimate     Std. Error     t value
 (Intercept)           -2.884661712402 0.185236007853 -15.5728994
@@ -1751,7 +1894,7 @@ Total_flights         0.637384586921758</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(glm.late)[<span class="st">"Mean_dep_delay"</span>]<span class="sc">*</span><span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="at">digits=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(glm.late)[<span class="st">"Mean_dep_delay"</span>]<span class="sc">*</span><span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="at">digits=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mean_dep_delay 
@@ -1764,9 +1907,895 @@ Total_flights         0.637384586921758</code></pre>
 </section>
 <section id="neural-network" class="level1">
 <h1>Neural Network</h1>
+<section id="features" class="level2">
+<h2 class="anchored" data-anchor-id="features">Features</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="co"># Include DEP_DELAY just for creating the target</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a>important_features <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Month"</span>, <span class="st">"OP_CARRIER"</span>, <span class="st">"DEST"</span>, <span class="st">"CANCELLED"</span>,</span>
+<span id="cb45-3"><a href="#cb45-3"></a>                        <span class="st">"CANCELLATION_CODE"</span>, <span class="st">"CRS_DEP_TIME"</span>, <span class="st">"DISTANCE"</span>, <span class="st">"DEP_DELAY"</span>)</span>
+<span id="cb45-4"><a href="#cb45-4"></a></span>
+<span id="cb45-5"><a href="#cb45-5"></a>planes <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span> </span>
+<span id="cb45-6"><a href="#cb45-6"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(DEP_TIME)) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-7"><a href="#cb45-7"></a>  <span class="fu">mutate</span>(<span class="at">delayed =</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(DEP_DELAY <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">"TRUE"</span>, <span class="st">"FALSE"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-8"><a href="#cb45-8"></a>  <span class="fu">mutate</span>(<span class="at">is_weekend =</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(Weekday <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>), <span class="dv">1</span>, <span class="dv">0</span>)))</span>
+<span id="cb45-9"><a href="#cb45-9"></a></span>
+<span id="cb45-10"><a href="#cb45-10"></a></span>
+<span id="cb45-11"><a href="#cb45-11"></a>LGA_cleaned <span class="ot">&lt;-</span> planes[important_features]</span>
+<span id="cb45-12"><a href="#cb45-12"></a></span>
+<span id="cb45-13"><a href="#cb45-13"></a><span class="co"># OR: Impute CANCELLED and CANCELLATION_CODE</span></span>
+<span id="cb45-14"><a href="#cb45-14"></a><span class="co">#LGA_cleaned$CANCELLATION_CODE[is.na(LGA_cleaned$CANCELLATION_CODE)] &lt;- "None"</span></span>
+<span id="cb45-15"><a href="#cb45-15"></a></span>
+<span id="cb45-16"><a href="#cb45-16"></a></span>
+<span id="cb45-17"><a href="#cb45-17"></a><span class="co"># 1. Add departure hour from CRS_DEP_TIME</span></span>
+<span id="cb45-18"><a href="#cb45-18"></a>planes<span class="sc">$</span>dep_hour <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">substr</span>(<span class="fu">sprintf</span>(<span class="st">"%04d"</span>, planes<span class="sc">$</span>CRS_DEP_TIME), <span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb45-19"><a href="#cb45-19"></a></span>
+<span id="cb45-20"><a href="#cb45-20"></a><span class="co"># 2. Bucket departure hours</span></span>
+<span id="cb45-21"><a href="#cb45-21"></a>planes<span class="sc">$</span>dep_hour_bucket <span class="ot">&lt;-</span> <span class="fu">cut</span>(</span>
+<span id="cb45-22"><a href="#cb45-22"></a>  planes<span class="sc">$</span>dep_hour,</span>
+<span id="cb45-23"><a href="#cb45-23"></a>  <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">24</span>),</span>
+<span id="cb45-24"><a href="#cb45-24"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Late Night"</span>, <span class="st">"Morning"</span>, <span class="st">"Midday"</span>, <span class="st">"Afternoon"</span>, <span class="st">"Evening"</span>)</span>
+<span id="cb45-25"><a href="#cb45-25"></a>)</span>
+<span id="cb45-26"><a href="#cb45-26"></a></span>
+<span id="cb45-27"><a href="#cb45-27"></a>LGA_cleaned<span class="sc">$</span>FL_DATE <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(planes<span class="sc">$</span>FL_DATE[<span class="sc">!</span><span class="fu">is.na</span>(planes<span class="sc">$</span>DEP_DELAY)])</span>
+<span id="cb45-28"><a href="#cb45-28"></a></span>
+<span id="cb45-29"><a href="#cb45-29"></a></span>
+<span id="cb45-30"><a href="#cb45-30"></a></span>
+<span id="cb45-31"><a href="#cb45-31"></a><span class="co"># 5. Bucket flight distance</span></span>
+<span id="cb45-32"><a href="#cb45-32"></a>planes<span class="sc">$</span>distance_bucket <span class="ot">&lt;-</span> <span class="fu">cut</span>(</span>
+<span id="cb45-33"><a href="#cb45-33"></a>  planes<span class="sc">$</span>DISTANCE,</span>
+<span id="cb45-34"><a href="#cb45-34"></a>  <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">250</span>, <span class="dv">750</span>, <span class="dv">1500</span>, <span class="cn">Inf</span>),</span>
+<span id="cb45-35"><a href="#cb45-35"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Short"</span>, <span class="st">"Medium"</span>, <span class="st">"Long"</span>, <span class="st">"Very Long"</span>)</span>
+<span id="cb45-36"><a href="#cb45-36"></a>)</span>
+<span id="cb45-37"><a href="#cb45-37"></a></span>
+<span id="cb45-38"><a href="#cb45-38"></a><span class="co"># leakage?</span></span>
+<span id="cb45-39"><a href="#cb45-39"></a><span class="co"># 6. Carrier-level delay rate</span></span>
+<span id="cb45-40"><a href="#cb45-40"></a><span class="co">#carrier_delay_rate &lt;- planes %&gt;%</span></span>
+<span id="cb45-41"><a href="#cb45-41"></a><span class="co">#  group_by(OP_CARRIER) %&gt;%</span></span>
+<span id="cb45-42"><a href="#cb45-42"></a><span class="co">#  summarise(carrier_delay_rate = mean(as.numeric(delayed) == 1))</span></span>
+<span id="cb45-43"><a href="#cb45-43"></a></span>
+<span id="cb45-44"><a href="#cb45-44"></a><span class="co">#LGA_cleaned &lt;- LGA_cleaned %&gt;%</span></span>
+<span id="cb45-45"><a href="#cb45-45"></a><span class="co">#  left_join(carrier_delay_rate, by = "OP_CARRIER")</span></span>
+<span id="cb45-46"><a href="#cb45-46"></a></span>
+<span id="cb45-47"><a href="#cb45-47"></a><span class="co"># 7. Destination-level delay rate</span></span>
+<span id="cb45-48"><a href="#cb45-48"></a><span class="co">#dest_delay_rate &lt;- planes %&gt;%</span></span>
+<span id="cb45-49"><a href="#cb45-49"></a><span class="co">#  group_by(DEST) %&gt;%</span></span>
+<span id="cb45-50"><a href="#cb45-50"></a><span class="co">#  summarise(dest_delay_rate = mean(as.numeric(delayed) == 1))</span></span>
+<span id="cb45-51"><a href="#cb45-51"></a></span>
+<span id="cb45-52"><a href="#cb45-52"></a><span class="co">#LGA_cleaned &lt;- LGA_cleaned %&gt;%</span></span>
+<span id="cb45-53"><a href="#cb45-53"></a><span class="co">#  left_join(dest_delay_rate, by = "DEST")</span></span>
+<span id="cb45-54"><a href="#cb45-54"></a></span>
+<span id="cb45-55"><a href="#cb45-55"></a><span class="co"># 🧼 Optional cleanup: remove raw dep_hour, keep bucket</span></span>
+<span id="cb45-56"><a href="#cb45-56"></a>LGA_cleaned <span class="ot">&lt;-</span> planes <span class="sc">%&gt;%</span> </span>
+<span id="cb45-57"><a href="#cb45-57"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Month, OP_CARRIER, DEST, CANCELLED, CANCELLATION_CODE, dep_hour_bucket, distance_bucket, delayed, is_weekend)</span>
+<span id="cb45-58"><a href="#cb45-58"></a></span>
+<span id="cb45-59"><a href="#cb45-59"></a><span class="co"># Make sure new categorical vars are factors</span></span>
+<span id="cb45-60"><a href="#cb45-60"></a>LGA_cleaned<span class="sc">$</span>dep_hour_bucket <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(LGA_cleaned<span class="sc">$</span>dep_hour_bucket)</span>
+<span id="cb45-61"><a href="#cb45-61"></a>LGA_cleaned<span class="sc">$</span>distance_bucket <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(LGA_cleaned<span class="sc">$</span>distance_bucket)</span>
+<span id="cb45-62"><a href="#cb45-62"></a>LGA_cleaned<span class="sc">$</span>Month <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(LGA_cleaned<span class="sc">$</span>Month)</span>
+<span id="cb45-63"><a href="#cb45-63"></a></span>
+<span id="cb45-64"><a href="#cb45-64"></a></span>
+<span id="cb45-65"><a href="#cb45-65"></a><span class="co"># Remove high NA columns if necessary, or impute here if needed</span></span>
+<span id="cb45-66"><a href="#cb45-66"></a></span>
+<span id="cb45-67"><a href="#cb45-67"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb45-68"><a href="#cb45-68"></a>trainIndex <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(LGA_cleaned<span class="sc">$</span>delayed, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb45-69"><a href="#cb45-69"></a>trainData <span class="ot">&lt;-</span> LGA_cleaned[trainIndex, ]</span>
+<span id="cb45-70"><a href="#cb45-70"></a>testData  <span class="ot">&lt;-</span> LGA_cleaned[<span class="sc">-</span>trainIndex, ]</span>
+<span id="cb45-71"><a href="#cb45-71"></a></span>
+<span id="cb45-72"><a href="#cb45-72"></a><span class="co"># 2. One-hot encode all predictors</span></span>
+<span id="cb45-73"><a href="#cb45-73"></a>dummies <span class="ot">&lt;-</span> <span class="fu">dummyVars</span>(<span class="sc">~</span> ., <span class="at">data =</span> trainData <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>delayed))</span>
+<span id="cb45-74"><a href="#cb45-74"></a>train_x <span class="ot">&lt;-</span> <span class="fu">predict</span>(dummies, <span class="at">newdata =</span> trainData) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb45-75"><a href="#cb45-75"></a>test_x <span class="ot">&lt;-</span> <span class="fu">predict</span>(dummies, <span class="at">newdata =</span> testData) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb45-76"><a href="#cb45-76"></a><span class="fu">print</span>(<span class="fu">nrow</span>(test_x))</span>
+<span id="cb45-77"><a href="#cb45-77"></a><span class="fu">print</span>(<span class="fu">nrow</span>(testData))</span>
+<span id="cb45-78"><a href="#cb45-78"></a></span>
+<span id="cb45-79"><a href="#cb45-79"></a><span class="co"># 3. Create y-labels</span></span>
+<span id="cb45-80"><a href="#cb45-80"></a>train_y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(trainData<span class="sc">$</span>delayed) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb45-81"><a href="#cb45-81"></a>test_y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(testData<span class="sc">$</span>delayed) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb45-82"><a href="#cb45-82"></a></span>
+<span id="cb45-83"><a href="#cb45-83"></a><span class="co"># 4. Remove zero-variance columns</span></span>
+<span id="cb45-84"><a href="#cb45-84"></a>nzv <span class="ot">&lt;-</span> <span class="fu">nearZeroVar</span>(train_x, <span class="at">saveMetrics =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb45-85"><a href="#cb45-85"></a>zero_var_cols <span class="ot">&lt;-</span> <span class="fu">rownames</span>(nzv[nzv<span class="sc">$</span>zeroVar <span class="sc">==</span> <span class="cn">TRUE</span>, ])</span>
+<span id="cb45-86"><a href="#cb45-86"></a>train_x <span class="ot">&lt;-</span> train_x[, <span class="sc">!</span>(<span class="fu">names</span>(train_x) <span class="sc">%in%</span> zero_var_cols)]</span>
+<span id="cb45-87"><a href="#cb45-87"></a>test_x <span class="ot">&lt;-</span> test_x[, <span class="sc">!</span>(<span class="fu">names</span>(test_x) <span class="sc">%in%</span> zero_var_cols)]</span>
+<span id="cb45-88"><a href="#cb45-88"></a><span class="co"># Align column structure of test_x to train_x</span></span>
+<span id="cb45-89"><a href="#cb45-89"></a>missing_cols <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(train_x), <span class="fu">names</span>(test_x))</span>
+<span id="cb45-90"><a href="#cb45-90"></a><span class="cf">for</span> (col <span class="cf">in</span> missing_cols) {</span>
+<span id="cb45-91"><a href="#cb45-91"></a>  test_x[[col]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb45-92"><a href="#cb45-92"></a>}</span>
+<span id="cb45-93"><a href="#cb45-93"></a><span class="co"># Also reorder the columns to match train_x</span></span>
+<span id="cb45-94"><a href="#cb45-94"></a>test_x <span class="ot">&lt;-</span> test_x[, <span class="fu">names</span>(train_x)]</span>
+<span id="cb45-95"><a href="#cb45-95"></a></span>
+<span id="cb45-96"><a href="#cb45-96"></a><span class="co"># 5. Normalize</span></span>
+<span id="cb45-97"><a href="#cb45-97"></a></span>
+<span id="cb45-98"><a href="#cb45-98"></a></span>
+<span id="cb45-99"><a href="#cb45-99"></a><span class="co"># Combine and convert to numeric</span></span>
+<span id="cb45-100"><a href="#cb45-100"></a>train_combined <span class="ot">&lt;-</span> <span class="fu">cbind</span>(train_x, <span class="at">delayed =</span> <span class="fu">as.numeric</span>(trainData<span class="sc">$</span>delayed) <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb45-101"><a href="#cb45-101"></a><span class="co"># SMOTE (on unscaled data)</span></span>
+<span id="cb45-102"><a href="#cb45-102"></a>smote_result <span class="ot">&lt;-</span> <span class="fu">SMOTE</span>(<span class="at">X =</span> train_combined[, <span class="sc">-</span><span class="fu">ncol</span>(train_combined)],</span>
+<span id="cb45-103"><a href="#cb45-103"></a>                      <span class="at">target =</span> train_combined<span class="sc">$</span>delayed,</span>
+<span id="cb45-104"><a href="#cb45-104"></a>                      <span class="at">K =</span> <span class="dv">5</span>)</span>
+<span id="cb45-105"><a href="#cb45-105"></a></span>
+<span id="cb45-106"><a href="#cb45-106"></a>train_x_bal <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(smote_result<span class="sc">$</span>data[, <span class="sc">-</span><span class="fu">ncol</span>(smote_result<span class="sc">$</span>data)])</span>
+<span id="cb45-107"><a href="#cb45-107"></a>train_y_bal <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(smote_result<span class="sc">$</span>data<span class="sc">$</span>class))</span>
+<span id="cb45-108"><a href="#cb45-108"></a></span>
+<span id="cb45-109"><a href="#cb45-109"></a><span class="co"># ✅ Now normalize AFTER SMOTE</span></span>
+<span id="cb45-110"><a href="#cb45-110"></a>preProc <span class="ot">&lt;-</span> <span class="fu">preProcess</span>(train_x_bal, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>))</span>
+<span id="cb45-111"><a href="#cb45-111"></a>train_x_bal <span class="ot">&lt;-</span> <span class="fu">predict</span>(preProc, train_x_bal)</span>
+<span id="cb45-112"><a href="#cb45-112"></a>test_x <span class="ot">&lt;-</span> <span class="fu">predict</span>(preProc, test_x)</span>
+<span id="cb45-113"><a href="#cb45-113"></a></span>
+<span id="cb45-114"><a href="#cb45-114"></a></span>
+<span id="cb45-115"><a href="#cb45-115"></a><span class="co">#install_keras() </span></span>
+<span id="cb45-116"><a href="#cb45-116"></a><span class="co"># Rebuild model with correct input shape</span></span>
+<span id="cb45-117"><a href="#cb45-117"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb45-118"><a href="#cb45-118"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">"relu"</span>, <span class="at">input_shape =</span> <span class="fu">ncol</span>(train_x_bal)) <span class="sc">%&gt;%</span></span>
+<span id="cb45-119"><a href="#cb45-119"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-120"><a href="#cb45-120"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-121"><a href="#cb45-121"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">"sigmoid"</span>)</span>
+<span id="cb45-122"><a href="#cb45-122"></a></span>
+<span id="cb45-123"><a href="#cb45-123"></a><span class="co"># Compile</span></span>
+<span id="cb45-124"><a href="#cb45-124"></a>model <span class="sc">%&gt;%</span> <span class="fu">compile</span>(</span>
+<span id="cb45-125"><a href="#cb45-125"></a>  <span class="at">loss =</span> <span class="st">"binary_crossentropy"</span>,</span>
+<span id="cb45-126"><a href="#cb45-126"></a>  <span class="at">optimizer =</span> <span class="fu">optimizer_adam</span>(),</span>
+<span id="cb45-127"><a href="#cb45-127"></a>  <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
+<span id="cb45-128"><a href="#cb45-128"></a>)</span>
+<span id="cb45-129"><a href="#cb45-129"></a></span>
+<span id="cb45-130"><a href="#cb45-130"></a><span class="co"># Add early stopping callback</span></span>
+<span id="cb45-131"><a href="#cb45-131"></a>early_stop <span class="ot">&lt;-</span> <span class="fu">callback_early_stopping</span>(</span>
+<span id="cb45-132"><a href="#cb45-132"></a>  <span class="at">monitor =</span> <span class="st">"val_loss"</span>,</span>
+<span id="cb45-133"><a href="#cb45-133"></a>  <span class="at">patience =</span> <span class="dv">5</span>,</span>
+<span id="cb45-134"><a href="#cb45-134"></a>  <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span></span>
+<span id="cb45-135"><a href="#cb45-135"></a>)</span>
+<span id="cb45-136"><a href="#cb45-136"></a></span>
+<span id="cb45-137"><a href="#cb45-137"></a><span class="co"># Since ROSE is used, set equal class weights</span></span>
+<span id="cb45-138"><a href="#cb45-138"></a></span>
+<span id="cb45-139"><a href="#cb45-139"></a></span>
+<span id="cb45-140"><a href="#cb45-140"></a><span class="co"># Train model</span></span>
+<span id="cb45-141"><a href="#cb45-141"></a>history <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(</span>
+<span id="cb45-142"><a href="#cb45-142"></a>  <span class="at">x =</span> <span class="fu">as.matrix</span>(train_x_bal),</span>
+<span id="cb45-143"><a href="#cb45-143"></a>  <span class="at">y =</span> train_y_bal,</span>
+<span id="cb45-144"><a href="#cb45-144"></a>  <span class="at">epochs =</span> <span class="dv">50</span>,</span>
+<span id="cb45-145"><a href="#cb45-145"></a>  <span class="at">batch_size =</span> <span class="dv">32</span>,</span>
+<span id="cb45-146"><a href="#cb45-146"></a>  <span class="at">validation_split =</span> <span class="fl">0.2</span>,</span>
+<span id="cb45-147"><a href="#cb45-147"></a>  <span class="at">callbacks =</span> <span class="fu">list</span>(early_stop)</span>
+<span id="cb45-148"><a href="#cb45-148"></a>)</span>
+<span id="cb45-149"><a href="#cb45-149"></a></span>
+<span id="cb45-150"><a href="#cb45-150"></a></span>
+<span id="cb45-151"><a href="#cb45-151"></a></span>
+<span id="cb45-152"><a href="#cb45-152"></a><span class="co"># Predict probabilities</span></span>
+<span id="cb45-153"><a href="#cb45-153"></a>pred_probs <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(model <span class="sc">%&gt;%</span> <span class="fu">predict</span>(<span class="fu">as.matrix</span>(test_x)))</span>
+<span id="cb45-154"><a href="#cb45-154"></a></span>
+<span id="cb45-155"><a href="#cb45-155"></a><span class="co"># Get optimized threshold</span></span>
+<span id="cb45-156"><a href="#cb45-156"></a>roc_obj <span class="ot">&lt;-</span> <span class="fu">roc</span>(testData<span class="sc">$</span>delayed, pred_probs)</span>
+<span id="cb45-157"><a href="#cb45-157"></a>best_thresh <span class="ot">&lt;-</span> <span class="fu">coords</span>(roc_obj, <span class="st">"best"</span>, <span class="at">ret =</span> <span class="st">"threshold"</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb45-158"><a href="#cb45-158"></a></span>
+<span id="cb45-159"><a href="#cb45-159"></a></span>
+<span id="cb45-160"><a href="#cb45-160"></a><span class="co"># Classify using that threshold</span></span>
+<span id="cb45-161"><a href="#cb45-161"></a>pred_classes <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(pred_probs <span class="sc">&gt;</span> best_thresh, <span class="st">"TRUE"</span>, <span class="st">"FALSE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># Evaluate</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a><span class="fu">confusionMatrix</span>(</span>
+<span id="cb46-3"><a href="#cb46-3"></a>  <span class="fu">factor</span>(pred_classes, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span>, <span class="st">"TRUE"</span>)),</span>
+<span id="cb46-4"><a href="#cb46-4"></a>  <span class="fu">factor</span>(testData<span class="sc">$</span>delayed, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span>, <span class="st">"TRUE"</span>))</span>
+<span id="cb46-5"><a href="#cb46-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre style="color: blue"><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction FALSE TRUE
+     FALSE  5216 1137
+     TRUE   8419 4515
+                                             
+               Accuracy : 0.5045             
+                 95% CI : (0.4975, 0.5116)   
+    No Information Rate : 0.707              
+    P-Value [Acc &gt; NIR] : 1                  
+                                             
+                  Kappa : 0.1317             
+                                             
+ Mcnemar's Test P-Value : &lt;0.0000000000000002
+                                             
+            Sensitivity : 0.3825             
+            Specificity : 0.7988             
+         Pos Pred Value : 0.8210             
+         Neg Pred Value : 0.3491             
+             Prevalence : 0.7070             
+         Detection Rate : 0.2704             
+   Detection Prevalence : 0.3294             
+      Balanced Accuracy : 0.5907             
+                                             
+       'Positive' Class : FALSE              
+                                             </code></pre>
+</div>
+</div>
+<p>During the development of a neural network to classify whether a flight would be delayed or not, several limitations of both the dataset and the model became apparent: Since only data from a single airport (LGA) was used, the variety in operational conditions and causes of delay was inherently limited. The available features provided insufficient variance to reliably distinguish outliers (i.e., delayed flights). Derived features — such as binned departure hours, distance categories, and carrier-specific delay rates — yielded only marginal performance improvements. Simple models lacked the capacity to learn meaningful patterns from the data. More complex models performed better on the training data but showed clear signs of overfitting. Despite various optimization efforts, including feature engineering, class balancing, and threshold tuning, the model’s maximum Kappa score remained around 0.28. This indicates limited predictive value and insufficient reliability for real-world application.</p>
+</section>
 </section>
 <section id="support-vector-machine" class="level1">
 <h1>Support Vector Machine</h1>
+<section id="eda-and-data-preprocessing" class="level2">
+<h2 class="anchored" data-anchor-id="eda-and-data-preprocessing">EDA and Data Preprocessing</h2>
+<section id="selecting-the-target-variable" class="level3">
+<h3 class="anchored" data-anchor-id="selecting-the-target-variable">Selecting the Target Variable</h3>
+<p>The first step involves selecting the dependent variable for classification using the Support Vector Machine (SVM) model. From a customer-oriented perspective, a key concern is whether a flight will arrive on time or experience a delay. The dataset includes a column labeled ARR_DELAY, which records the total delay in minutes upon arrival. To proceed, it is essential to examine the distribution of arrival delays in the dataset.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>planes_initial_svm <span class="ot">&lt;-</span> planes</span>
+<span id="cb48-2"><a href="#cb48-2"></a></span>
+<span id="cb48-3"><a href="#cb48-3"></a><span class="fu">hist</span>(planes_initial_svm<span class="sc">$</span>ARR_DELAY,</span>
+<span id="cb48-4"><a href="#cb48-4"></a>     <span class="at">main =</span> <span class="st">"Histogram of Arrival Delays"</span>,</span>
+<span id="cb48-5"><a href="#cb48-5"></a>     <span class="at">xlab =</span> <span class="st">"Arrival Delay (minutes)"</span>,</span>
+<span id="cb48-6"><a href="#cb48-6"></a>     <span class="at">col =</span> <span class="st">"skyblue"</span>,</span>
+<span id="cb48-7"><a href="#cb48-7"></a>     <span class="at">border =</span> <span class="st">"white"</span>,</span>
+<span id="cb48-8"><a href="#cb48-8"></a>     <span class="at">breaks =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(planes_initial_svm<span class="sc">$</span>ARR_DELAY, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb49-2"><a href="#cb49-2"></a>     <span class="at">main =</span> <span class="st">"Density Plot of Arrival Delays"</span>,</span>
+<span id="cb49-3"><a href="#cb49-3"></a>     <span class="at">xlab =</span> <span class="st">"Arrival Delay (minutes)"</span>,</span>
+<span id="cb49-4"><a href="#cb49-4"></a>     <span class="at">col =</span> <span class="st">"darkgreen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-32-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The plotted data indicates that arrival delays are relatively symmetrically distributed around zero, with some degree of variation. While a small number of flights experience significant delays, early arrivals are less extreme in comparison. Given that this study employs a classification approach—transforming continuous delay values into categorical labels—the impact of such outliers is mitigated. Unlike regression tasks, where precise delay durations significantly affect the model, classification focuses on threshold-based categorization, reducing the influence of extreme values.</p>
+<p>The next step involves preprocessing the dataset by introducing a new binary target column. This column assigns a value of 1 to flights with an arrival delay greater than zero, indicating a delayed arrival, and a value of 0 to flights that arrived on time or early (arrival delay less than or equal to zero).</p>
+<p>To evaluate the balance of the newly created target variable, we analyzeits class distribution. This allows us to assess the proportion of delayed versus non-delayed flights in the dataset.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(planes_initial_svm<span class="sc">$</span>DELAYED))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="fu">length</span>(planes_initial_svm<span class="sc">$</span>DELAYED)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>planes_initial_svm<span class="sc">$</span>DELAYED <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(planes_initial_svm<span class="sc">$</span>ARR_DELAY <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb54-2"><a href="#cb54-2"></a></span>
+<span id="cb54-3"><a href="#cb54-3"></a><span class="fu">barplot</span>(<span class="fu">table</span>(planes_initial_svm<span class="sc">$</span>DELAYED),</span>
+<span id="cb54-4"><a href="#cb54-4"></a>        <span class="at">names.arg =</span> <span class="fu">c</span>(<span class="st">"On Time (0)"</span>, <span class="st">"Delayed (1)"</span>),</span>
+<span id="cb54-5"><a href="#cb54-5"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightgreen"</span>, <span class="st">"salmon"</span>),</span>
+<span id="cb54-6"><a href="#cb54-6"></a>        <span class="at">main =</span> <span class="st">"Distribution of Flight Delays"</span>,</span>
+<span id="cb54-7"><a href="#cb54-7"></a>        <span class="at">ylab =</span> <span class="st">"Number of Flights"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a><span class="fu">pie</span>(<span class="fu">table</span>(planes_initial_svm<span class="sc">$</span>DELAYED),</span>
+<span id="cb55-2"><a href="#cb55-2"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"On Time"</span>, <span class="st">"Delayed"</span>),</span>
+<span id="cb55-3"><a href="#cb55-3"></a>    <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"orange"</span>),</span>
+<span id="cb55-4"><a href="#cb55-4"></a>    <span class="at">main =</span> <span class="st">"Proportion of Delayed Flights"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-33-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a><span class="fu">mean</span>(planes_initial_svm<span class="sc">$</span>DELAYED, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3675691</code></pre>
+</div>
+</div>
+<p>The plot shows that 36.75% of the flights are classified as delayed. This indicates a reasonably balanced distribution between delayed and non-delayed flights, which is suitable for training a classification model like SVM.</p>
+</section>
+<section id="feature-selection-engineering" class="level3">
+<h3 class="anchored" data-anchor-id="feature-selection-engineering">Feature Selection &amp; Engineering</h3>
+<p>Consistent with the approach used in the linear model, airlines are categorized into three pricing tiers: low-cost, mid-tier, and premium carriers.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>planes_initial_svm <span class="ot">&lt;-</span> planes_initial_svm <span class="sc">%&gt;%</span></span>
+<span id="cb58-2"><a href="#cb58-2"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> dplyr<span class="sc">::</span><span class="fu">recode</span>(OP_CARRIER,</span>
+<span id="cb58-3"><a href="#cb58-3"></a>    <span class="co"># Expensive</span></span>
+<span id="cb58-4"><a href="#cb58-4"></a>    <span class="st">"AA"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb58-5"><a href="#cb58-5"></a>    <span class="st">"DL"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb58-6"><a href="#cb58-6"></a>    <span class="st">"UA"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb58-7"><a href="#cb58-7"></a>    <span class="st">"CO"</span> <span class="ot">=</span> <span class="st">"Expensive"</span>,</span>
+<span id="cb58-8"><a href="#cb58-8"></a></span>
+<span id="cb58-9"><a href="#cb58-9"></a>    <span class="co"># Cheap</span></span>
+<span id="cb58-10"><a href="#cb58-10"></a>    <span class="st">"B6"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb58-11"><a href="#cb58-11"></a>    <span class="st">"F9"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb58-12"><a href="#cb58-12"></a>    <span class="st">"FL"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb58-13"><a href="#cb58-13"></a>    <span class="st">"WN"</span> <span class="ot">=</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb58-14"><a href="#cb58-14"></a></span>
+<span id="cb58-15"><a href="#cb58-15"></a>    <span class="co"># Mid-tier</span></span>
+<span id="cb58-16"><a href="#cb58-16"></a>    <span class="st">"9E"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb58-17"><a href="#cb58-17"></a>    <span class="st">"EV"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb58-18"><a href="#cb58-18"></a>    <span class="st">"MQ"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb58-19"><a href="#cb58-19"></a>    <span class="st">"OH"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb58-20"><a href="#cb58-20"></a>    <span class="st">"OO"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb58-21"><a href="#cb58-21"></a>    <span class="st">"XE"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb58-22"><a href="#cb58-22"></a>    <span class="st">"YV"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb58-23"><a href="#cb58-23"></a>    <span class="st">"NW"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb58-24"><a href="#cb58-24"></a>    <span class="st">"US"</span> <span class="ot">=</span> <span class="st">"Mid-tier"</span>,</span>
+<span id="cb58-25"><a href="#cb58-25"></a></span>
+<span id="cb58-26"><a href="#cb58-26"></a>    <span class="at">.default =</span> <span class="cn">NA_character_</span></span>
+<span id="cb58-27"><a href="#cb58-27"></a>  )) <span class="sc">%&gt;%</span> </span>
+<span id="cb58-28"><a href="#cb58-28"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">OP_CARRIER_Tier =</span> <span class="fu">factor</span>(OP_CARRIER_Tier, </span>
+<span id="cb58-29"><a href="#cb58-29"></a>                                  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Cheap"</span>, <span class="st">"Mid-tier"</span>, <span class="st">"Expensive"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>A key requirement for the SVM classification task is to limit input features to those available prior to flight departure. This ensures that the model operates under realistic conditions where only pre-departure information is accessible. Accordingly, the initial set of features will be selected based on their availability before takeoff.:</p>
+<table class="table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 10%">
+<col style="width: 70%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FL_DATE</td>
+<td>Date</td>
+<td>Date of the flight (yy/mm/dd)</td>
+</tr>
+<tr class="even">
+<td>OP_CARRIER</td>
+<td>character</td>
+<td>Airline Identifier</td>
+</tr>
+<tr class="odd">
+<td>OP_CARRIER_FL_NUM</td>
+<td>integer</td>
+<td>Flight Number</td>
+</tr>
+<tr class="even">
+<td>DEST</td>
+<td>character</td>
+<td>Destination Airport Code</td>
+</tr>
+<tr class="odd">
+<td>CRS_DEP_TIME</td>
+<td>Date</td>
+<td>Planned Departure Time (HH:MM)</td>
+</tr>
+<tr class="even">
+<td>CRS_ARR_TIME</td>
+<td>Date</td>
+<td>Planned Arrival Time</td>
+</tr>
+<tr class="odd">
+<td>CRS_ELAPSED_TIME</td>
+<td>integer</td>
+<td>Planned time amount needed for the flight trip</td>
+</tr>
+<tr class="even">
+<td>DISTANCE</td>
+<td>integer</td>
+<td>Distance between two airports</td>
+</tr>
+<tr class="odd">
+<td>OP_CARRIER_Tier</td>
+<td>character</td>
+<td>Category of carrier (e.g., major, regional)</td>
+</tr>
+<tr class="even">
+<td>DELAYED</td>
+<td>integer</td>
+<td>Target: 1 if ARR_DELAY &gt; 0, else 0</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>planes_svm <span class="ot">&lt;-</span> planes_initial_svm[, <span class="fu">c</span>(<span class="st">"FL_DATE"</span>,</span>
+<span id="cb59-2"><a href="#cb59-2"></a>                         <span class="st">"OP_CARRIER_FL_NUM"</span>,</span>
+<span id="cb59-3"><a href="#cb59-3"></a>                         <span class="st">"DEST"</span>,</span>
+<span id="cb59-4"><a href="#cb59-4"></a>                         <span class="st">"CRS_DEP_TIME"</span>,</span>
+<span id="cb59-5"><a href="#cb59-5"></a>                         <span class="st">"CRS_ARR_TIME"</span>,</span>
+<span id="cb59-6"><a href="#cb59-6"></a>                         <span class="st">"CRS_ELAPSED_TIME"</span>,</span>
+<span id="cb59-7"><a href="#cb59-7"></a>                         <span class="st">"DISTANCE"</span>,</span>
+<span id="cb59-8"><a href="#cb59-8"></a>                         <span class="st">"OP_CARRIER_Tier"</span>,</span>
+<span id="cb59-9"><a href="#cb59-9"></a>                         <span class="st">"DELAYED"</span>)]</span>
+<span id="cb59-10"><a href="#cb59-10"></a></span>
+<span id="cb59-11"><a href="#cb59-11"></a>planes_svm <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(planes_svm)</span>
+<span id="cb59-12"><a href="#cb59-12"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(planes_svm))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>The OP_CARRIER feature is excluded from the model, as its information is sufficiently represented by the OP_CARRIER_Tier variable. To prepare OP_CARRIER_Tier for use in the SVM classifier, one-hot encoding is applied. This converts the categorical tier levels into a numerical format appropriate for classification.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>planes_svm <span class="ot">&lt;-</span> <span class="fu">cbind</span>(planes_svm, <span class="fu">model.matrix</span>(<span class="sc">~</span> OP_CARRIER_Tier <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> planes_svm))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>To utilize the date-related columns effectively, an appropriate transformation strategy must be established. Initially, the FL_DATE field is categorized into two temporal dimensions: weekday versus weekend, and calendar quarters. The use of calendar quarters is chosen over seasonal labels, as seasonal patterns vary significantly across different regions of the United States.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>planes_svm<span class="sc">$</span>DayType <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">weekdays</span>(planes_svm<span class="sc">$</span>FL_DATE) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>),</span>
+<span id="cb62-2"><a href="#cb62-2"></a>                             <span class="st">"Weekend"</span>, <span class="st">"Weekday"</span>)</span>
+<span id="cb62-3"><a href="#cb62-3"></a>planes_svm<span class="sc">$</span>Quarter <span class="ot">&lt;-</span> <span class="fu">quarters</span>(planes_svm<span class="sc">$</span>FL_DATE)</span>
+<span id="cb62-4"><a href="#cb62-4"></a></span>
+<span id="cb62-5"><a href="#cb62-5"></a>planes_svm<span class="sc">$</span>DayType <span class="ot">&lt;-</span> <span class="fu">factor</span>(planes_svm<span class="sc">$</span>DayType, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Weekday"</span>, <span class="st">"Weekend"</span>))</span>
+<span id="cb62-6"><a href="#cb62-6"></a>planes_svm<span class="sc">$</span>Quarter <span class="ot">&lt;-</span> <span class="fu">factor</span>(planes_svm<span class="sc">$</span>Quarter, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Q1"</span>, <span class="st">"Q2"</span>, <span class="st">"Q3"</span>, <span class="st">"Q4"</span>))</span>
+<span id="cb62-7"><a href="#cb62-7"></a>daytype_dummies <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> DayType <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> planes_svm)</span>
+<span id="cb62-8"><a href="#cb62-8"></a>quarter_dummies <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> Quarter <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> planes_svm)</span>
+<span id="cb62-9"><a href="#cb62-9"></a>planes_svm <span class="ot">&lt;-</span> <span class="fu">cbind</span>(planes_svm, daytype_dummies, quarter_dummies)</span>
+<span id="cb62-10"><a href="#cb62-10"></a>planes_svm<span class="sc">$</span>DayType <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb62-11"><a href="#cb62-11"></a>planes_svm<span class="sc">$</span>Quarter <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>For the scheduled departure time (CRS_DEP_TIME) and scheduled arrival time (CRS_ARR_TIME) we will use cyclical encoding (see https://scholarworks.calstate.edu/downloads/pv63g5147).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>to_minutes <span class="ot">&lt;-</span> <span class="cf">function</span>(hhmm) {</span>
+<span id="cb63-2"><a href="#cb63-2"></a>  hours <span class="ot">&lt;-</span> hhmm <span class="sc">%/%</span> <span class="dv">100</span></span>
+<span id="cb63-3"><a href="#cb63-3"></a>  minutes <span class="ot">&lt;-</span> hhmm <span class="sc">%%</span> <span class="dv">100</span></span>
+<span id="cb63-4"><a href="#cb63-4"></a>  <span class="fu">return</span>(hours <span class="sc">*</span> <span class="dv">60</span> <span class="sc">+</span> minutes)</span>
+<span id="cb63-5"><a href="#cb63-5"></a>}</span>
+<span id="cb63-6"><a href="#cb63-6"></a></span>
+<span id="cb63-7"><a href="#cb63-7"></a>planes_svm<span class="sc">$</span>DEP_MIN <span class="ot">&lt;-</span> <span class="fu">to_minutes</span>(planes_svm<span class="sc">$</span>CRS_DEP_TIME)</span>
+<span id="cb63-8"><a href="#cb63-8"></a>planes_svm<span class="sc">$</span>ARR_MIN <span class="ot">&lt;-</span> <span class="fu">to_minutes</span>(planes_svm<span class="sc">$</span>CRS_ARR_TIME)</span>
+<span id="cb63-9"><a href="#cb63-9"></a>max_minutes <span class="ot">&lt;-</span> <span class="dv">24</span> <span class="sc">*</span> <span class="dv">60</span>  <span class="co"># total minutes in a day</span></span>
+<span id="cb63-10"><a href="#cb63-10"></a>planes_svm<span class="sc">$</span>DEP_SIN <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> planes_svm<span class="sc">$</span>DEP_MIN <span class="sc">/</span> max_minutes)</span>
+<span id="cb63-11"><a href="#cb63-11"></a>planes_svm<span class="sc">$</span>DEP_COS <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> planes_svm<span class="sc">$</span>DEP_MIN <span class="sc">/</span> max_minutes)</span>
+<span id="cb63-12"><a href="#cb63-12"></a>planes_svm<span class="sc">$</span>ARR_SIN <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> planes_svm<span class="sc">$</span>ARR_MIN <span class="sc">/</span> max_minutes)</span>
+<span id="cb63-13"><a href="#cb63-13"></a>planes_svm<span class="sc">$</span>ARR_COS <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> planes_svm<span class="sc">$</span>ARR_MIN <span class="sc">/</span> max_minutes)</span>
+<span id="cb63-14"><a href="#cb63-14"></a></span>
+<span id="cb63-15"><a href="#cb63-15"></a>planes_svm <span class="ot">&lt;-</span> <span class="fu">subset</span>(planes_svm, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(CRS_DEP_TIME, CRS_ARR_TIME, DEP_MIN, ARR_MIN))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>It would be interesting to also utilize the destination codes. Lets analyze the distribution of the destionation codes.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(planes_svm<span class="sc">$</span>DEST))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 60</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>dest_counts <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(planes_svm<span class="sc">$</span>DEST))</span>
+<span id="cb66-2"><a href="#cb66-2"></a><span class="fu">ggplot</span>(dest_counts, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Var1, <span class="sc">-</span>Freq), <span class="at">y =</span> Freq)) <span class="sc">+</span></span>
+<span id="cb66-3"><a href="#cb66-3"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb66-4"><a href="#cb66-4"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Flight Counts by Destination"</span>,</span>
+<span id="cb66-5"><a href="#cb66-5"></a>       <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb66-6"><a href="#cb66-6"></a>       <span class="at">y =</span> <span class="st">"Number of Flights"</span>) <span class="sc">+</span></span>
+<span id="cb66-7"><a href="#cb66-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb66-8"><a href="#cb66-8"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb66-9"><a href="#cb66-9"></a>        <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The dataset includes 60 unique destination airports, exhibiting a long-tail distribution in terms of frequency. To manage this categorical feature effectively, destinations are first grouped based on traffic volume before applying one-hot encoding. Specifically, the eight most frequent destination airports are classified as “high-frequency,” while the remaining airports are grouped into an “other” category.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a>dest_freq <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">table</span>(planes_svm<span class="sc">$</span>DEST), <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb67-2"><a href="#cb67-2"></a>top_10_dest <span class="ot">&lt;-</span> <span class="fu">names</span>(dest_freq)[<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>]</span>
+<span id="cb67-3"><a href="#cb67-3"></a>planes_svm<span class="sc">$</span>DEST_GROUPED <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(planes_svm<span class="sc">$</span>DEST <span class="sc">%in%</span> top_10_dest, <span class="st">"High"</span>, <span class="st">"Other"</span>)</span>
+<span id="cb67-4"><a href="#cb67-4"></a>planes_svm<span class="sc">$</span>DEST_GROUPED <span class="ot">&lt;-</span> <span class="fu">factor</span>(planes_svm<span class="sc">$</span>DEST_GROUPED, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Other"</span>, <span class="st">"High"</span>))</span>
+<span id="cb67-5"><a href="#cb67-5"></a></span>
+<span id="cb67-6"><a href="#cb67-6"></a></span>
+<span id="cb67-7"><a href="#cb67-7"></a><span class="fu">ggplot</span>(planes_svm, <span class="fu">aes</span>(<span class="at">x =</span> DEST_GROUPED)) <span class="sc">+</span></span>
+<span id="cb67-8"><a href="#cb67-8"></a>  <span class="fu">geom_bar</span>(<span class="at">fill =</span> <span class="st">"tomato"</span>) <span class="sc">+</span></span>
+<span id="cb67-9"><a href="#cb67-9"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Destination Tiers"</span>,</span>
+<span id="cb67-10"><a href="#cb67-10"></a>       <span class="at">x =</span> <span class="st">"Destination Tier"</span>,</span>
+<span id="cb67-11"><a href="#cb67-11"></a>       <span class="at">y =</span> <span class="st">"Number of Flights"</span>) <span class="sc">+</span></span>
+<span id="cb67-12"><a href="#cb67-12"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="main_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Visual inspection of the resulting distribution reveals a relatively balanced split between the two groups, supporting the decision to proceed with this categorization. Let’s one-hot encode the destination group and remove redundant columns. Redundant columns, including the original destination identifier and the carrier flight number, are removed, as they do not contribute meaningful predictive value.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>dest_dummies <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> DEST_GROUPED <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> planes_svm)</span>
+<span id="cb68-2"><a href="#cb68-2"></a>planes_svm <span class="ot">&lt;-</span> <span class="fu">cbind</span>(planes_svm, dest_dummies)</span>
+<span id="cb68-3"><a href="#cb68-3"></a>planes_svm<span class="sc">$</span>DEST_GROUPED <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb68-4"><a href="#cb68-4"></a>planes_svm<span class="sc">$</span>DEST <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb68-5"><a href="#cb68-5"></a>planes_svm<span class="sc">$</span>FL_DATE <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb68-6"><a href="#cb68-6"></a>planes_svm<span class="sc">$</span>OP_CARRIER_FL_NUM <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb68-7"><a href="#cb68-7"></a>planes_svm<span class="sc">$</span>OP_CARRIER_Tier <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>At this stage, the final set of features is defined.</p>
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 9%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CRS_ELAPSED_TIME</td>
+<td>integer</td>
+<td>Planned time amount needed for the flight trip</td>
+</tr>
+<tr class="even">
+<td>DISTANCE</td>
+<td>integer</td>
+<td>Distance between two airports</td>
+</tr>
+<tr class="odd">
+<td>DELAYED</td>
+<td>integer</td>
+<td>Target: 1 if ARR_DELAY &gt; 0, else 0</td>
+</tr>
+<tr class="even">
+<td>OP_CARRIER_Tier_*</td>
+<td>numeric</td>
+<td>One-hot encoded carrier category (e.g., major, regional, low-cost)</td>
+</tr>
+<tr class="odd">
+<td>DayType_*</td>
+<td>numeric</td>
+<td>One-hot encoded day type (Weekday, Weekend)</td>
+</tr>
+<tr class="even">
+<td>Quarter_*</td>
+<td>numeric</td>
+<td>One-hot encoded calendar quarter (Q1–Q4)</td>
+</tr>
+<tr class="odd">
+<td>DEP_SIN, DEP_COS</td>
+<td>numeric</td>
+<td>Cyclical encoding of scheduled departure time</td>
+</tr>
+<tr class="even">
+<td>ARR_SIN, ARR_COS</td>
+<td>numeric</td>
+<td>Cyclical encoding of scheduled arrival time</td>
+</tr>
+<tr class="odd">
+<td>DEST_GROUPEDHigh</td>
+<td>numeric</td>
+<td>One-hot encoded indicator for high-traffic destinations</td>
+</tr>
+</tbody>
+</table>
+<p>Now the data is ready train and test a svm to predict DELAYED. All features are then normalized to ensure they are on a consistent scale. We will choose z-score scaling, but after splitting the data see https://forecastegy.com/posts/does-svm-need-feature-scaling-or-normalization/</p>
+</section>
+</section>
+<section id="svm-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="svm-modeling">SVM Modeling</h2>
+<p>To conduct an initial performance evaluation, the SVM model is trained using the caret package with the e1071 implementation. Given the size of the dataset, a 50% subset is used to reduce computational time during training. The tuneLength parameter is set to 3, combined with 5-fold cross-validation, to enable a quick, preliminary analysis of model performance while minimizing training overhead.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb69-2"><a href="#cb69-2"></a>planes_svm <span class="ot">&lt;-</span> planes_svm[<span class="fu">sample</span>(<span class="fu">nrow</span>(planes_svm)), ]</span>
+<span id="cb69-3"><a href="#cb69-3"></a></span>
+<span id="cb69-4"><a href="#cb69-4"></a>svm_train_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(planes_svm<span class="sc">$</span>DELAYED, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb69-5"><a href="#cb69-5"></a>svm_train_data <span class="ot">&lt;-</span> planes_svm[svm_train_index, ]</span>
+<span id="cb69-6"><a href="#cb69-6"></a>svm_test_data  <span class="ot">&lt;-</span> planes_svm[<span class="sc">-</span>svm_train_index, ]</span>
+<span id="cb69-7"><a href="#cb69-7"></a></span>
+<span id="cb69-8"><a href="#cb69-8"></a>subset_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(svm_train_data<span class="sc">$</span>DELAYED, <span class="at">p =</span> <span class="fl">0.3</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb69-9"><a href="#cb69-9"></a>svm_train_data <span class="ot">&lt;-</span> svm_train_data[subset_index, ]</span>
+<span id="cb69-10"><a href="#cb69-10"></a></span>
+<span id="cb69-11"><a href="#cb69-11"></a>svm_train_data<span class="sc">$</span>DELAYED <span class="ot">&lt;-</span> <span class="fu">factor</span>(svm_train_data<span class="sc">$</span>DELAYED, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"0"</span>, <span class="st">"1"</span>))</span>
+<span id="cb69-12"><a href="#cb69-12"></a>svm_test_data<span class="sc">$</span>DELAYED  <span class="ot">&lt;-</span> <span class="fu">factor</span>(svm_test_data<span class="sc">$</span>DELAYED, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"0"</span>, <span class="st">"1"</span>))</span>
+<span id="cb69-13"><a href="#cb69-13"></a></span>
+<span id="cb69-14"><a href="#cb69-14"></a>preds <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(svm_train_data), <span class="st">"DELAYED"</span>)</span>
+<span id="cb69-15"><a href="#cb69-15"></a></span>
+<span id="cb69-16"><a href="#cb69-16"></a>train_scaled   <span class="ot">&lt;-</span> <span class="fu">scale</span>(svm_train_data[preds])</span>
+<span id="cb69-17"><a href="#cb69-17"></a>scaling_params <span class="ot">&lt;-</span> <span class="fu">attributes</span>(train_scaled)</span>
+<span id="cb69-18"><a href="#cb69-18"></a><span class="co">#   scaling_params$`scaled:center`  = per-feature means</span></span>
+<span id="cb69-19"><a href="#cb69-19"></a><span class="co">#   scaling_params$`scaled:scale`   = per-feature sds</span></span>
+<span id="cb69-20"><a href="#cb69-20"></a></span>
+<span id="cb69-21"><a href="#cb69-21"></a>svm_train_data[preds] <span class="ot">&lt;-</span> train_scaled</span>
+<span id="cb69-22"><a href="#cb69-22"></a></span>
+<span id="cb69-23"><a href="#cb69-23"></a>svm_test_data[preds] <span class="ot">&lt;-</span> <span class="fu">scale</span>(</span>
+<span id="cb69-24"><a href="#cb69-24"></a>  svm_test_data[preds],</span>
+<span id="cb69-25"><a href="#cb69-25"></a>  <span class="at">center =</span> scaling_params<span class="sc">$</span><span class="st">`</span><span class="at">scaled:center</span><span class="st">`</span>,</span>
+<span id="cb69-26"><a href="#cb69-26"></a>  <span class="at">scale  =</span> scaling_params<span class="sc">$</span><span class="st">`</span><span class="at">scaled:scale</span><span class="st">`</span></span>
+<span id="cb69-27"><a href="#cb69-27"></a>)</span>
+<span id="cb69-28"><a href="#cb69-28"></a></span>
+<span id="cb69-29"><a href="#cb69-29"></a></span>
+<span id="cb69-30"><a href="#cb69-30"></a>train_control <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>,</span>
+<span id="cb69-31"><a href="#cb69-31"></a>                              <span class="at">number =</span> <span class="dv">5</span>,</span>
+<span id="cb69-32"><a href="#cb69-32"></a>                              <span class="at">verboseIter =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb69-33"><a href="#cb69-33"></a>                              <span class="at">allowParallel =</span> <span class="cn">FALSE</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="co"># svm_model &lt;- train(DELAYED ~ ., </span></span>
+<span id="cb70-2"><a href="#cb70-2"></a><span class="co">#                   data = svm_train_data,</span></span>
+<span id="cb70-3"><a href="#cb70-3"></a><span class="co">#                   method = "svmRadial",</span></span>
+<span id="cb70-4"><a href="#cb70-4"></a><span class="co">#                   trControl = train_control,</span></span>
+<span id="cb70-5"><a href="#cb70-5"></a><span class="co">#                   tuneLength = 3,</span></span>
+<span id="cb70-6"><a href="#cb70-6"></a><span class="co">#                   preProcess = NULL</span></span>
+<span id="cb70-7"><a href="#cb70-7"></a><span class="co">#                   )</span></span>
+<span id="cb70-8"><a href="#cb70-8"></a><span class="co">#saveRDS(svm_model, file = "../Models/svm_model.rds")</span></span>
+<span id="cb70-9"><a href="#cb70-9"></a><span class="co"># Load model</span></span>
+<span id="cb70-10"><a href="#cb70-10"></a>svm_model <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../Models/svm_model.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(svm_model, <span class="at">newdata =</span> svm_test_data)</span>
+<span id="cb71-2"><a href="#cb71-2"></a>conf_matrix <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(predictions, svm_test_data<span class="sc">$</span>DELAYED, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb71-3"><a href="#cb71-3"></a><span class="fu">print</span>(conf_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction     0     1
+         0 16817  8416
+         1  1635  1952
+                                               
+               Accuracy : 0.6512               
+                 95% CI : (0.6457, 0.6568)     
+    No Information Rate : 0.6402               
+    P-Value [Acc &gt; NIR] : 0.00004952           
+                                               
+                  Kappa : 0.1163               
+                                               
+ Mcnemar's Test P-Value : &lt; 0.00000000000000022
+                                               
+            Sensitivity : 0.18827              
+            Specificity : 0.91139              
+         Pos Pred Value : 0.54419              
+         Neg Pred Value : 0.66647              
+             Prevalence : 0.35975              
+         Detection Rate : 0.06773              
+   Detection Prevalence : 0.12446              
+      Balanced Accuracy : 0.54983              
+                                               
+       'Positive' Class : 1                    
+                                               </code></pre>
+</div>
+</div>
+<p>The Support Vector Machine (SVM) model achieved an accuracy of 64.58%, which is only marginally higher than the no-information rate of 63.05%. However, since the primary objective is to identify delayed flights, overall accuracy is less meaningful due to class imbalance. The model demonstrates high specificity (92.74%)—indicating strong performance in recognizing non-delayed flights—but its sensitivity is critically low at 16.5%, highlighting a substantial weakness in detecting the target class (delays). The balanced accuracy of 54.6% and a low kappa of 0.1087 further emphasize the model’s poor discriminatory power for delayed flights. To address this, the next step is to apply downsampling (via sampling = “down”) to reduce the dominance of the majority class and improve the model’s ability to correctly identify delayed flights.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a><span class="co">#set.seed(123)</span></span>
+<span id="cb73-2"><a href="#cb73-2"></a></span>
+<span id="cb73-3"><a href="#cb73-3"></a></span>
+<span id="cb73-4"><a href="#cb73-4"></a>train_control <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>,</span>
+<span id="cb73-5"><a href="#cb73-5"></a>                              <span class="at">number =</span> <span class="dv">5</span>,</span>
+<span id="cb73-6"><a href="#cb73-6"></a>                              <span class="at">sampling =</span> <span class="st">"down"</span>,   </span>
+<span id="cb73-7"><a href="#cb73-7"></a>                              <span class="at">verboseIter =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb73-8"><a href="#cb73-8"></a>                              <span class="at">allowParallel =</span> <span class="cn">FALSE</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a><span class="co">#svm_model_down &lt;- train(DELAYED ~ ., </span></span>
+<span id="cb74-2"><a href="#cb74-2"></a><span class="co">#                   data = svm_train_data,</span></span>
+<span id="cb74-3"><a href="#cb74-3"></a><span class="co">#                   method = "svmRadial",</span></span>
+<span id="cb74-4"><a href="#cb74-4"></a><span class="co">#                   trControl = train_control,</span></span>
+<span id="cb74-5"><a href="#cb74-5"></a><span class="co">#                   tuneLength = 3,</span></span>
+<span id="cb74-6"><a href="#cb74-6"></a><span class="co">#                   preProcess = NULL)</span></span>
+<span id="cb74-7"><a href="#cb74-7"></a><span class="co">#saveRDS(svm_model_down, file = "../Models/svm_model_down.rds")</span></span>
+<span id="cb74-8"><a href="#cb74-8"></a><span class="co"># Load model</span></span>
+<span id="cb74-9"><a href="#cb74-9"></a>svm_model_down <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../Models/svm_model_down.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a>predictions_b <span class="ot">&lt;-</span> <span class="fu">predict</span>(svm_model_down, <span class="at">newdata =</span> svm_test_data)</span>
+<span id="cb75-2"><a href="#cb75-2"></a>conf_matrix_b <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(predictions_b, svm_test_data<span class="sc">$</span>DELAYED, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb75-3"><a href="#cb75-3"></a><span class="fu">print</span>(conf_matrix_b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction     0     1
+         0 10177  3729
+         1  8275  6639
+                                             
+               Accuracy : 0.5835             
+                 95% CI : (0.5778, 0.5892)   
+    No Information Rate : 0.6402             
+    P-Value [Acc &gt; NIR] : 1                  
+                                             
+                  Kappa : 0.1751             
+                                             
+ Mcnemar's Test P-Value : &lt;0.0000000000000002
+                                             
+            Sensitivity : 0.6403             
+            Specificity : 0.5515             
+         Pos Pred Value : 0.4452             
+         Neg Pred Value : 0.7318             
+             Prevalence : 0.3598             
+         Detection Rate : 0.2304             
+   Detection Prevalence : 0.5175             
+      Balanced Accuracy : 0.5959             
+                                             
+       'Positive' Class : 1                  
+                                             </code></pre>
+</div>
+</div>
+<p>After downsampling, the SVM model achieved an accuracy of 60.1%, below the baseline of 63.05%, but sensitivity improved to 62.82%, indicating better detection of delayed flights—the primary goal. Specificity dropped to 58.51%, reflecting more false positives. Despite lower accuracy, balanced accuracy rose to 60.67% and kappa improved to 0.199, showing a better balance between classes. This trade-off is acceptable given the focus on delays. The next step is to apply recursive feature elimination (RFE) and rerun the model.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb77-2"><a href="#cb77-2"></a></span>
+<span id="cb77-3"><a href="#cb77-3"></a>slice30_idx <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(svm_train_data<span class="sc">$</span>DELAYED, <span class="at">p =</span> <span class="fl">0.3</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb77-4"><a href="#cb77-4"></a>slice30     <span class="ot">&lt;-</span> svm_train_data[slice30_idx, ]</span>
+<span id="cb77-5"><a href="#cb77-5"></a>slice30<span class="sc">$</span>DELAYED <span class="ot">&lt;-</span> <span class="fu">factor</span>(slice30<span class="sc">$</span>DELAYED, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"0"</span>,<span class="st">"1"</span>))</span>
+<span id="cb77-6"><a href="#cb77-6"></a></span>
+<span id="cb77-7"><a href="#cb77-7"></a></span>
+<span id="cb77-8"><a href="#cb77-8"></a>slice90_idx <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(slice30<span class="sc">$</span>DELAYED, <span class="at">p =</span> <span class="fl">0.9</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb77-9"><a href="#cb77-9"></a>slice90     <span class="ot">&lt;-</span> slice30[slice90_idx, ]</span>
+<span id="cb77-10"><a href="#cb77-10"></a></span>
+<span id="cb77-11"><a href="#cb77-11"></a>x_rfe   <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(DELAYED <span class="sc">~</span> . <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> slice90)</span>
+<span id="cb77-12"><a href="#cb77-12"></a>y_rfe   <span class="ot">&lt;-</span> slice90<span class="sc">$</span>DELAYED</span>
+<span id="cb77-13"><a href="#cb77-13"></a></span>
+<span id="cb77-14"><a href="#cb77-14"></a>rfe_ctrl <span class="ot">&lt;-</span> <span class="fu">rfeControl</span>(</span>
+<span id="cb77-15"><a href="#cb77-15"></a>  <span class="at">functions     =</span> rfFuncs,</span>
+<span id="cb77-16"><a href="#cb77-16"></a>  <span class="at">method        =</span> <span class="st">"cv"</span>,</span>
+<span id="cb77-17"><a href="#cb77-17"></a>  <span class="at">number        =</span> <span class="dv">4</span>,</span>
+<span id="cb77-18"><a href="#cb77-18"></a>  <span class="at">repeats       =</span> <span class="dv">2</span>,</span>
+<span id="cb77-19"><a href="#cb77-19"></a>  <span class="at">verbose       =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb77-20"><a href="#cb77-20"></a>  <span class="at">allowParallel =</span> <span class="cn">FALSE</span></span>
+<span id="cb77-21"><a href="#cb77-21"></a>)</span>
+<span id="cb77-22"><a href="#cb77-22"></a></span>
+<span id="cb77-23"><a href="#cb77-23"></a>rfe_results <span class="ot">&lt;-</span> <span class="fu">rfe</span>(</span>
+<span id="cb77-24"><a href="#cb77-24"></a>  <span class="at">x          =</span> x_rfe,</span>
+<span id="cb77-25"><a href="#cb77-25"></a>  <span class="at">y          =</span> y_rfe,</span>
+<span id="cb77-26"><a href="#cb77-26"></a>  <span class="at">sizes      =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>),</span>
+<span id="cb77-27"><a href="#cb77-27"></a>  <span class="at">rfeControl =</span> rfe_ctrl</span>
+<span id="cb77-28"><a href="#cb77-28"></a>)</span>
+<span id="cb77-29"><a href="#cb77-29"></a></span>
+<span id="cb77-30"><a href="#cb77-30"></a>selected_features <span class="ot">&lt;-</span> <span class="fu">predictors</span>(rfe_results)</span>
+<span id="cb77-31"><a href="#cb77-31"></a><span class="fu">print</span>(selected_features)</span>
+<span id="cb77-32"><a href="#cb77-32"></a></span>
+<span id="cb77-33"><a href="#cb77-33"></a>train_sel <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb77-34"><a href="#cb77-34"></a>  svm_train_data[, selected_features, <span class="at">drop =</span> <span class="cn">FALSE</span>],</span>
+<span id="cb77-35"><a href="#cb77-35"></a>  <span class="at">DELAYED =</span> svm_train_data<span class="sc">$</span>DELAYED</span>
+<span id="cb77-36"><a href="#cb77-36"></a>)</span>
+<span id="cb77-37"><a href="#cb77-37"></a></span>
+<span id="cb77-38"><a href="#cb77-38"></a>test_sel <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb77-39"><a href="#cb77-39"></a>  svm_test_data[, selected_features, <span class="at">drop =</span> <span class="cn">FALSE</span>],</span>
+<span id="cb77-40"><a href="#cb77-40"></a>  <span class="at">DELAYED =</span> svm_test_data<span class="sc">$</span>DELAYED</span>
+<span id="cb77-41"><a href="#cb77-41"></a>)</span>
+<span id="cb77-42"><a href="#cb77-42"></a></span>
+<span id="cb77-43"><a href="#cb77-43"></a>train_ctrl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(</span>
+<span id="cb77-44"><a href="#cb77-44"></a>  <span class="at">method      =</span> <span class="st">"cv"</span>,</span>
+<span id="cb77-45"><a href="#cb77-45"></a>  <span class="at">number      =</span> <span class="dv">5</span>,</span>
+<span id="cb77-46"><a href="#cb77-46"></a>  <span class="at">sampling    =</span> <span class="st">"down"</span>,</span>
+<span id="cb77-47"><a href="#cb77-47"></a>  <span class="at">verboseIter =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb77-48"><a href="#cb77-48"></a>  <span class="at">allowParallel =</span> <span class="cn">FALSE</span></span>
+<span id="cb77-49"><a href="#cb77-49"></a>)</span>
+<span id="cb77-50"><a href="#cb77-50"></a></span>
+<span id="cb77-51"><a href="#cb77-51"></a><span class="co">#saveRDS(test_sel, file = "../Models/test_sel.rds")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a><span class="co">#svm_model_feature &lt;- train(</span></span>
+<span id="cb78-2"><a href="#cb78-2"></a><span class="co">#  DELAYED    ~ .,</span></span>
+<span id="cb78-3"><a href="#cb78-3"></a><span class="co">#  data       = train_sel,</span></span>
+<span id="cb78-4"><a href="#cb78-4"></a><span class="co">#  method     = "svmRadial",</span></span>
+<span id="cb78-5"><a href="#cb78-5"></a><span class="co">#  trControl  = train_ctrl,</span></span>
+<span id="cb78-6"><a href="#cb78-6"></a><span class="co">#  tuneLength = 3,</span></span>
+<span id="cb78-7"><a href="#cb78-7"></a><span class="co">#  preProcess = NULL </span></span>
+<span id="cb78-8"><a href="#cb78-8"></a><span class="co">#)</span></span>
+<span id="cb78-9"><a href="#cb78-9"></a></span>
+<span id="cb78-10"><a href="#cb78-10"></a><span class="co">#saveRDS(svm_model_feature, file = "../Models/svm_model_feature.rds")</span></span>
+<span id="cb78-11"><a href="#cb78-11"></a></span>
+<span id="cb78-12"><a href="#cb78-12"></a><span class="co"># Load model</span></span>
+<span id="cb78-13"><a href="#cb78-13"></a>svm_model_feature <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../Models/svm_model_feature.rds"</span>)</span>
+<span id="cb78-14"><a href="#cb78-14"></a>test_sel<span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../Models/test_sel.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>predicitons_c    <span class="ot">&lt;-</span> <span class="fu">predict</span>(svm_model_feature, <span class="at">newdata =</span> test_sel)</span>
+<span id="cb79-2"><a href="#cb79-2"></a>conf_matrix_c <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(predicitons_c, test_sel<span class="sc">$</span>DELAYED, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb79-3"><a href="#cb79-3"></a><span class="fu">print</span>(conf_matrix_c)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction     0     1
+         0  4824  1572
+         1 13628  8796
+                                             
+               Accuracy : 0.4726             
+                 95% CI : (0.4668, 0.4784)   
+    No Information Rate : 0.6402             
+    P-Value [Acc &gt; NIR] : 1                  
+                                             
+                  Kappa : 0.0875             
+                                             
+ Mcnemar's Test P-Value : &lt;0.0000000000000002
+                                             
+            Sensitivity : 0.8484             
+            Specificity : 0.2614             
+         Pos Pred Value : 0.3923             
+         Neg Pred Value : 0.7542             
+             Prevalence : 0.3598             
+         Detection Rate : 0.3052             
+   Detection Prevalence : 0.7781             
+      Balanced Accuracy : 0.5549             
+                                             
+       'Positive' Class : 1                  
+                                             </code></pre>
+</div>
+</div>
+<p>After feature selection, sensitivity is 63.6%, slightly improving the detection of delayed flights, while overall accuracy dropped slightly to 58.0%.</p>
+</section>
+<section id="interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
+<p>The initial SVM model struggled to detect delayed flights due to class imbalance, achieving high specificity but very low sensitivity. Downsampling improved sensitivity significantly, aligning better with the goal of identifying delays, though accuracy declined. Feature selection further raised sensitivity to 63.6%, but other performance metrics deteriorated. Overall, all models demonstrate limited predictive power in this context.</p>
+<p>After tackling the class imbalance via downsampling, the model was able to predict To improve results, future tests should focus on addressing class imbalance through more advanced resampling strategies, refining the SVM kernel and hyperparameters, or exploring alternative classification approaches such as gradient boosting or ensemble methods that are better suited for imbalanced datasets. A central question in this analysis is identifying which factors—available well before a flight departs—can serve as reliable indicators of arrival delays. Understanding and leveraging such pre-departure features is critical for developing predictive models that can inform operational decision-making in advance.</p>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
 </section>
 
 </main>

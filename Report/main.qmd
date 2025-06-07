@@ -52,6 +52,18 @@ library(RColorBrewer)
 library(caret)
 library(doParallel)
 library(randomForest) #For feature selection
+library(caret)
+library(keras)
+library(ROSE)
+library(pROC)
+library(DMwR2) 
+library(mgcv)
+library(smotefamily)
+library(tensorflow)
+library(car)
+library(keras)
+library(neuralnet)
+
 
 
 ```
@@ -180,6 +192,7 @@ This correlation plot helps us understand the relationship and colinearity among
 
 
 
+
 # Linear Model
 
 **Aim: Investigating the factors contributing to delays in arrival.**
@@ -239,14 +252,13 @@ drop1(lm.arrival.3, test ="F")
 
 We use `drop1` function, since `OP_CARRIER` has more than two levels. The addition of the `OP_CARRIER` variable significantly improves the model fit.
 
-
 It could be more interesting to group the different `OP_CARRIER` into three categories of Cheap, Mid-tier and expensive airlines. For this we use chatGPT. Having three categories instead of 14 will help us to reduce the complexity of the model and make it easier to interpret and compare different levels of airlines. Especially, since some airlines how low flight counts. Of course these categories may not be complete true for each case. As ChatGPT mentions some airlines blur the categories as they could be considered cheap and or mid-tier and so on.  
 
 ```{r}
 #| code-summary: "Show ChatGPT classification"
 
 planes <- planes %>%
-  mutate(OP_CARRIER_Tier = recode(OP_CARRIER,
+  dplyr::mutate(OP_CARRIER_Tier = dplyr::recode(OP_CARRIER,
     # Expensive
     "AA" = "Expensive",
     "DL" = "Expensive",
@@ -347,7 +359,7 @@ planes %>%
     theme(legend.position = "none")
 
 ```
-These boxplots show the skewedness of the variables. Outliers may play a big role in the model and could drive differences in the averages. Since these outliers are not measurement error we will keep them in the data set. Still, it's visiable that cheap airlines have more delayed flights (dep and arr)
+These boxplots show the skewedness of the variables. Outliers may play a big role in the model and could drive differences in the averages. Since these outliers are not measurement error we will keep them in the data set. Still, it's visible that cheap airlines have more delayed flights (dep and arr)
 
 ### Model diagnostics
 
@@ -355,8 +367,9 @@ These boxplots show the skewedness of the variables. Outliers may play a big rol
 ```{r}
 plot(lm.arrival.4)
 ```
-- The `Q-Q plot` shows that the residuals are not normally distributed for higher values of `ARR_DELAY`. Higher arrival delays are underestimated by the model. Intuitively this could make sense, since extreme delay may not be linear anymore and considering the LGA flight curfew this could have an influence as well. 
-- The overall fit of the model seem acceptable but as already mentioned with increased delay (extreme delays) the model fit decreases.
+- The `Q-Q plot` shows that the residuals are not normally distributed for higher values of `ARR_DELAY`. 
+- The `Fitted vs. Residuals plot` shows a clear case of heteroscedasticity where the variance is not constant across predicted values.
+
 
 
 
@@ -433,6 +446,28 @@ summary(lm.arrival.5)
 - This again shows that using the average for modelling may give us a biased picture. 
 - We see that `z_dep_delay` has a higher relative effect on arrival delay than `z_taxi_out`. This was not so clear in the model without transformation and is likely because depature delay has a larger range compared to taxi out time. 
 
+```{r}
+vif(lm.arrival.5)
+```
+No collinearity problem
+
+
+# GAM 
+
+To increase flexibilty in our model we use GAM in our last created model 
+```{r}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
+
+gam.arrival.5 <- gam(ARR_DELAY ~ s(z_dep_delay) + s(z_taxi_out, by = OP_CARRIER_Tier) + OP_CARRIER_Tier, data = planes)
+summary(gam.arrival.5)
+
+```
+We have high estimated degrees of freedom for our predictors indicating possible non-linearity in our relationship
+```{r}
+plot(gam.arrival.5, residuals = TRUE, select = 1)
+gam.check(gam.arrival.5)
+```
 
 
 # GLM Poisson
@@ -571,6 +606,192 @@ More specifically, the odds of airline flights being delayed by more than 30 min
 
 
 # Neural Network
+## Features 
+```{r}
+#| output = FALSE
+
+# Include DEP_DELAY just for creating the target
+important_features <- c("Month", "OP_CARRIER", "DEST", "CANCELLED",
+                        "CANCELLATION_CODE", "CRS_DEP_TIME", "DISTANCE", "DEP_DELAY")
+
+planes <- planes %>% 
+  filter(!is.na(DEP_TIME)) %>% 
+  mutate(delayed = as.factor(ifelse(DEP_DELAY > 0, "TRUE", "FALSE"))) %>% 
+  mutate(is_weekend = as.factor(ifelse(Weekday %in% c("Saturday", "Sunday"), 1, 0)))
+
+
+LGA_cleaned <- planes[important_features]
+
+# OR: Impute CANCELLED and CANCELLATION_CODE
+#LGA_cleaned$CANCELLATION_CODE[is.na(LGA_cleaned$CANCELLATION_CODE)] <- "None"
+
+
+# 1. Add departure hour from CRS_DEP_TIME
+planes$dep_hour <- as.numeric(substr(sprintf("%04d", planes$CRS_DEP_TIME), 1, 2))
+
+# 2. Bucket departure hours
+planes$dep_hour_bucket <- cut(
+  planes$dep_hour,
+  breaks = c(-1, 5, 10, 15, 20, 24),
+  labels = c("Late Night", "Morning", "Midday", "Afternoon", "Evening")
+)
+
+LGA_cleaned$FL_DATE <- as.Date(planes$FL_DATE[!is.na(planes$DEP_DELAY)])
+
+
+
+# 5. Bucket flight distance
+planes$distance_bucket <- cut(
+  planes$DISTANCE,
+  breaks = c(-1, 250, 750, 1500, Inf),
+  labels = c("Short", "Medium", "Long", "Very Long")
+)
+
+# leakage?
+# 6. Carrier-level delay rate
+#carrier_delay_rate <- planes %>%
+#  group_by(OP_CARRIER) %>%
+#  summarise(carrier_delay_rate = mean(as.numeric(delayed) == 1))
+
+#LGA_cleaned <- LGA_cleaned %>%
+#  left_join(carrier_delay_rate, by = "OP_CARRIER")
+
+# 7. Destination-level delay rate
+#dest_delay_rate <- planes %>%
+#  group_by(DEST) %>%
+#  summarise(dest_delay_rate = mean(as.numeric(delayed) == 1))
+
+#LGA_cleaned <- LGA_cleaned %>%
+#  left_join(dest_delay_rate, by = "DEST")
+
+# 🧼 Optional cleanup: remove raw dep_hour, keep bucket
+LGA_cleaned <- planes %>% 
+  dplyr::select(Month, OP_CARRIER, DEST, CANCELLED, CANCELLATION_CODE, dep_hour_bucket, distance_bucket, delayed, is_weekend)
+
+# Make sure new categorical vars are factors
+LGA_cleaned$dep_hour_bucket <- as.factor(LGA_cleaned$dep_hour_bucket)
+LGA_cleaned$distance_bucket <- as.factor(LGA_cleaned$distance_bucket)
+LGA_cleaned$Month <- as.factor(LGA_cleaned$Month)
+
+
+# Remove high NA columns if necessary, or impute here if needed
+
+set.seed(123)
+trainIndex <- createDataPartition(LGA_cleaned$delayed, p = 0.8, list = FALSE)
+trainData <- LGA_cleaned[trainIndex, ]
+testData  <- LGA_cleaned[-trainIndex, ]
+
+# 2. One-hot encode all predictors
+dummies <- dummyVars(~ ., data = trainData %>% dplyr::select(-delayed))
+train_x <- predict(dummies, newdata = trainData) %>% as.data.frame()
+test_x <- predict(dummies, newdata = testData) %>% as.data.frame()
+print(nrow(test_x))
+print(nrow(testData))
+
+# 3. Create y-labels
+train_y <- as.numeric(trainData$delayed) - 1
+test_y <- as.numeric(testData$delayed) - 1
+
+# 4. Remove zero-variance columns
+nzv <- nearZeroVar(train_x, saveMetrics = TRUE)
+zero_var_cols <- rownames(nzv[nzv$zeroVar == TRUE, ])
+train_x <- train_x[, !(names(train_x) %in% zero_var_cols)]
+test_x <- test_x[, !(names(test_x) %in% zero_var_cols)]
+# Align column structure of test_x to train_x
+missing_cols <- setdiff(names(train_x), names(test_x))
+for (col in missing_cols) {
+  test_x[[col]] <- 0
+}
+# Also reorder the columns to match train_x
+test_x <- test_x[, names(train_x)]
+
+# 5. Normalize
+
+
+# Combine and convert to numeric
+train_combined <- cbind(train_x, delayed = as.numeric(trainData$delayed) - 1)
+# SMOTE (on unscaled data)
+smote_result <- SMOTE(X = train_combined[, -ncol(train_combined)],
+                      target = train_combined$delayed,
+                      K = 5)
+
+train_x_bal <- as.data.frame(smote_result$data[, -ncol(smote_result$data)])
+train_y_bal <- as.numeric(as.character(smote_result$data$class))
+
+# ✅ Now normalize AFTER SMOTE
+preProc <- preProcess(train_x_bal, method = c("center", "scale"))
+train_x_bal <- predict(preProc, train_x_bal)
+test_x <- predict(preProc, test_x)
+
+
+#install_keras() 
+# Rebuild model with correct input shape
+model <- keras_model_sequential() %>%
+  layer_dense(units = 64, activation = "relu", input_shape = ncol(train_x_bal)) %>%
+  layer_dropout(rate = 0.3) %>%
+  layer_dense(units = 32, activation = "relu") %>%
+  layer_dense(units = 1, activation = "sigmoid")
+
+# Compile
+model %>% compile(
+  loss = "binary_crossentropy",
+  optimizer = optimizer_adam(),
+  metrics = c("accuracy")
+)
+
+# Add early stopping callback
+early_stop <- callback_early_stopping(
+  monitor = "val_loss",
+  patience = 5,
+  restore_best_weights = TRUE
+)
+
+# Since ROSE is used, set equal class weights
+
+
+# Train model
+history <- model %>% fit(
+  x = as.matrix(train_x_bal),
+  y = train_y_bal,
+  epochs = 50,
+  batch_size = 32,
+  validation_split = 0.2,
+  callbacks = list(early_stop)
+)
+
+
+
+# Predict probabilities
+pred_probs <- as.vector(model %>% predict(as.matrix(test_x)))
+
+# Get optimized threshold
+roc_obj <- roc(testData$delayed, pred_probs)
+best_thresh <- coords(roc_obj, "best", ret = "threshold")[[1]]
+
+
+# Classify using that threshold
+pred_classes <- ifelse(pred_probs > best_thresh, "TRUE", "FALSE")
+```
+
+
+```{r}
+#| code-fold: false
+#| attr-output: "style='color: blue'"
+# Evaluate
+confusionMatrix(
+  factor(pred_classes, levels = c("FALSE", "TRUE")),
+  factor(testData$delayed, levels = c("FALSE", "TRUE"))
+)
+```
+
+During the development of a neural network to classify whether a flight would be delayed or not, several limitations of both the dataset and the model became apparent:
+Since only data from a single airport (LGA) was used, the variety in operational conditions and causes of delay was inherently limited.
+The available features provided insufficient variance to reliably distinguish outliers (i.e., delayed flights).
+Derived features — such as binned departure hours, distance categories, and carrier-specific delay rates — yielded only marginal performance improvements.
+Simple models lacked the capacity to learn meaningful patterns from the data.
+More complex models performed better on the training data but showed clear signs of overfitting.
+Despite various optimization efforts, including feature engineering, class balancing, and threshold tuning, the model's maximum Kappa score remained around 0.28. This indicates limited predictive value and insufficient reliability for real-world application.
+
 
 # Support Vector Machine
 
@@ -603,7 +824,7 @@ The next step involves preprocessing the dataset by introducing a new binary tar
 To evaluate the balance of the newly created target variable, we analyzeits class distribution. This allows us to assess the proportion of delayed versus non-delayed flights in the dataset.
 
 ```{r}
-sum(is.na(planes_intial_svm$DELAYED))
+sum(is.na(planes_initial_svm$DELAYED))
 length(planes_initial_svm$DELAYED)
 
 
@@ -633,7 +854,7 @@ Consistent with the approach used in the linear model, airlines are categorized 
 ```{r}
 
 planes_initial_svm <- planes_initial_svm %>%
-  mutate(OP_CARRIER_Tier = recode(OP_CARRIER,
+  dplyr::mutate(OP_CARRIER_Tier = dplyr::recode(OP_CARRIER,
     # Expensive
     "AA" = "Expensive",
     "DL" = "Expensive",
@@ -659,7 +880,7 @@ planes_initial_svm <- planes_initial_svm %>%
 
     .default = NA_character_
   )) %>% 
-  mutate(OP_CARRIER_Tier = factor(OP_CARRIER_Tier, 
+  dplyr::mutate(OP_CARRIER_Tier = factor(OP_CARRIER_Tier, 
                                   levels = c("Cheap", "Mid-tier", "Expensive")))
 
 ```
@@ -811,7 +1032,6 @@ To conduct an initial performance evaluation, the SVM model is trained using the
 
 
 ```{r}
-
 set.seed(123)
 planes_svm <- planes_svm[sample(nrow(planes_svm)), ]
 
@@ -845,14 +1065,24 @@ train_control <- trainControl(method = "cv",
                               number = 5,
                               verboseIter = TRUE,
                               allowParallel = FALSE )
+```
 
-svm_model <- train(DELAYED ~ ., 
-                   data = svm_train_data,
-                   method = "svmRadial",
-                   trControl = train_control,
-                   tuneLength = 3,
-                   preProcess = NULL
-                   )
+```{r}
+# svm_model <- train(DELAYED ~ ., 
+#                   data = svm_train_data,
+#                   method = "svmRadial",
+#                   trControl = train_control,
+#                   tuneLength = 3,
+#                   preProcess = NULL
+#                   )
+#saveRDS(svm_model, file = "../Models/svm_model.rds")
+# Load model
+svm_model <- readRDS("../Models/svm_model.rds")
+
+```
+
+```{r}
+
 
 predictions <- predict(svm_model, newdata = svm_test_data)
 conf_matrix <- confusionMatrix(predictions, svm_test_data$DELAYED, positive = "1")
@@ -872,15 +1102,25 @@ train_control <- trainControl(method = "cv",
                               sampling = "down",   
                               verboseIter = TRUE,
                               allowParallel = FALSE )
+```
 
-svm_model <- train(DELAYED ~ ., 
-                   data = svm_train_data,
-                   method = "svmRadial",
-                   trControl = train_control,
-                   tuneLength = 3,
-                   preProcess = NULL)
 
-predictions_b <- predict(svm_model, newdata = svm_test_data)
+```{r}
+#svm_model_down <- train(DELAYED ~ ., 
+#                   data = svm_train_data,
+#                   method = "svmRadial",
+#                   trControl = train_control,
+#                   tuneLength = 3,
+#                   preProcess = NULL)
+#saveRDS(svm_model_down, file = "../Models/svm_model_down.rds")
+# Load model
+svm_model_down <- readRDS("../Models/svm_model_down.rds")
+
+```
+
+
+```{r}
+predictions_b <- predict(svm_model_down, newdata = svm_test_data)
 conf_matrix_b <- confusionMatrix(predictions_b, svm_test_data$DELAYED, positive = "1")
 print(conf_matrix_b)
 ```
@@ -889,6 +1129,7 @@ After downsampling, the SVM model achieved an accuracy of 60.1%, below the basel
 
 
 ```{r}
+#| output = FALSE
 set.seed(123)
 
 slice30_idx <- createDataPartition(svm_train_data$DELAYED, p = 0.3, list = FALSE)
@@ -939,16 +1180,33 @@ train_ctrl <- trainControl(
   allowParallel = FALSE
 )
 
-svm_model <- train(
-  DELAYED    ~ .,
-  data       = train_sel,
-  method     = "svmRadial",
-  trControl  = train_ctrl,
-  tuneLength = 3,
-  preProcess = NULL 
-)
+#saveRDS(test_sel, file = "../Models/test_sel.rds")
+```
 
-predicitons_c    <- predict(svm_model, newdata = test_sel)
+
+```{r}
+#| output = FALSE
+
+#svm_model_feature <- train(
+#  DELAYED    ~ .,
+#  data       = train_sel,
+#  method     = "svmRadial",
+#  trControl  = train_ctrl,
+#  tuneLength = 3,
+#  preProcess = NULL 
+#)
+
+#saveRDS(svm_model_feature, file = "../Models/svm_model_feature.rds")
+
+# Load model
+svm_model_feature <- readRDS("../Models/svm_model_feature.rds")
+test_sel<- readRDS("../Models/test_sel.rds")
+
+```
+
+
+```{r}
+predicitons_c    <- predict(svm_model_feature, newdata = test_sel)
 conf_matrix_c <- confusionMatrix(predicitons_c, test_sel$DELAYED, positive = "1")
 print(conf_matrix_c)
 
@@ -962,6 +1220,7 @@ The initial SVM model struggled to detect delayed flights due to class imbalance
 After tackling the class imbalance via downsampling, the model was able to predict 
 To improve results, future tests should focus on addressing class imbalance through more advanced resampling strategies, refining the SVM kernel and hyperparameters, or exploring alternative classification approaches such as gradient boosting or ensemble methods that are better suited for imbalanced datasets. A central question in this analysis is identifying which factors—available well before a flight departs—can serve as reliable indicators of arrival delays. Understanding and leveraging such pre-departure features is critical for developing predictive models that can inform operational decision-making in advance.
 
+# Conclusion 
 
 
 
