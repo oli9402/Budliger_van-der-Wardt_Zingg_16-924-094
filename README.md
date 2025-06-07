@@ -21,13 +21,16 @@ Group Project for course "Applied Machine Learning and Predictive Modelling 1" i
 |__ <b>Data</b>
     |______ <b>LGA.csv</b>
     |______ <b>LGA_preprocessing.rda</b>   # Binary format of preprocessed LGA.csv
+|__ <b>Models</b>                          # Binary format of trained models
+    |______ <b>svm_model.rds</b>
+    |______ <b>svm_model_down.rds</b>
+    |______ <b>svm_model_feature.rds</b>
+    |______ <b>test_sel.rds</b>
 |__ <b>Scripts</b>
     |______ <b>preprocessing.r</b>         # Preprocessing raw data and transforming variables
-    |______ <b>exploration.qmd</b>         # Exploration of LGA data set
-|__ <b>Plots_Exploration</b>
-    |______ <b>NAME.rda</b>                # Binary format of plots generated in exploration.qmd and included in Main Report
 |__ <b>Output</b>
     |______ <b>main.qmd</b>                # Main Report 
+    |______ <b>main.html</b>               # Self-Contained HTML file of main report
 </pre>
 
 ## Install 
