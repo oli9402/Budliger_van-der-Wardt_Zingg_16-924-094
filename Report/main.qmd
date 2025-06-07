@@ -6,6 +6,7 @@ author:
   - name: Oliver Zingg
 format:
   html:
+    self-contained: true
     theme: cosmo  # or "default", "flatly", "journal", etc.
     full-width: true
     mainfont: "sans-serif"
@@ -557,10 +558,11 @@ More specifically, the odds of airline flights being delayed by more than 30 min
 
 
 # Neural Network
-## Features 
+Predicting departure delay 
 ```{r}
-#| output = FALSE
-
+#| output: FALSE
+#| code-summary: "Show Code of Model"
+#| 
 # Include DEP_DELAY just for creating the target
 important_features <- c("Month", "OP_CARRIER", "DEST", "CANCELLED",
                         "CANCELLATION_CODE", "CRS_DEP_TIME", "DISTANCE", "DEP_DELAY")
@@ -598,22 +600,6 @@ planes$distance_bucket <- cut(
   labels = c("Short", "Medium", "Long", "Very Long")
 )
 
-# leakage?
-# 6. Carrier-level delay rate
-#carrier_delay_rate <- planes %>%
-#  group_by(OP_CARRIER) %>%
-#  summarise(carrier_delay_rate = mean(as.numeric(delayed) == 1))
-
-#LGA_cleaned <- LGA_cleaned %>%
-#  left_join(carrier_delay_rate, by = "OP_CARRIER")
-
-# 7. Destination-level delay rate
-#dest_delay_rate <- planes %>%
-#  group_by(DEST) %>%
-#  summarise(dest_delay_rate = mean(as.numeric(delayed) == 1))
-
-#LGA_cleaned <- LGA_cleaned %>%
-#  left_join(dest_delay_rate, by = "DEST")
 
 # 🧼 Optional cleanup: remove raw dep_hour, keep bucket
 LGA_cleaned <- planes %>% 
@@ -754,6 +740,7 @@ The first step involves selecting the dependent variable for classification usin
 
 ```{r}
 planes_initial_svm <- planes
+par(mfrow = c(1, 2))
 
 hist(planes_initial_svm$ARR_DELAY,
      main = "Histogram of Arrival Delays",
@@ -775,11 +762,12 @@ The next step involves preprocessing the dataset by introducing a new binary tar
 To evaluate the balance of the newly created target variable, we analyzeits class distribution. This allows us to assess the proportion of delayed versus non-delayed flights in the dataset.
 
 ```{r}
-sum(is.na(planes_initial_svm$DELAYED))
-length(planes_initial_svm$DELAYED)
+# sum(is.na(planes_initial_svm$DELAYED))
+# length(planes_initial_svm$DELAYED)
 
 
 planes_initial_svm$DELAYED <- ifelse(planes_initial_svm$ARR_DELAY > 0, 1, 0)
+par(mfrow = c(1, 2))
 
 barplot(table(planes_initial_svm$DELAYED),
         names.arg = c("On Time (0)", "Delayed (1)"),
@@ -792,7 +780,7 @@ pie(table(planes_initial_svm$DELAYED),
     col = c("lightblue", "orange"),
     main = "Proportion of Delayed Flights")
     
-mean(planes_initial_svm$DELAYED, na.rm = TRUE)
+# mean(planes_initial_svm$DELAYED, na.rm = TRUE)
 
 ```
 
@@ -865,7 +853,7 @@ planes_svm <- planes_initial_svm[, c("FL_DATE",
                          "DELAYED")]
 
 planes_svm <- na.omit(planes_svm)
-sum(is.na(planes_svm))
+#sum(is.na(planes_svm))
 
 
 ```
@@ -919,7 +907,7 @@ planes_svm <- subset(planes_svm, select = -c(CRS_DEP_TIME, CRS_ARR_TIME, DEP_MIN
 It would be interesting to also utilize the destination codes. Lets analyze the distribution of the destionation codes.
 
 ```{r}
-length(unique(planes_svm$DEST))
+# length(unique(planes_svm$DEST))
 dest_counts <- as.data.frame(table(planes_svm$DEST))
 ggplot(dest_counts, aes(x = reorder(Var1, -Freq), y = Freq)) +
   geom_bar(stat = "identity", fill = "steelblue") +
@@ -1034,7 +1022,7 @@ svm_model <- readRDS("../Models/svm_model.rds")
 ```
 
 ```{r}
-
+#| code-fold: false
 #| attr-output: "style='color: blue'"
 
 predictions <- predict(svm_model, newdata = svm_test_data)
@@ -1044,7 +1032,7 @@ print(conf_matrix)
 ```
 
 
-The Support Vector Machine (SVM) model achieved an accuracy of 64.58%, which is only marginally higher than the no-information rate of 63.05%. However, since the primary objective is to identify delayed flights, overall accuracy is less meaningful due to class imbalance. The model demonstrates high specificity (92.74%)—indicating strong performance in recognizing non-delayed flights—but its sensitivity is critically low at 16.5%, highlighting a substantial weakness in detecting the target class (delays). The balanced accuracy of 54.6% and a low kappa of 0.1087 further emphasize the model’s poor discriminatory power for delayed flights. To address this, the next step is to apply downsampling (via sampling = "down") to reduce the dominance of the majority class and improve the model’s ability to correctly identify delayed flights.
+The Support Vector Machine (SVM) model achieved an accuracy of 65.12%, which is only marginally higher than the no-information rate of 64.02%. However, since the primary objective is to identify delayed flights, overall accuracy is less meaningful due to class imbalance. The model demonstrates high specificity (91.14%)—indicating strong performance in recognizing non-delayed flights—but its sensitivity is critically low at 18.8%, highlighting a substantial weakness in detecting the target class (delays). The balanced accuracy of 54.9% and a low kappa of 0.1163 further emphasize the model’s poor discriminatory power for delayed flights. To address this, the next step is to apply downsampling (via sampling = "down") to reduce the dominance of the majority class and improve the model’s ability to correctly identify delayed flights.
 
 ```{r}
 #set.seed(123)
@@ -1075,17 +1063,18 @@ svm_model_down <- readRDS("../Models/svm_model_down.rds")
 
 ```{r}
 #| attr-output: "style='color: blue'"
-
+#| code-fold: false
 predictions_b <- predict(svm_model_down, newdata = svm_test_data)
 conf_matrix_b <- confusionMatrix(predictions_b, svm_test_data$DELAYED, positive = "1")
 print(conf_matrix_b)
 ```
 
-After downsampling, the SVM model achieved an accuracy of 60.1%, below the baseline of 63.05%, but sensitivity improved to 62.82%, indicating better detection of delayed flights—the primary goal. Specificity dropped to 58.51%, reflecting more false positives. Despite lower accuracy, balanced accuracy rose to 60.67% and kappa improved to 0.199, showing a better balance between classes. This trade-off is acceptable given the focus on delays. The next step is to apply recursive feature elimination (RFE) and rerun the model.
+After downsampling, the SVM model achieved an accuracy of 58.4%, below the baseline of 64.02%, but sensitivity improved to 64.03%, indicating better detection of delayed flights—the primary goal. Specificity dropped to 55.15%, reflecting more false positives. Despite lower accuracy, balanced accuracy rose to 59.59% and kappa improved to 0.18, showing a better balance between classes. This trade-off is acceptable given the focus on delays. The next step is to apply recursive feature elimination (RFE) and rerun the model.
 
 
 ```{r}
-#| output = FALSE
+#| output: false
+#| execute: false
 set.seed(123)
 
 slice30_idx <- createDataPartition(svm_train_data$DELAYED, p = 0.3, list = FALSE)
@@ -1141,7 +1130,7 @@ train_ctrl <- trainControl(
 
 
 ```{r}
-#| output = FALSE
+#| output: false
 
 #svm_model_feature <- train(
 #  DELAYED    ~ .,
@@ -1169,17 +1158,19 @@ conf_matrix_c <- confusionMatrix(predicitons_c, test_sel$DELAYED, positive = "1"
 print(conf_matrix_c)
 
 ```
-After feature selection, sensitivity is 63.6%, slightly improving the detection of delayed flights, while overall accuracy dropped slightly to 58.0%.
+After feature selection, sensitivity is 84.8%, slightly improving the detection of delayed flights, while overall accuracy dropped slightly to 47.3%.
 
 ## Interpretation
 
 The initial SVM model struggled to detect delayed flights due to class imbalance, achieving high specificity but very low sensitivity. Downsampling improved sensitivity significantly, aligning better with the goal of identifying delays, though accuracy declined. Feature selection further raised sensitivity to 63.6%, but other performance metrics deteriorated. Overall, all models demonstrate limited predictive power in this context.
 
 After tackling the class imbalance via downsampling, the model was able to predict 
-To improve results, future tests should focus on addressing class imbalance through more advanced resampling strategies, refining the SVM kernel and hyperparameters, or exploring alternative classification approaches such as gradient boosting or ensemble methods that are better suited for imbalanced datasets. A central question in this analysis is identifying which factors—available well before a flight departs—can serve as reliable indicators of arrival delays. Understanding and leveraging such pre-departure features is critical for developing predictive models that can inform operational decision-making in advance.
+To improve results, future tests should focus on addressing class imbalance through more advanced resampling strategies, refining the SVM kernel and hyperparameters, or exploring alternative classification approaches such as gradient boosting or ensemble methods that are better suited for imbalanced datasets. A central question in this analysis is identifying which factors—available well before a flight departs—can serve as reliable indicators of arrival delays. Understanding and leveraging such pre-departure features is critical for developing predictive models that can inform operational decision-making in advance. 
 
 # Conclusion 
+The dataset used in this task demonstrates limited predictive capability for determining whether a flight will experience a delayed departure or arrival. Two main strategies were explored for feature selection. One included all available features, while the other, more aligned with practical business considerations, limited the selection to features known before the aircraft begins to move. The latter approach was evaluated using a Support Vector Machine (SVM) model. However, even after applying feature engineering, the predictions produced by the SVM were not sufficiently accurate. Therefore, if an airport intends to provide travelers with advance notice of likely delays at their destination, incorporating additional features or experimenting with alternative models is necessary.
+For more reliable prediction we conclude that it would be vastly beneficial to collect additional features like weather or general airport traffic. 
 
-
-
+## Usaged of AI
+We used ChatGPT to assist with debugging code (such as data wrangling, plotting) and questions related to quarto, markdown. In one case we used ChatGPT to group the airlines into Tier level as outlined in Chapter 1.  
 
