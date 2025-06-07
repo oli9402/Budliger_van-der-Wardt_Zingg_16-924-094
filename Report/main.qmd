@@ -1,30 +1,33 @@
 ---
-title: "Project Title"
+title: "Analysing Flights"
 author: 
-- Lenny Budlinger
-- Thomas van der Wardt 
-- Oliver Zingg
+  - name: Lenny Budlinger
+  - name: Thomas van der Wardt 
+  - name: Oliver Zingg
 format:
   html:
-    full_width: true
+    theme: cosmo  # or "default", "flatly", "journal", etc.
+    full-width: true
     mainfont: "sans-serif"
     monofont: "monospace"
     code-fold: true
     code-summary: "Show the code"
     code-line-numbers: true
     toc: true
-    toc-location: left-body
-    number_sections: true
-    toc_depth: 3
+    toc-location: left
+    number-sections: true
+    toc-depth: 3
     grid:
       sidebar-width: 150px
       margin-width: 5px
+    smooth-scroll: true
 execute:
   warning: false
   error: false
 ---
 
-## Packages
+
+## Packages & Load
 
 ```{r}
 #| message: false
@@ -64,24 +67,11 @@ library(car)
 library(keras)
 library(neuralnet)
 
-
-
-```
-
-
-## Load
-
-```{r}
-
-# Load data ---------------------------
-
-# get working directory if csv not loading or use absolute path
-# getwd() 
-
 load("./../Data/LGA_preprocessed.rda")
 
 
 ```
+
 
 
 
@@ -123,21 +113,8 @@ planes %>%
 ```
 
 
-### Depature times
-```{r}
-#|output: false
-planes %>%
-  summarise(
-    planned_first_flight = min(CRS_DEP_TIME, na.rm = TRUE),
-    planned_last_flight = max(CRS_DEP_TIME, na.rm = TRUE),
-    actual_first_flight = min(DEP_TIME, na.rm = TRUE),
-    actual_last_flight = max(DEP_TIME, na.rm = TRUE)
-  ) %>% 
-  kable()
 
-```
-
-If we look at the planned departure times, we see that the first flight is at 5:35 am and the last flight is at 10:39 pm. This departure times are explain by a seasonal curfew between the hours of 12 am and 6 am during the warm months (Source: Wikipedia). 
+### Departure Time
 
 ```{r}
 planes %>%
@@ -223,32 +200,25 @@ p1 + p2 + plot_layout(ncol = 2)
 ```
 
 From the plots above we see that both `DEP_DELAY` and `TAXI_OUT` are positively correlated with `ARR_DELAY`. It's obvious that a delay in departure leads to a delay in arrival. Furthermore, the skeweness is again visiable in the plot.
-## Modelling
+## Modelling Selection
 
 ```{r}
-#| code-fold: false
+#| echo: false
 #| attr-output: "style='color: blue'"
 
 lm.arrival <- lm(ARR_DELAY ~ DEP_DELAY, data = planes)
 lm.arrival.2 <- update(lm.arrival, . ~ . + TAXI_OUT)
-
-
 anova(lm.arrival, lm.arrival.2)
-```
-We can see that the second model with the `TAXI_OUT` variable significantly improves the model fit.
+# We can see that the second model with the `TAXI_OUT` variable significantly improves the model fit. Let's see if we can improve the model further by adding the airlines as predictor.
 
-Let's see if we can improve the model further by adding the airlines as predictor.
-
-
-```{r}
-#| code-fold: false
-#| attr-output: "style='color: blue'"
-
+#--------------
 
 lm.arrival.3 <- update(lm.arrival.2, . ~ . + OP_CARRIER)
-
 drop1(lm.arrival.3, test ="F")
 ```
+
+
+
 
 We use `drop1` function, since `OP_CARRIER` has more than two levels. The addition of the `OP_CARRIER` variable significantly improves the model fit.
 
@@ -296,6 +266,7 @@ With including the `OP_CARRIER_Tier` variable we lose the individual information
 
 ```{r}
 #| code-fold: false
+#| echo: false
 #| attr-output: "style='color: blue'"
 
 lm.arrival.4 <- update(lm.arrival.3, . ~ . -OP_CARRIER+ OP_CARRIER_Tier)
@@ -313,6 +284,7 @@ ph.test.THSD <- glht(lm.arrival.4,
     linfct = mcp(OP_CARRIER_Tier = "Tukey"))
 
 summary(ph.test.THSD)
+
 ```
 We find strong evidence that all three pairwise differences are not equal to zero. Lets plot the differences:
 ```{r}
@@ -330,7 +302,8 @@ This plots shows us that the the difference between airline tiers is not zero in
 #| code-fold: false
 #| attr-output: "style='color: blue'"
 
-summary(lm.arrival.4)
+print(summary(lm.arrival.4)$coefficients %>% round(digits = 7))
+
 ```
 - `DEP_DEALY`: given all predictors in the model are kept constant, a 1 minute increase in `DEP_DELAY` leads to an increase in `ARR_DELAY` of 0.976 minutes on *average*. 
 - `TAXI_OUT`: given all predictors in the model are kept constant, a 1 minute increase in `TAXI_OUT` leads to an increase in `ARR_DELAY` of 0.935 minutes on *average*.
@@ -338,33 +311,11 @@ summary(lm.arrival.4)
 - `TierMid-tier`: **on average** Mid-tier airlines arrive 2.892 minutes earlier compared to cheap airlines.  
 - `TierExpensive`: **on average** Expensive airlines arrive 3.544 minutes earlier compared to cheap airlines.
 
-### Let's explore our model variables a bit more
-
-```{r}
-
-
-planes %>%
-  pivot_longer(cols = c(ARR_DELAY, TAXI_OUT, DEP_DELAY),
-               names_to = "Metric",
-               values_to = "Value") %>% 
-  ggplot( aes(x = Metric, y = Value)) +
-    geom_boxplot(aes(fill = Metric), outlier.alpha = 0.2) +
-    facet_wrap(~ OP_CARRIER_Tier) +
-    labs(
-      title = "Boxplot of Metrics by Carrier Tier",
-      x = "Metric",
-      y = "Value"
-    ) +
-    theme_minimal() +
-    theme(legend.position = "none")
-
-```
-These boxplots show the skewedness of the variables. Outliers may play a big role in the model and could drive differences in the averages. Since these outliers are not measurement error we will keep them in the data set. Still, it's visible that cheap airlines have more delayed flights (dep and arr)
 
 ### Model diagnostics
 
-### Let's look at density plots
 ```{r}
+par(mfrow = c(2, 2))
 plot(lm.arrival.4)
 ```
 - The `Q-Q plot` shows that the residuals are not normally distributed for higher values of `ARR_DELAY`. 
@@ -372,6 +323,11 @@ plot(lm.arrival.4)
 
 
 
+
+
+### Transformation
+
+Since we have a lot of negative and zero values, we can't use log transformation. Therefore we try a cubic root transformation.
 
 ```{r}
 
@@ -384,18 +340,14 @@ planes %>%
   facet_wrap(~ OP_CARRIER_Tier) +
   xlim(-20, 200) + 
   labs(
-    title = "Density of Metrics by Carrier Tier",
+    title = "Before Transformation",
     x = "Value",
     y = "Density"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  guides(fill = "none", color = "none") -> p1
 
-```
-### Transformation
 
-Since we have a lot of negative and zero values, we can't use log transformation. Therefore we try a cubic root transformation.
-
-```{r}
 cbrt_transform <- function(x) {
   sign(x) * abs(x)^(1/3)
 }
@@ -413,11 +365,14 @@ planes %>%
   geom_density(alpha = 0.4) +
   facet_wrap(~ OP_CARRIER_Tier) +
   labs(
-    title = "Density of Metrics by Carrier Tier",
+    title = "After cubic root Transformation",
     x = "Value",
     y = "Density"
   ) +
-  theme_minimal()
+  theme(legend.position = "top")+
+  theme_minimal() -> p2 
+
+p1 + p2
 ```
 The cubic root transformation produces a bimodal distribution for the `ARR_DELAY` and `DEP_DELAY` variables. Although this reveals an interesting pattern in the data, that most planes are on time (or more specific early) but the distribution shows slight delays to be somewhat common as well. Given the bimodality a normal regression modelling the average may not be better than using untransformed data. Interpretation of the model coefficents would become quit difficult after this transformation.
 
@@ -435,8 +390,8 @@ planes <- planes %>%
   )
 
 lm.arrival.5 <- lm(ARR_DELAY ~ z_dep_delay + z_taxi_out + OP_CARRIER_Tier, data = planes)
-summary(lm.arrival.5)
 #plot(lm.arrival.5)
+print(summary(lm.arrival.5)$coefficients %>% round(digits = 7))
 
 ```
 
@@ -463,11 +418,7 @@ gam.arrival.5 <- gam(ARR_DELAY ~ s(z_dep_delay) + s(z_taxi_out, by = OP_CARRIER_
 summary(gam.arrival.5)
 
 ```
-We have high estimated degrees of freedom for our predictors indicating possible non-linearity in our relationship
-```{r}
-plot(gam.arrival.5, residuals = TRUE, select = 1)
-gam.check(gam.arrival.5)
-```
+We have high estimated degrees of freedom for our predictors indicating non-linearity in our relationship
 
 
 # GLM Poisson
@@ -902,6 +853,7 @@ A key requirement for the SVM classification task is to limit input features to 
 | DELAYED             | integer    | Target: 1 if ARR_DELAY > 0, else 0        
 
 ```{r}
+#|echo: false
 planes_svm <- planes_initial_svm[, c("FL_DATE",
                          "OP_CARRIER_FL_NUM",
                          "DEST",
@@ -1083,6 +1035,7 @@ svm_model <- readRDS("../Models/svm_model.rds")
 
 ```{r}
 
+#| attr-output: "style='color: blue'"
 
 predictions <- predict(svm_model, newdata = svm_test_data)
 conf_matrix <- confusionMatrix(predictions, svm_test_data$DELAYED, positive = "1")
@@ -1095,7 +1048,7 @@ The Support Vector Machine (SVM) model achieved an accuracy of 64.58%, which is 
 
 ```{r}
 #set.seed(123)
-
+#| echo: false
 
 train_control <- trainControl(method = "cv",
                               number = 5,
@@ -1106,6 +1059,7 @@ train_control <- trainControl(method = "cv",
 
 
 ```{r}
+#| echo: false
 #svm_model_down <- train(DELAYED ~ ., 
 #                   data = svm_train_data,
 #                   method = "svmRadial",
@@ -1120,6 +1074,8 @@ svm_model_down <- readRDS("../Models/svm_model_down.rds")
 
 
 ```{r}
+#| attr-output: "style='color: blue'"
+
 predictions_b <- predict(svm_model_down, newdata = svm_test_data)
 conf_matrix_b <- confusionMatrix(predictions_b, svm_test_data$DELAYED, positive = "1")
 print(conf_matrix_b)
@@ -1206,6 +1162,8 @@ test_sel<- readRDS("../Models/test_sel.rds")
 
 
 ```{r}
+#| attr-output: "style='color: blue'"
+
 predicitons_c    <- predict(svm_model_feature, newdata = test_sel)
 conf_matrix_c <- confusionMatrix(predicitons_c, test_sel$DELAYED, positive = "1")
 print(conf_matrix_c)
